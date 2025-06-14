@@ -6,11 +6,12 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/14 17:48:32 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/06/14 19:00:09 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -45,11 +46,12 @@ typedef struct s_redirection
 
 typedef struct s_command
 {
-	char				*command;
 	char				**args;
 	t_redirection		*rds;
 	int					pipe_in;
-	int					pipe_out;   //      ls    ->      test      ->     |      -> .......
+	int					pipe_out;
+	int					built_in;
+	char				*path;   //      ls    ->      test      ->     |      -> .......
 	struct s_command	*next;
 	// struct s_command	*prev;
 }	t_command;
@@ -66,3 +68,5 @@ t_token			*parse_input(char *str);
 size_t			ft_strlen(const char *s);
 char			**ft_split(char const *s, char c);
 char			*ft_strjoin(char const *s1, char const *s2);
+int				check_cmd(t_command *cmd);
+size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/14 16:30:11 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/14 21:28:47 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,32 +34,36 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	check_and_set_builtin(t_cmd *cmd_list)
+int	check_and_set_builtin(t_command *comd)
 {
 	char	*cmd;
 
-	cmd = cmd_list->argv[0];
+	cmd = comd->args[0];
 	if (!cmd)
 		return (0);
-	if (ft_strcmp(cmd, "echo") || ft_strcmp(cmd, "cd") || ft_strcmp(cmd, "pwd") 
-		|| ft_strcmp(cmd, "export") || ft_strcmp(cmd, "unset") || ft_strcmp(cmd, "env") 
-			|| ft_strcmp(cmd, "exit"))
+	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "pwd") 
+		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
+			|| !ft_strcmp(cmd, "exit"))
 	{
-		cmd_list->built_in = 1;
+		comd->built_in = 1;
 		return (1);
 	}
 	else
 		return (0);
 }
 
-int	find_command_in_path(t_cmd *cmd)
+int	find_command_in_path(t_command *cmd)
 {
-	int	flag;
-
-	flag = 0;
-	if (ft_strchr(cmd->argv[0], '/'))
-		if (!access(cmd->argv[0], F_OK))
-			flag = 1;
+	if (ft_strchr(cmd->args[0], '/'))
+	{
+		if (!access(cmd->args[0], F_OK))
+			return (1);
+		else
+		{
+			printf("minishell: %s: No such file or directory\n", cmd->args[0]);
+			return (0);
+		}
+	}
 	else
 	{
 		char	*path;
@@ -69,27 +73,29 @@ int	find_command_in_path(t_cmd *cmd)
 
 		i = 0;
 		path = getenv("PATH");
-		path_dir = ft_split(path, ':');
+		if (!path)
+			return (-1);
+		path_dir = ft_split(path, ':'); //free
 		if (path_dir == NULL)
 			return (-1);
-		while (path[i])
+		while (path_dir[i])
 		{
-			cmd_path = ft_strjoin(path[i], cmd->argv[0]);
-			if (cmd_path == NULL)
+			cmd_path = ft_strjoin(path_dir[i], cmd->args[0]);
+			if (cmd_path == NULL) //free path dir
 				return (-1);
 			if (!access(cmd_path, F_OK))
 			{
 				cmd->path = cmd_path;
-				flag = 1;
-				break ;
+				return (1);
 			}
 			i++;
 		}
+		printf("minishell: %s: command not found\n", cmd->args[0]);
 	}
-	return (flag);
+	return (0);
 }
 
-int	check_cmd(t_cmd *cmd)
+int	check_cmd(t_command *cmd)
 {
 	if (check_and_set_builtin(cmd))
 		return (0);

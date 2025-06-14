@@ -49,13 +49,14 @@ int main()
 {
 	char str[] = "  ls -l ' ddd ddd lll' < >>  |<<cat >> -e  >";
 	int i;
-	int j;
-	char *s;
-	char q;
-	char rd;
-	t_token *token;
-	t_token *lst = NULL;
-
+	int j; // inside inner function
+	char *s; // in the arguments of parse
+	char q; // inside inner function
+	char rd; // inside inner function
+	t_token *token; // inside inner function
+	t_token *lst;
+	
+	lst = NULL;
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -73,8 +74,8 @@ int main()
 			if (i > j)
 			{
 				s = ft_substr(str, j, i - j + 1);
-				token = ft_lstnew(s);
-				ft_lstadd_back(&lst, token);			
+				token = ft_lstnew_token(s);
+				ft_lstadd_back_token(&lst, token);
 			}
 			i++;
 		}
@@ -84,11 +85,13 @@ int main()
 			if (str[i + 1] == rd && rd != '|')
 			{
 				s = malloc(3);
+				if(s == NULL)
+					return (1);
 				s[0] = str[i];
 				s[1] = str[i];
 				s[2] = '\0';
-				token = ft_lstnew(s);
-				ft_lstadd_back(&lst, token);
+				token = ft_lstnew_token(s);
+				ft_lstadd_back_token(&lst, token);
 				i += 2;
 			}
 			else
@@ -96,8 +99,8 @@ int main()
 				s = malloc(2);
 				s[0] = str[i];
 				s[1] = '\0';
-				token = ft_lstnew(s);
-				ft_lstadd_back(&lst, token);
+				token = ft_lstnew_token(s);
+				ft_lstadd_back_token(&lst, token);
 				i++;
 			}
 		}
@@ -107,8 +110,8 @@ int main()
 		if (i > j)
 		{
 			s = ft_substr(str, j, i - j);
-			token = ft_lstnew(s);
-			ft_lstadd_back(&lst, token);
+			token = ft_lstnew_token(s);
+			ft_lstadd_back_token(&lst, token);
 		}
 	}
 	valid_tokens(lst);
