@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/05/29 14:27:14 by ytlidi           ###   ########.fr       */
+/*   Created: 2025/01/12 16:40:45 by ytlidi            #+#    #+#             */
+/*   Updated: 2025/05/28 22:22:35 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "minishell.h"
 
-typedef struct s_token
+t_token	*ft_lstnew(char *token)
 {
-	char			*token;
-	struct s_token	*next;
-}	t_token;
+	t_token	*new_node;
 
-t_token	*ft_lstnew(char *token);
-void	ft_lstadd_back(t_token **lst, t_token *new);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+	new_node = malloc(sizeof(t_token));
+	new_node -> token = token;
+	new_node -> next = NULL;
+	return (new_node);
+}

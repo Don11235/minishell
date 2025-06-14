@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/05/29 14:27:14 by ytlidi           ###   ########.fr       */
+/*   Created: 2024/10/31 11:34:05 by ytlidi            #+#    #+#             */
+/*   Updated: 2025/05/29 16:33:28 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include <stdlib.h>
 
-typedef struct s_token
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char			*token;
-	struct s_token	*next;
-}	t_token;
+	int		i;
+	char	*p;
 
-t_token	*ft_lstnew(char *token);
-void	ft_lstadd_back(t_token **lst, t_token *new);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+	p = malloc(len + 1);
+	if (p == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		p[i] = s[start + i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}

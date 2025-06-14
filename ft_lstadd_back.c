@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/05/29 14:27:14 by ytlidi           ###   ########.fr       */
+/*   Created: 2025/01/13 15:19:54 by ytlidi            #+#    #+#             */
+/*   Updated: 2025/05/28 22:26:33 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "minishell.h"
 
-typedef struct s_token
+void	ft_lstadd_back(t_token **lst, t_token *new)
 {
-	char			*token;
-	struct s_token	*next;
-}	t_token;
+	t_token	*current;
 
-t_token	*ft_lstnew(char *token);
-void	ft_lstadd_back(t_token **lst, t_token *new);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+	current = *lst;
+	if (*lst == NULL)
+		*lst = new;
+	else
+	{
+		while (current -> next != NULL)
+			current = current -> next;
+		current -> next = new;
+	}
+	new -> next = NULL;
+}
