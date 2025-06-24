@@ -9,35 +9,22 @@ void display_list(t_token *head) {
     printf("NULL\n");
 }
 
-int main()
+int main(int argc, char *argv[], char **envp)
 {
-	char	*input;
-	t_token *str;
+	char		*input;
+	t_command	*cmd;
+	t_env		*env;
 
+	env = init_env(envp);
 	while (1)
 	{
 		input = readline("minishell$ "); 
-		add_history(input);
 		if (!input)
 			break;
-		str = parse_input(input); // when pars_input return NULL which mean fails 
-		// display_list(str);
+		add_history(input);
+		cmd = parse_input(input); // when pars_input return NULL which mean fails 
+		if (!cmd)
+			continue ;
+		execute(cmd, envp);
 	}
 }
-
-// int main()
-// {
-// 	char	*input;
-// //	t_cmd	*cmd;
-
-// 	while (1)
-// 	{
-// 		input = readline("minishell$ "); 
-// 		if (!input)
-// 			break;
-// 		cmd = parse_input(input)
-// 		if (!cmd)
-// 			continue;
-// 		execute(cmd);
-// 	}
-// }
