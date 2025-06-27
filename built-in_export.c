@@ -1,0 +1,110 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built-in_export.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/27 20:58:44 by mben-cha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+static int	is_valid(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(arg[0]) || arg[0] == '=' || arg[0])
+		return (print_export_error(arg));
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (print_export_error(arg));
+	}
+	return (0);
+}
+
+static int	has_equal_sign(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (arg[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	add_key_value(t_env **env, char *arg)
+{
+	char	**key_value;
+	t_env	*exist;
+
+	key_value = ft_split(arg, '=');
+	if (!key_value)
+		return (1);
+	exist = find_env(*env, key_value[0]);
+	if (!key_value[1])
+	{
+		if (!exist)
+			add_env(env, key_value[0], "");
+		else
+			update_env(env, key_value[0], "");
+	}
+	else
+	{
+		if (!exist)
+			add_env(env, key_value[0], key_value[1]);
+		else
+			update_env(env, key_value[0], key_value[1]);
+	}
+	free_split(key_value);
+	return (0);
+}
+
+void	print_export_env(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		printf("declare -x %s=%s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
+}
+
+int	export(t_env **env, char **args)
+{
+	int		i;
+	int		status;
+
+	i = 1;
+	status = 0;
+	if (!args[1])
+		print_export_env(*env);
+	while (args[i])
+	{
+		if (is_valid(args[i]))
+		{
+			status = 1;
+			i++;
+			continue ;
+		}
+		if (has_equal_sign(args[i]))
+		{
+			if (add_key_value(env, args[i]))
+				return (1);
+		}
+		else
+			add_env(env, args[i], NULL);
+		i++;
+	}
+	return (status);
+}

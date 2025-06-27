@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 20:22:07 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/24 23:51:36 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:11:54 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,19 @@ t_env	*init_env(char **envp)
 			return (NULL);
 		new = ft_lstnew(key_value[0], key_value[1]);
 		ft_lstadd_back(&env_list, new);
-		printf("++%s++\n", env_list->key);
 		free_split(key_value);
 		i++;
 	}
 	return (env_list);
 }
-
 int main(int argc, char *argv[], char **envp)
 {
-	t_env	*env;
-	t_env	*tmp;
-	
-	env = init_env(envp);
-	// tmp = env;
-	// while (tmp)
-	// {
-	// 	printf("%s %s\n", tmp->key, tmp->value);
-	// 	tmp = tmp->next;
-	// }
+	t_env *tmp;
+
+	tmp = init_env(envp);
+	while (tmp)
+	{
+		printf("%s=%s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
 }

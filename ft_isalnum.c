@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_syscall.c                                    :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 19:52:59 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/20 21:04:43 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/27 16:41:11 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/27 16:41:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_or_exit(int result, char *msg)
+int	ft_isalnum(int c)
 {
-	if (result == -1)
-	{
-		perror(msg);
-		exit(EXIT_FAILURE);
-	}
+	if (ft_isalpha(c) == 1 || ft_isdigit(c) == 1)
+		return (1);
+	else
+		return (0);
 }

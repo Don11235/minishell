@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/24 23:01:22 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:53:54 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
@@ -83,4 +84,9 @@ int				ft_strcmp(const char *s1, const char *s2);
 t_env			*ft_lstnew(char *key, char *value);
 void			ft_lstadd_back(t_env **env, t_env *new);
 void			free_split(char **array);
-
+int				print_getcwd_error(char *cmd_name);
+int				print_chdir_error(char *path);
+void			add_env(t_env **env, char *key, char *value);
+int				print_export_error(char *identifier);
+t_env			*find_env(t_env *env, char *key);
+int				update_env(t_env *env, char *key, char *new_value);

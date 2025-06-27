@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   built-in_unset.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/27 18:49:48 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/27 21:06:18 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+static int	is_valid(char *arg)
 {
-	int		i;
-	char	*p;
+	int	i;
 
 	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
+	if (ft_isdigit(arg[0]) || arg[0])
+		return (print_export_error(arg));
+	while (arg[i])
 	{
-		p[i] = src[i];
-		i++;
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (print_export_error(arg));
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	return (0);
+}
+
+int	unset(char *key)
+{
+	
 }
