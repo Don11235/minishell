@@ -125,22 +125,25 @@ int words_count(t_token *beginning)
 
 	current = beginning;
 	i = 0;
-	while (current != NULL && current->type == TOKEN_WORD)
+	while (current != NULL && current->type != TOKEN_PIPE)
 	{
+		if (current->type >= 4 && current->type <= 7)
+			current = current->next->next;
+		else
+			current = current->next;
 		i++;
-		current = current->next;
 	}
 	return i;
 }
 
-void display_redirection_list(t_redirection *head) {
-    t_redirection *current = head;
-    while (current != NULL) {
-        printf("%s(%d) -> ", current->file, current->type);
-        current = current->next;
-    }
-    printf("NULL\n");
-}
+// void display_redirection_list(t_redirection *head) {
+//     t_redirection *current = head;
+//     while (current != NULL) {
+//         printf("%s(%d) -> ", current->file, current->type);
+//         current = current->next;
+//     }
+//     printf("NULL\n");
+// }
 
 char	*remove_quote(char *str)
 {
@@ -174,7 +177,7 @@ char	*remove_quote(char *str)
 	return (new_str);
 }
 
-t_token *parse_input(char *str)
+t_command *parse_input(char *str)
 {
 	t_token			*token_list;
 	t_token			*current_token;
@@ -188,8 +191,9 @@ t_token *parse_input(char *str)
 	int				i;
 	int				pipe;
 
-	token_list = NULL;
 	i = 0;
+	token_list = NULL;
+	command_list = NULL;
 	while (str[i] != '\0')
 	{
 		if (quote_tokens(str, &token_list, &i))
@@ -199,11 +203,12 @@ t_token *parse_input(char *str)
 		if (word_tokens(str, &token_list, &i))
 			return (NULL);
 	}
-	command_list = NULL;
+	if (valid_tokens(token_list))
+		return (NULL);
 	current_token = token_list;
 	while (current_token != NULL)
 	{
-		args = malloc(sizeof(char *) * (words_count(token_list) + 1)); //free
+		args = malloc(sizeof(char *) * (words_count(current_token) + 1)); //free
 		i = 0;
 		while (current_token != NULL && current_token->type < 3)
 		{
@@ -215,8 +220,6 @@ t_token *parse_input(char *str)
 		command = ft_lstnew_command(args); //free
 		command->pipe_in = 0;
 		command->pipe_out = 0;
-		command->built_in = 0;
-		command->path = NULL;
 	//	i = 0;
 	//	while (command->args[i])
 	//	{
@@ -262,10 +265,8 @@ t_token *parse_input(char *str)
 		}
 		printf("pipe_in : %d\n", command_list->pipe_in);
 		printf("pipe_out : %d\n", command_list->pipe_out);
-		printf("built-in : %d\n", command->built_in);
-		printf("path : %s\n", command->path);
 		command_list = command_list->next;
 		printf("\n");
 	}
-	return (token_list);
+	return (command_list);
 }

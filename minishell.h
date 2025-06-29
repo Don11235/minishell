@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/14 19:00:09 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/06/29 16:53:33 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ typedef struct s_command
 	t_redirection		*rds;
 	int					pipe_in;
 	int					pipe_out;
-	int					built_in;
-	char				*path;   //      ls    ->      test      ->     |      -> .......
 	struct s_command	*next;
 	// struct s_command	*prev;
 }	t_command;
@@ -61,12 +59,13 @@ t_command		*ft_lstnew_command(char **args);
 t_redirection	*ft_lstnew_redirection(int type, char *file);
 void			ft_lstadd_back_token(t_token **lst, t_token *new);
 void			ft_lstadd_back_command(t_command **lst, t_command *new);
-void			ft_lstadd_back_redirection(t_redirection **lst, t_redirection *new);
+void			ft_lstadd_back_redirection(t_redirection ***lst, t_redirection *new);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strdup(char *src);
-t_token			*parse_input(char *str);
+t_command		*parse_input(char *str);
 size_t			ft_strlen(const char *s);
 char			**ft_split(char const *s, char c);
 char			*ft_strjoin(char const *s1, char const *s2);
 int				check_cmd(t_command *cmd);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
+int				valid_tokens(t_token *head);

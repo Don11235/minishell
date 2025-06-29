@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <stdio.h>
 
-void valid_tokens(t_token *head)
+int	valid_tokens(t_token *head)
 {
 	t_token *current;
 
@@ -9,14 +9,14 @@ void valid_tokens(t_token *head)
 	if (current->token[0] == '|')
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
-		return;
+		return (1);
 	}
 	while (current != NULL)
 	{
 		if (current->token[0] == '|' && current->next->token[0] == '|')
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
-			return;
+			return (1);
 		}
 		if ((current->token[0] == '>' || current->token[0] == '<')
 			&& (current->next->token[0] == '|'
@@ -24,13 +24,13 @@ void valid_tokens(t_token *head)
 		{
 			printf("minishell: syntax error near unexpected token `%c%c'\n",
 				current->next->token[0], current->next->token[1]);
-			return;
+			return (1);
 		}
 		if (current->next == NULL
 			&& (current->token[0] == '>' || current->token[0] == '<'))
 		{
 			printf("minishell: syntax error near unexpected token `newline'\n");
-			return;
+			return (1);
 		}
 		current = current->next;
 	}
