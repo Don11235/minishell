@@ -175,6 +175,18 @@ char	*remove_quote(char *str)
 	if (flag % 2 == 1)
 		printf("quote not closed\n");
 	return (new_str);
+// }
+
+// void	gleu_tokens(t_token *head)
+// {
+// 	while (head)
+// 	{
+// 		if (head->merg)
+// 		{
+
+// 		}
+// 		head = head->next;
+// 	}
 }
 
 t_command *parse_input(char *str)
@@ -203,6 +215,7 @@ t_command *parse_input(char *str)
 		if (word_tokens(str, &token_list, &i))
 			return (NULL);
 	}
+	glue_token();
 	if (valid_tokens(token_list))
 		return (NULL);
 	current_token = token_list;

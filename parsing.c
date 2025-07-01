@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/29 22:16:27 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:32:05 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int quote_tokens(char *str, t_token **list, int *i)
 	int		j;
 	char	*s;
 	t_token	*token;
+	int		flag;
 
 	while (str[*i] == ' ' || (str[*i] >= 9 && str[*i] <= 13))
 		(*i)++;
@@ -33,8 +34,21 @@ int quote_tokens(char *str, t_token **list, int *i)
 	{
 		q = str[*i];
 		j = (*i)++;
-		while (str[*i] != q && str[*i] != '\0')
+		flag = 1;
+		while ((str[*i] != ' ' || flag % 2 == 1) && str[*i] != '\0')
+		{
+			if ((flag % 2 == 0 && (str[*i] == '\'' || str[*i] == '"'))
+				|| (flag % 2 == 1 && str[*i] == q))
+			{
+				q = str[*i];
+				flag++;
+			}
+			// if (str[i] == '\'' || str[i] == '"')
+			// 	flag++;
 			(*i)++;
+		}
+		// while (str[*i] != q && str[*i] != '\0')
+		// 	(*i)++;
 		//if (str[*i] == '\0')
 		//	printf("quote not closed\n");
 		if (*i > j)
@@ -112,29 +126,30 @@ int word_tokens(char *str, t_token **list, int *i)
 {
 	int		j;
 	char	*s;
+	char	q;
 	t_token *token;
+	int		flag;
 	   	
 	j = *i;
-	while (str[*i] != ' ' && !(str[*i] >= 9 && str[*i] <= 13) && str[*i] != '|'
-		&& str[*i] != '>' && str[*i] != '<' && str[*i] != '"' && str[*i] != '\''
-		&& str[*i] != '\0')
-		(*i)++;
-	while ((str[*i] == '"' || str[*i] == '\'') && str[*i] != '\0')
+	flag = 0;
+	while (((str[*i] != ' ' && !(str[*i] >= 9 && str[*i] <= 13) && str[*i] != '|'
+		&& str[*i] != '>' && str[*i] != '<') || flag % 2 == 1) && str[*i] != '\0')
 	{
-		if (str[*i] == '"' || str[*i] == '\'')
+		if ((flag % 2 == 0 && (str[*i] == '\'' || str[*i] == '"'))
+			|| (flag % 2 == 1 && str[*i] == q))
 		{
-			(*i)++;
-			while (str[*i] != '"' && str[*i] != '\'' && str[*i] != '\0')
-				(*i)++;
+			q = str[*i];
+			flag++;
 		}
+		// if (str[i] == '\'' || str[i] == '"')
+		// 	flag++;
 		(*i)++;
 	}
 	if (*i > j)
 	{
-		s = ft_substr(str, j, *i - j + 1); //free
+		s = ft_substr(str, j, *i - j); //free
 		if (s == NULL)
 			return (1);
-		(*i)++;
 		token = ft_lstnew_token(s); //free
 		token->type = TOKEN_WORD; //not necessary (it's 0 by default)
 		ft_lstadd_back_token(list, token);
@@ -190,6 +205,10 @@ char	*remove_quote(char *str)
 			flag++;
 			i++;
 			continue;
+		}
+		if (str[i] == '$' && ((flag % 2 == 1 && quote == '"') || flag % 2 == 0))
+		{
+			
 		}
 		new_str[j] = str[i];
 		i++;
@@ -300,6 +319,11 @@ t_command	*parse_input(char *str)
 		if (word_tokens(str, &token_list, &i))
 			return (NULL);
 	}
+	// while (token_list)
+	// {
+	// 	printf("value: %s\n", token_list->token);
+	// 	token_list= token_list->next;
+	// }
 	if (valid_tokens(token_list))
 		return (NULL);
 	command_list = filling_cmd_list(token_list, 0);

@@ -36,7 +36,7 @@ int main()
 			int test = 0;
 			while (cmd->args[test])
 			{
-				printf("args:%s\n", cmd->args[test]);
+				printf("args : %s\n", cmd->args[test]);
 				test++;
 			}
 			if (cmd->rds)
