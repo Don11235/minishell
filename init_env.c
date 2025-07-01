@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/24 20:22:07 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/30 13:33:41 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+t_env	*init_env(char **envp)
 {
 	int		i;
-	char	*p;
+	char	**key_value;
+	t_env	*new;
+	t_env	*env_list;
 
 	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
+	env_list = NULL;
+	while (envp[i])
 	{
-		p[i] = src[i];
+		key_value = ft_split(envp[i], '=');
+		if (key_value == NULL)
+			return (NULL);
+		new = ft_lstnew(key_value[0], key_value[1]);
+		ft_lstadd_back(&env_list, new);
+		free(key_value);
 		i++;
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	return (env_list);
 }

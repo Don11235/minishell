@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   built-in_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/22 17:04:54 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/22 20:19:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+int	echo(char **args)
 {
-	int		i;
-	char	*p;
+	int	i;
+	int	flag;
 
-	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
+	i = 1;
+	flag = 0;
+	if (args[i] && !ft_strcmp(args[i], "-n"))
 	{
-		p[i] = src[i];
+		flag = 1;
 		i++;
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	while (args[i] && !ft_strcmp(args[i], "-n"))
+		i++;
+	while (args[i])
+	{
+		if (printf("%s", args[i++]) == -1)
+			return (1);
+		if (args[i] != NULL && printf(" ") == -1)
+			return (1);
+	}
+	if (flag == 0)
+	{
+		if (printf("\n") == -1)
+			return (1);
+	}
+	return (0);
 }

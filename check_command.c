@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/14 21:28:47 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:13:55 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	while (*s1 == *s2 && *s1)
-	{
-		s1++;
-		s2++;
-	}
-	return (*s1 - *s2);
-}
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -45,7 +35,6 @@ int	check_and_set_builtin(t_command *comd)
 		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
 			|| !ft_strcmp(cmd, "exit"))
 	{
-		comd->built_in = 1;
 		return (1);
 	}
 	else
@@ -84,10 +73,7 @@ int	find_command_in_path(t_command *cmd)
 			if (cmd_path == NULL) //free path dir
 				return (-1);
 			if (!access(cmd_path, F_OK))
-			{
-				cmd->path = cmd_path;
 				return (1);
-			}
 			i++;
 		}
 		printf("minishell: %s: command not found\n", cmd->args[0]);
