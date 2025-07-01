@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   free_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/24 21:57:06 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/24 21:57:16 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+void	free_split(char **array)
 {
-	int		i;
-	char	*p;
+	int	i;
 
 	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
-	{
-		p[i] = src[i];
-		i++;
-	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	while (array[i])
+		free(array[i++]);
+	free(array);
 }

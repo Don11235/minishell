@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_execution.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/24 21:41:57 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/25 00:22:48 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+t_env	*ft_lstnew(char *key, char *value)
 {
-	int		i;
-	char	*p;
+	t_env	*new;
 
-	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
+	new = (t_env *)malloc(sizeof(t_env));
+	if (new == NULL)
 		return (NULL);
-	while (src[i] != '\0')
-	{
-		p[i] = src[i];
-		i++;
-	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
+	new->next = NULL;
+	return (new);
 }

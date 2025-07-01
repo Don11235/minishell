@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/24 19:40:59 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/24 19:41:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	int		i;
-	char	*p;
-
-	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
+	while (*s1 == *s2 && *s1)
 	{
-		p[i] = src[i];
-		i++;
+		s1++;
+		s2++;
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	return (*s1 - *s2);
 }

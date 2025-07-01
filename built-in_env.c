@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   built-in_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/28 17:01:38 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/28 18:34:07 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+int	env(t_env *env, t_shell *shell)
 {
-	int		i;
-	char	*p;
-
-	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
-		return (NULL);
-	while (src[i] != '\0')
+	while (env)
 	{
-		p[i] = src[i];
-		i++;
+		if (env->value && printf("%s=%s\n", env->key, env->value) == -1)
+			return (1);
+		env = env->next;
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
+	return (shell->last_exit_status = 0, 0);
 }

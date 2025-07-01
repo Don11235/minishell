@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_lstadd_back_execution.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/25 00:23:36 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/24 21:50:09 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/24 23:11:17 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup(char *src)
+t_env	*ft_lstlast(t_env *env)
 {
-	int		i;
-	char	*p;
-
-	i = 0;
-	p = malloc(ft_strlen(src) + 1);
-	if (p == NULL)
+	if (env == NULL)
 		return (NULL);
-	while (src[i] != '\0')
+	while (env->next != NULL)
+		env = env->next;
+	return (env);
+}
+
+void	ft_lstadd_back(t_env **env, t_env *new)
+{
+	t_env	*last;
+
+	if (env == NULL || new == NULL)
+		return ;
+	if (*env == NULL)
+		*env = new;
+	else
 	{
-		p[i] = src[i];
-		i++;
+		last = ft_lstlast(*env);
+		last->next = new;
 	}
-	p[i] = '\0';
-	free(src);
-	return (p);
 }

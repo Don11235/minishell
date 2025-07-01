@@ -6,13 +6,16 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/30 22:11:32 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/01 19:30:22 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
@@ -40,7 +43,7 @@ typedef struct s_token
 typedef struct s_redirection
 {
 	int						type;
-	char					*file;
+	char					*filename_or_delimiter;
 	struct s_redirection	*next;
 }	t_redirection;
 
@@ -49,10 +52,23 @@ typedef struct s_command
 	char				**args;
 	t_redirection		*rds;
 	int					pipe_in;
-	int					pipe_out;
+	int					pipe_out; 
+	int					heredoc_fd;
 	struct s_command	*next;
 	// struct s_command	*prev;
 }	t_command;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_shell
+{
+	int	last_exit_status;
+}	t_shell;
 
 t_token			*ft_lstnew_token(char *token);
 t_command		*ft_lstnew_command(char **args);
@@ -69,3 +85,18 @@ char			*ft_strjoin(char const *s1, char const *s2);
 int				check_cmd(t_command *cmd);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int				valid_tokens(t_token *head);
+int				check_or_exit(int result, char *msg);
+void			setup_redirections(int type, char *filename);
+int				execute(t_command *cmd_list, char **envp);
+int				ft_strcmp(const char *s1, const char *s2);
+t_env			*ft_lstnew(char *key, char *value);
+void			ft_lstadd_back(t_env **env, t_env *new);
+void			free_split(char **array);
+int				print_getcwd_error(char *cmd_name);
+int				print_chdir_error(char *path);
+void			add_env(t_env **env, char *key, char *value);
+int				print_export_error(char *identifier);
+t_env			*find_env(t_env *env, char *key);
+int				update_env(t_env *env, char *key, char *new_value);
+void			print_exit_error(char *arg);
+int				setup_pipe(int *pipefd);
