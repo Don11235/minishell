@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sys_error.c                                        :+:      :+:    :+:   */
+/*   built-in_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 19:52:59 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/30 14:02:41 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/28 17:01:38 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/28 18:34:07 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_or_exit(int result, char *msg)
+int	env(t_env *env, t_shell *shell)
 {
-	if (result == -1)
+	while (env)
 	{
-		perror(msg);
-		return (1);
+		if (env->value && printf("%s=%s\n", env->key, env->value) == -1)
+			return (1);
+		env = env->next;
 	}
-	return (0);
+	return (shell->last_exit_status = 0, 0);
 }
-

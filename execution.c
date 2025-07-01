@@ -6,21 +6,11 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/21 22:26:41 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:10:21 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int setup_pipe(int *pipefd)
-{
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return (-1);
-	}
-	return (0);
-}
 
 void	handle_pipe_fds(t_command *cmd, int *pipefd)
 {
@@ -55,11 +45,11 @@ void	handle_redirections(t_command *cmd)
 	while (redirect)
 	{
 		if (redirect->type == TOKEN_RD_IN)
-			setup_redirections(TOKEN_RD_IN, redirect->file);
+			setup_redirections(TOKEN_RD_IN, redirect->filename_or_delimiter);
 		else if (redirect->type == TOKEN_RD_OUT)
-			setup_redirections(TOKEN_RD_OUT, redirect->file);
+			setup_redirections(TOKEN_RD_OUT, redirect->filename_or_delimiter);
 		else if (redirect->type == TOKEN_APPEND)
-			setup_redirections(TOKEN_APPEND, redirect->file);
+			setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/27 20:58:44 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:35:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ static int	is_valid(char *arg)
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(arg[0]) || arg[0] == '=' || arg[0])
+	if (ft_isdigit(arg[0]) || arg[0] == '=' || !arg[0])
 		return (print_export_error(arg));
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (print_export_error(arg));
+		i++;
 	}
 	return (0);
 }
@@ -80,7 +81,7 @@ void	print_export_env(t_env *env)
 	}
 }
 
-int	export(t_env **env, char **args)
+int	export(t_env **env, char **args, t_shell *shell)
 {
 	int		i;
 	int		status;
@@ -100,11 +101,11 @@ int	export(t_env **env, char **args)
 		if (has_equal_sign(args[i]))
 		{
 			if (add_key_value(env, args[i]))
-				return (1);
+				return (shell->last_exit_status = 1, 1);
 		}
 		else
 			add_env(env, args[i], NULL);
 		i++;
 	}
-	return (status);
+	return (shell->last_exit_status = status, status);
 }

@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/20 21:55:42 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:06:52 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	redirect_fd(char *filename, int flags, int std_fd)
+static int	redirect_fd(char *filename, int flags, int std_fd)
 {
 	int	fd;
 	int	ret;
@@ -21,10 +21,27 @@ static void	redirect_fd(char *filename, int flags, int std_fd)
 		fd = open(filename, flags, 0644);
 	else
 		fd = open(filename, flags);
-	check_or_exit(fd, "open");
+	if (check_or_exit(fd, "open"))
+		return (1);
 	ret = dup2(fd, std_fd);
-	check_or_exit(ret, "dup2");
+	if (check_or_exit(ret, "dup2"))
+		return (1);
 	close(fd);
+	return (0);
+}
+
+static int	redirect_heredoc(char *delimiter)
+{
+	int	pipefd[2];
+	int	ret;
+
+	if (setup_pipe(pipefd))
+		return (1);
+	close(pipefd[1]);
+	ret = dup2(pipefd[0], STDIN_FILENO);
+	if (check_or_exit(ret, "dup2"))
+		return (1);
+	return (0);
 }
 
 void	setup_redirections(int type, char *filename)
@@ -38,4 +55,6 @@ void	setup_redirections(int type, char *filename)
 		redirect_fd(filename, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO);
 	else if (type == TOKEN_APPEND)
 		redirect_fd(filename, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO);
+	else if (type == TOKEN_HEREDOC)
+		
 }

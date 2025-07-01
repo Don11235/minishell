@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sys_error.c                                        :+:      :+:    :+:   */
+/*   setup_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 19:52:59 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/30 14:02:41 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/06/30 14:44:14 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/06/30 14:45:25 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_or_exit(int result, char *msg)
+int setup_pipe(int *pipefd)
 {
-	if (result == -1)
+	if (pipe(pipefd) == -1)
 	{
-		perror(msg);
-		return (1);
+		perror("pipe");
+		return (-1);
 	}
 	return (0);
 }
-

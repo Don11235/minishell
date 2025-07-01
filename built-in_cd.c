@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 21:06:27 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/27 19:53:10 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:32:47 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,21 @@ int	change_directory(char *path, t_env **env)
 	return (0);
 }
 
-int	cd(char *path, t_env **env)
+int	cd(char *path, t_env **env, t_shell *shell)
 {
 	t_env	*home;
 	t_env	*old_pwd;
-	
+	int		result;
+
 	home = find_env(*env, "HOME");
 	old_pwd = find_env(*env, "OLDPWD");
 	if (!home || !old_pwd)
-		return (1);
+		return (shell->last_exit_status = 1, 1);
 	if (!path || !ft_strcmp(path, "~"))
-		return (change_directory(home->value, env));
-	if (path && !ft_strcmp(path, "-"))
-		return (change_directory(old_pwd->value, env));
-	return (change_directory(path, env));
+		result = change_directory(home->value, env);
+	else if (path && !ft_strcmp(path, "-"))
+		result = change_directory(old_pwd->value, env);
+	else
+		result = change_directory(path, env);
+	return (shell->last_exit_status = result, result);
 }

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:15:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/27 12:56:22 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:15:15 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,11 @@ int	print_export_error(char *identifier)
 	write(2, identifier, ft_strlen(identifier));
 	write(2, "': not a valid identifier\n", 26);
 	return (1);
+}
+
+void	print_exit_error(char *arg)
+{
+	write(2, "minishell: export: ", 19);
+	write(2, arg, ft_strlen(arg));
+	write(2, ": numeric argument required", 27);
 }
