@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/24 20:13:55 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/01 23:14:42 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	check_and_set_builtin(t_command *comd)
+int	check_builtin(t_command *comd)
 {
 	char	*cmd;
 
@@ -41,16 +41,16 @@ int	check_and_set_builtin(t_command *comd)
 		return (0);
 }
 
-int	find_command_in_path(t_command *cmd)
+char	*resolve_command_path(t_command *cmd)
 {
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		if (!access(cmd->args[0], F_OK))
-			return (1);
+			return (cmd->args[0]);
 		else
 		{
 			printf("minishell: %s: No such file or directory\n", cmd->args[0]);
-			return (0);
+			return (NULL);
 		}
 	}
 	else
@@ -73,12 +73,12 @@ int	find_command_in_path(t_command *cmd)
 			if (cmd_path == NULL) //free path dir
 				return (-1);
 			if (!access(cmd_path, F_OK))
-				return (1);
+				return (cmd_path);
 			i++;
 		}
 		printf("minishell: %s: command not found\n", cmd->args[0]);
 	}
-	return (0);
+	return (NULL);
 }
 
 int	check_cmd(t_command *cmd)

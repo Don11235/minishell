@@ -18,12 +18,6 @@ int main(int argc, char *argv[], char **envp)
 	env = init_env(envp);
 	if (!env)
 		return (1);
-	t_env	*tmp;
-	tmp = env;
-	while (tmp)
-	{
-		
-	}
 	// while (1)
 	// {
 	// 	input = readline("minishell$ "); 

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/30 18:43:51 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/02 23:40:39 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ typedef struct s_shell
 	int	last_exit_status;
 }	t_shell;
 
+typedef struct s_fd_backup
+{
+    int saved_stdin;
+	int	saved_stdout;
+}   t_fd_backup;
+
+
 t_token			*ft_lstnew_token(char *token);
 t_command		*ft_lstnew_command(char **args);
 t_redirection	*ft_lstnew_redirection(int type, char *file);
@@ -99,3 +106,6 @@ t_env			*find_env(t_env *env, char *key);
 int				update_env(t_env *env, char *key, char *new_value);
 void			print_exit_error(char *arg);
 int				setup_pipe(int *pipefd);
+char			*resolve_command_path(t_command *cmd);
+int				print_cmd_not_found(char *cmd);
+void			ft_putstr_fd(char *s, int fd);
