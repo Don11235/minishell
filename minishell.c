@@ -33,7 +33,7 @@ int main(int argc, char *argv[], char **envp)
 		add_history(input);
 		if (!input)
 			break;
-		cmd = parse_input(input); // when pars_input return NULL which mean fails 
+		cmd = parse_input(input, env); // when pars_input return NULL which mean fails 
 		// display_list(str);
 		while (cmd)
 		{

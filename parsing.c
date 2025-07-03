@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/01 15:32:05 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/03 17:49:51 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int quote_tokens(char *str, t_token **list, int *i)
 		q = str[*i];
 		j = (*i)++;
 		flag = 1;
-		while ((str[*i] != ' ' || flag % 2 == 1) && str[*i] != '\0')
+		while (((str[*i] != ' ' && !(str[*i] >= 9 && str[*i] <= 13)) || flag % 2 == 1) && str[*i] != '\0')
 		{
 			if ((flag % 2 == 0 && (str[*i] == '\'' || str[*i] == '"'))
 				|| (flag % 2 == 1 && str[*i] == q))
@@ -184,31 +184,64 @@ int words_count(t_token *beginning)
 //     printf("NULL\n");
 // }
 
-char	*remove_quote(char *str)
+void	expanding(char *new_str, int *j, char *str_to_add)
+{
+	int	i;
+
+	i = 0;
+	while (str_to_add[i] != '\0')
+	{
+		new_str[*j] = str_to_add[i];
+		i++;
+		(*j)++;
+	}
+}
+
+char	*remove_quote(char *str, t_env *env)
 {
 	int		i;
 	int		j;
 	int		flag;
 	char	*new_str;
 	char	quote;
+	t_env	*env_line;
 
 	i = 0;
 	j = 0;
 	flag = 0;
-	new_str = malloc(ft_strlen(str) + 1);
+	new_str = malloc(ft_strlen(str) + 1); //free
 	while (str[i] != '\0')
 	{
 		if ((flag % 2 == 0 && (str[i] == '\'' || str[i] == '"'))
 			|| (flag % 2 == 1 && str[i] == quote))
 		{
-			quote = str[i];
+			if (flag % 2 == 0)
+				quote = str[i];
 			flag++;
 			i++;
 			continue;
 		}
 		if (str[i] == '$' && ((flag % 2 == 1 && quote == '"') || flag % 2 == 0))
 		{
-			
+			i++;
+			if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13)) || str[i] == '\0')
+			{
+				new_str[j] = '$';
+				j++;
+				continue;
+			}
+			env_line = find_env_exp(env, &str[i]);
+			if (env_line == NULL)
+			{
+				i += strlen_before_spaces(&str[i]);
+				continue;
+			}
+			if (env_line != NULL)
+			{
+				expanding(new_str, &j, env_line->value);
+				i += ft_strlen(env_line->key);
+			}
+			// continue;
 		}
 		new_str[j] = str[i];
 		i++;
@@ -242,7 +275,7 @@ void	filling_pipes(t_command *command, t_token *current_token)
 	}	
 }
 
-char **inner_filling_cmd_list(t_token **current_token, t_redirection **redirection_list)
+char **inner_filling_cmd_list(t_token **current_token, t_redirection **redirection_list, t_env *env)
 {
 	t_redirection	*redirection;
 	char			**args;
@@ -254,7 +287,7 @@ char **inner_filling_cmd_list(t_token **current_token, t_redirection **redirecti
 	{
 		if (*current_token != NULL && (*current_token)->type < 3)
 		{
-			args[i] = remove_quote((*current_token)->token); //free
+			args[i] = remove_quote((*current_token)->token, env); //free
 			if (args[i] == NULL) //free function
 				return (NULL);
 			*current_token = (*current_token)->next;
@@ -271,7 +304,7 @@ char **inner_filling_cmd_list(t_token **current_token, t_redirection **redirecti
 	return (args);
 }
 
-t_command	*filling_cmd_list(t_token *token_list, int pipe_flag)
+t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env)
 {
 	t_token			*current_token;
 	t_command		*command_list;
@@ -285,7 +318,7 @@ t_command	*filling_cmd_list(t_token *token_list, int pipe_flag)
 	{
 		// command = NULL;
 		redirection_list = NULL;
-		args = inner_filling_cmd_list(&current_token, &redirection_list);
+		args = inner_filling_cmd_list(&current_token, &redirection_list, env);
 		if (args == NULL)
 			return (NULL);
 		command = ft_lstnew_command(args); //free
@@ -301,7 +334,7 @@ t_command	*filling_cmd_list(t_token *token_list, int pipe_flag)
 	return (command_list);
 }
 
-t_command	*parse_input(char *str)
+t_command	*parse_input(char *str, t_env *env)
 {
 	t_token		*token_list;
 	t_command	*command_list;
@@ -326,6 +359,6 @@ t_command	*parse_input(char *str)
 	// }
 	if (valid_tokens(token_list))
 		return (NULL);
-	command_list = filling_cmd_list(token_list, 0);
+	command_list = filling_cmd_list(token_list, 0, env);
 	return (command_list);
 }

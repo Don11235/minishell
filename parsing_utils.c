@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 01:09:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/02 18:36:37 by ytlidi           ###   ########.fr       */
+/*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
+/*   Updated: 2025/07/02 22:34:18 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*find_env(t_env *env, char *key)
+t_env	*find_env_exp(t_env *env, char *key)
 {
 	t_env	*tmp;
 
@@ -21,35 +21,19 @@ t_env	*find_env(t_env *env, char *key)
 		return (NULL);
 	while (tmp)
 	{
-		if (!ft_strcmp(key, tmp->key))
+		if (!ft_strcmp_exp(key, tmp->key))
 			return (tmp);
 		tmp = tmp->next;
 	}
 	return (NULL);
 }
 
-int	update_env(t_env *env, char *key, char *new_value)
+int	strlen_before_spaces(char *str)
 {
-	t_env	*env_node;
+	int	i;
 
-	env_node = find_env(env, key);
-	if (!env_node)
-		return (1);
-	free(env_node->value);
-	env_node->value = ft_strdup(new_value);
-	if (!env_node->value)
-		return (1);
-	return (0);
-}
-
-void	add_env(t_env **env, char *key, char *value)
-{
-	t_env	*new_node;
-
-	if (!env)
-		return ;
-	new_node = ft_lstnew(key, value);
-	if (new_node)
-		return ;
-	ft_lstadd_back(env, new_node);
+	i = 0;
+	while (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13) && str[i] != '\0' && str[i] != '"')
+		i++;
+	return (i);
 }
