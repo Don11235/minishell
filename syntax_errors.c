@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:46:03 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/06/22 16:55:28 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/03 19:23:25 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	valid_tokens(t_token *head)
 			printf("minishell: syntax error near unexpected token `|'\n");
 			return (1);				
 		}
-		if ((current->type >= 3 && current->type <= 7) && current->next != NULL
-			&& (current->next->type >= 4 && current->next->type <= 7))
+		if ((current->type >= 4 && current->type <= 7) && current->next != NULL
+			&& (current->next->type >= 3 && current->next->type <= 7))
 		{
 			printf("minishell: syntax error near unexpected token `%s'\n",
 				current->next->token);
