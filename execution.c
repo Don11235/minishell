@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/03 15:36:04 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:21:14 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_fd_backup	*handle_redirections(t_command *cmd)
 	return (fd_backup);
 }
 
-int	execute(t_command *cmd_list, char **envp)
+int	execute(t_command *cmd_list, t_env *env)
 {
 	t_command	*cmd;
 	pid_t		pid;
@@ -149,7 +149,7 @@ int	execute(t_command *cmd_list, char **envp)
 				if (is_built_in)
 					execute_builtin(cmd);
 				else
-					execve(cmd_path, cmd->args, envp);
+					execve(cmd_path, cmd->args, env);
 			}
 		}
 		cmd = cmd->next;

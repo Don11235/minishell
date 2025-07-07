@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/01 23:14:42 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:25:16 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*resolve_command_path(t_command *cmd)
 			return (-1);
 		while (path_dir[i])
 		{
-			cmd_path = ft_strjoin(path_dir[i], cmd->args[0]);
+			cmd_path = ft_strjoin_with(path_dir[i], cmd->args[0], '/');
 			if (cmd_path == NULL) //free path dir
 				return (-1);
 			if (!access(cmd_path, F_OK))

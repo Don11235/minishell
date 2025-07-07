@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/02 23:40:39 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:24:21 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char			*ft_strdup(char *src);
 t_token			*parse_input(char *str);
 size_t			ft_strlen(const char *s);
 char			**ft_split(char const *s, char c);
-char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_strjoin_with(char const *s1, char const *s2, char sep);
 int				check_cmd(t_command *cmd);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int				check_or_exit(int result, char *msg);
@@ -109,3 +109,4 @@ int				setup_pipe(int *pipefd);
 char			*resolve_command_path(t_command *cmd);
 int				print_cmd_not_found(char *cmd);
 void			ft_putstr_fd(char *s, int fd);
+int				env_size(t_env *env);

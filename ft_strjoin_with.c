@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin_with.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 22:22:56 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/14 20:28:53 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/07 17:24:49 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_with(char const *s1, char const *s2, char sep)
 {
 	size_t	len;
 	size_t	len1;
@@ -42,7 +42,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (pt == NULL)
 		return (NULL);
 	ft_memcpy(pt, s1, len1);
-	pt[len1] = '/';
+	pt[len1] = sep;
 	ft_memcpy(pt + len1 + 1, s2, ft_strlen(s2));
 	pt[len + 1] = '\0';
 	return (pt);
