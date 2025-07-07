@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sys_error.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 19:52:59 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/03 15:21:17 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/02 23:39:24 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/02 23:39:58 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_fail(int result, char *msg)
+void	ft_putstr_fd(char *s, int fd)
 {
-	if (result == -1)
-	{
-		perror(msg);
-		return (1);
-	}
-	return (0);
-}
+	size_t	len;
 
+	if (s == NULL)
+		return ;
+	len = ft_strlen(s);
+	write(fd, s, len);
+	write(fd, "\n", 1);
+}

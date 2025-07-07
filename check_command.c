@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/01 19:15:58 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/07 21:08:50 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	check_and_set_builtin(t_command *comd)
+int	check_builtin(t_command *comd)
 {
 	char	*cmd;
 
@@ -43,16 +43,16 @@ int	check_and_set_builtin(t_command *comd)
 		return (0);
 }
 
-int	find_command_in_path(t_command *cmd)
+char	*resolve_command_path(t_command *cmd)
 {
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		if (!access(cmd->args[0], F_OK))
-			return (1);
+			return (cmd->args[0]);
 		else
 		{
 			printf("minishell: %s: No such file or directory\n", cmd->args[0]);
-			return (0);
+			return (NULL);
 		}
 	}
 	else
@@ -71,16 +71,16 @@ int	find_command_in_path(t_command *cmd)
 			return (-1);
 		while (path_dir[i])
 		{
-			cmd_path = ft_strjoin(path_dir[i], cmd->args[0]);
+			cmd_path = ft_strjoin_with(path_dir[i], cmd->args[0], '/');
 			if (cmd_path == NULL) //free path dir
 				return (-1);
 			if (!access(cmd_path, F_OK))
-				return (1);
+				return (cmd_path);
 			i++;
 		}
 		printf("minishell: %s: command not found\n", cmd->args[0]);
 	}
-	return (0);
+	return (NULL);
 }
 
 int	check_cmd(t_command *cmd)
