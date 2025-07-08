@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/07 16:21:14 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:34:30 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,14 @@ t_fd_backup	*handle_redirections(t_command *cmd)
 	return (fd_backup);
 }
 
-int	execute(t_command *cmd_list, t_env *env)
+int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 {
 	t_command	*cmd;
 	pid_t		pid;
 	int			pipefd[2];
 	int			is_built_in;
 	char		*cmd_path;
+	int			status;
 
 	cmd = cmd_list;
 	while (cmd)
@@ -127,12 +128,14 @@ int	execute(t_command *cmd_list, t_env *env)
 		is_built_in = check_builtin(cmd);
 		if (!is_built_in)
 			cmd_path = resolve_command_path(cmd);
+		if (!cmd_path)
+			return (1);
 		if (cmd->pipe_out && setup_pipe(pipefd))
 			return (1);
 		if (is_built_in && !cmd->pipe_out)
 		{
 			handle_redirections(cmd);
-			execute_builtin(cmd);
+			execute_builtin(cmd, env, shell);
 			//restore
 		}
 		else
@@ -144,17 +147,19 @@ int	execute(t_command *cmd_list, t_env *env)
 			{
 				handle_pipe_fds(cmd, pipefd);
 				handle_redirections(cmd);
-				if (!is_built_in && !cmd_path)
-					return (print_cmd_not_found(cmd));
 				if (is_built_in)
-					execute_builtin(cmd);
+					execute_builtin(cmd, env, shell);
 				else
-					execve(cmd_path, cmd->args, env);
+					execve(cmd_path, cmd->args, env_to_array(env));
+			}
+			else
+			{
+				close(pipefd[0]);
+				close(pipefd[1]);
 			}
 		}
 		cmd = cmd->next;
 	}
-	close(pipefd[0]);
-	close(pipefd[1]);
+	wait(&status);
 	return (0);
 }

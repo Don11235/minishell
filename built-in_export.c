@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/28 18:35:29 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:18:50 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ int	add_key_value(t_env **env, char *arg)
 		if (!exist)
 			add_env(env, key_value[0], "");
 		else
-			update_env(env, key_value[0], "");
+			update_env(*env, key_value[0], "");
 	}
 	else
 	{
 		if (!exist)
 			add_env(env, key_value[0], key_value[1]);
 		else
-			update_env(env, key_value[0], key_value[1]);
+			update_env(*env, key_value[0], key_value[1]);
 	}
 	free_split(key_value);
 	return (0);
