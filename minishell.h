@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/08 14:19:47 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:27:24 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_fd_backup
 {
     int saved_stdin;
 	int	saved_stdout;
+	int	has_redirection;
 }   t_fd_backup;
 
 
@@ -93,7 +94,7 @@ char			*ft_strjoin_with(char const *s1, char const *s2, char sep);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int				valid_tokens(t_token *head);
 int				check_fail(int result, char *msg);
-void			setup_redirections(int type, char *filename);
+int				setup_redirections(int type, char *filename);
 int				execute(t_command *cmd_list, t_env *env, t_shell *shell);
 int				ft_strcmp(const char *s1, const char *s2);
 t_env			*ft_lstnew(char *key, char *value);
@@ -132,7 +133,7 @@ int				pipes_and_rds_tokens(char *str, t_token **list, int *i);
 int				word_tokens(char *str, t_token **list, int *i);
 int				words_count(t_token *beginning);
 int				calc_new_str_len(char *str, t_env *env);
-char			*resolve_command_path(t_command *cmd);
+char			*resolve_command_path(t_command *cmd, t_env *env);
 int				print_cmd_error(char *cmd, char *msg, int exit_code);
 void			ft_putstr_fd(char *s, int fd);
 int				env_size(t_env *env);
@@ -142,7 +143,7 @@ int				execute_builtin(t_command *cmd, t_env *env_list, t_shell *shell);
 int				cd(char *path, t_env **env, t_shell *shell);
 int				echo(char **args);
 int				env(t_env *env, t_shell *shell);
-int				exit_b(char **args, t_shell *shell);
+int				do_exit(char **args, t_shell *shell);
 int				export(t_env **env, char **args, t_shell *shell);
 int				pwd(t_shell *shell);
 int				unset(t_env **env, char **args, t_shell *shell);
@@ -150,6 +151,10 @@ int				ft_isdigit(int c);
 int				ft_isalnum(int c);
 int				ft_isalpha(int c);
 void			free_split(char **array);
+void			quick_sort_env(t_env **array, int low, int high);
+t_env			**get_sorted_env_ptr_array(t_env *env_list);
+int				restore_stdio(int saved_stdin, int saved_stdout);
+t_fd_backup		*handle_redirections(t_command *cmd);
 
 
 

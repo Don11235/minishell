@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_env.c                                         :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 20:22:07 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 12:46:27 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/09 13:51:28 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/09 17:34:08 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*init_env(char **envp)
+static void	fill_key_array(t_env *env, t_env **array)
 {
-	int		i;
-	char	**key_value;
-	t_env	*new;
-	t_env	*env_list;
-
+	int	i;
+	
 	i = 0;
-	env_list = NULL;
-	while (envp[i])
+	while (env)
 	{
-		key_value = ft_split(envp[i], '=');
-		if (key_value == NULL)
-			return (NULL);
-		new = ft_lstnew(key_value[0], key_value[1]);
-		ft_lstadd_back(&env_list, new);
-		free_split(key_value);
-		i++;
+		array[i++] = env;
+		env = env->next;
 	}
-	if (!find_env(env_list, "OLDPWD"))
-		add_env(&env_list, "OLDPWD", NULL);
-	return (env_list);
+	array[i] = NULL;
+}
+
+t_env	**get_sorted_env_ptr_array(t_env *env_list)
+{
+	int		size_env_list;
+	t_env	**array;
+
+	size_env_list = env_size(env_list);
+	array = malloc((size_env_list + 1) * sizeof(t_env *));
+	if (!array)
+		return (NULL);
+	fill_key_array(env_list, array);
+	quick_sort_env(array, 0, size_env_list - 1);
+	return (array);
 }

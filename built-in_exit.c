@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:42:50 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/08 13:08:35 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/09 22:53:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ long	ft_atol(const char *str)
 	return (num);
 }
 
-int	exit_b(char **args, t_shell *shell)
+int	do_exit(char **args, t_shell *shell)
 {
 	long int	exit_code;
 
@@ -70,7 +70,7 @@ int	exit_b(char **args, t_shell *shell)
 		exit(255);
 	if (args[2])
 	{
-		write(2, "minishell: exit: too many arguments", 35);
+		write(2, "minishell: do_exit: too many arguments\n", 39);
 		shell->last_exit_status = 1;
 		return (1);
 	}

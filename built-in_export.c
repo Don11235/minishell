@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/08 14:18:50 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/09 19:25:27 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,29 @@ int	add_key_value(t_env **env, char *arg)
 
 void	print_export_env(t_env *env)
 {
-	t_env	*tmp;
+	t_env	**sorted_array;
+	int		i;
 
-	tmp = env;
-	while (tmp)
+	i = 0;
+	sorted_array = get_sorted_env_ptr_array(env);
+	while (sorted_array[i])
 	{
-		printf("declare -x %s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		if (!sorted_array[i]->value)
+			printf("declare -x %s\n", sorted_array[i]->key);
+		else
+			printf("declare -x %s=\"%s\"\n", sorted_array[i]->key, sorted_array[i]->value);
+		i++;
 	}
 }
+
+void	add_or_update_export(t_env **env, char *key)
+{
+	if (!find_env(*env, key))
+		add_env(env, key, NULL);
+	else
+		update_env(*env, key, NULL);
+}
+
 
 int	export(t_env **env, char **args, t_shell *shell)
 {
@@ -104,7 +118,7 @@ int	export(t_env **env, char **args, t_shell *shell)
 				return (shell->last_exit_status = 1, 1);
 		}
 		else
-			add_env(env, args[i], NULL);
+			add_or_update_export(env, args[i]);
 		i++;
 	}
 	return (shell->last_exit_status = status, status);

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:49:48 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/28 18:42:20 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:08:46 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_valid(char *arg)
 	return (0);
 }
 
-t_env	*find_prev_env(t_env *env, char *key)
+static t_env	*find_prev_env(t_env *env, char *key)
 {
 	t_env	*tmp;
 
@@ -46,7 +46,7 @@ t_env	*find_prev_env(t_env *env, char *key)
 	return (NULL);
 }
 
-void	free_env_node(t_env *env_node)
+static void	free_env_node(t_env *env_node)
 {
 	if (!env_node)
 		return ;
@@ -55,7 +55,7 @@ void	free_env_node(t_env *env_node)
 	free(env_node);
 }
 
-void	unset_env_key(t_env **env, char *key)
+static void	unset_env_key(t_env **env, char *key)
 {
 	t_env	*prev_env;
 	t_env	*node_to_remove;
