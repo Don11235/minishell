@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 01:09:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/07 21:09:25 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:19:41 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	add_env(t_env **env, char *key, char *value)
 	if (!env)
 		return ;
 	new_node = ft_lstnew(key, value);
-	if (new_node)
+	if (!new_node)
 		return ;
 	ft_lstadd_back(env, new_node);
 }

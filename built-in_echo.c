@@ -6,11 +6,30 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 17:04:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/22 20:19:29 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:25:19 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	is_n_option(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[i] != '-')
+		return (0);
+	if (arg[i] == '-' && arg[i + 1] == '\0')
+		return (0);
+	i++;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;	
+	}
+	return (1);
+}
 
 int	echo(char **args)
 {
@@ -19,12 +38,12 @@ int	echo(char **args)
 
 	i = 1;
 	flag = 0;
-	if (args[i] && !ft_strcmp(args[i], "-n"))
+	if (args[i] && is_n_option(args[i]))
 	{
 		flag = 1;
 		i++;
 	}
-	while (args[i] && !ft_strcmp(args[i], "-n"))
+	while (args[i] && is_n_option(args[i]))
 		i++;
 	while (args[i])
 	{
