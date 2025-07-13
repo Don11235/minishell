@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:42:50 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 22:53:11 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:47:19 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_valid(char *arg)
+static int	is_valid(char *arg)
 {
 	int	i;
 	
@@ -28,7 +28,7 @@ int	is_valid(char *arg)
 	return (0);
 }
 
-long	ft_atol(const char *str)
+static long	ft_atol(const char *str)
 {
 	long int	num;
 	long int	sign;
@@ -59,25 +59,27 @@ long	ft_atol(const char *str)
 	return (num);
 }
 
-int	do_exit(char **args, t_shell *shell)
+int	do_exit(t_command *cmd, t_shell *shell)
 {
 	long int	exit_code;
 
-	write(1, "exit\n", 5);
-	if (!args[1])
+	if (cmd->pipe_in || cmd->pipe_out)
+		return (0);
+	write(1, "exit\n", 6);
+	if (!cmd->args[1])
 		exit (shell->last_exit_status);
-	if (is_valid(args[1]))
+	if (is_valid(cmd->args[1]))
 		exit(255);
-	if (args[2])
+	if (cmd->args[2])
 	{
-		write(2, "minishell: do_exit: too many arguments\n", 39);
+		write(2, "minishell: exit: too many arguments\n", 36);
 		shell->last_exit_status = 1;
 		return (1);
 	}
-	exit_code = ft_atol(args[1]);
+	exit_code = ft_atol(cmd->args[1]);
 	if (exit_code == -1)
 	{
-		print_exit_error(args[1]);
+		print_exit_error(cmd->args[1]);
 		exit(255);
 	}
 	exit(exit_code);

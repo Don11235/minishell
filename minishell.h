@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/10 15:27:24 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:47:31 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void			free_split(char **array);
 int				print_getcwd_error(char *cmd_name);
 int				print_chdir_error(char *path);
 void			add_env(t_env **env, char *key, char *value);
+void			print_shlvl_too_high_error(char *shlvl);
 int				print_export_error(char *identifier);
 t_env			*find_env(t_env *env, char *key);
 int				update_env(t_env *env, char *key, char *new_value);
@@ -143,7 +144,7 @@ int				execute_builtin(t_command *cmd, t_env *env_list, t_shell *shell);
 int				cd(char *path, t_env **env, t_shell *shell);
 int				echo(char **args);
 int				env(t_env *env, t_shell *shell);
-int				do_exit(char **args, t_shell *shell);
+int				do_exit(t_command *cmd, t_shell *shell);
 int				export(t_env **env, char **args, t_shell *shell);
 int				pwd(t_shell *shell);
 int				unset(t_env **env, char **args, t_shell *shell);
@@ -155,9 +156,5 @@ void			quick_sort_env(t_env **array, int low, int high);
 t_env			**get_sorted_env_ptr_array(t_env *env_list);
 int				restore_stdio(int saved_stdin, int saved_stdout);
 t_fd_backup		*handle_redirections(t_command *cmd);
-
-
-
-
-
-
+int				ft_atoi(const char *str);
+char			*ft_itoa(int n);

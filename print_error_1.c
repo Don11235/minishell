@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:15:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 22:47:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/12 17:54:08 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	print_export_error(char *identifier)
 
 void	print_exit_error(char *arg)
 {
-	write(2, "minishell: do_exit: ", 20);
+	write(2, "minishell: exit: ", 17);
 	write(2, arg, ft_strlen(arg));
 	write(2, ": numeric argument required\n", 28);
 }
@@ -54,12 +54,3 @@ int	print_cmd_error(char *cmd, char *msg, int exit_code)
 	write(2, "\n", 1);
 	return (exit_code);
 }
-
-
-// int	print_cmd_not_found(char *cmd)
-// {
-// 	write(2, "minishell: ", 11);
-// 	write(2, cmd, ft_strlen(cmd));
-// 	write(2, ": command not found\n", 20);
-// 	return (1);
-// }
