@@ -6,11 +6,29 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:46:03 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/03 14:21:32 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/13 17:39:14 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int middle_cases(t_token *current)
+{
+	if (current->type == TOKEN_PIPE && current->next != NULL
+		&& current->next->type == TOKEN_PIPE)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (1);				
+	}
+	if ((current->type >= 4 && current->type <= 7) && current->next != NULL
+		&& (current->next->type >= 3 && current->next->type <= 7))
+	{
+		printf("minishell: syntax error near unexpected token `%s'\n",
+			current->next->token);
+		return (1);
+	}
+	return (0);
+}
 
 int	valid_tokens(t_token *head)
 {
@@ -24,19 +42,8 @@ int	valid_tokens(t_token *head)
 	}
 	while (current != NULL)
 	{
-		if (current->type == TOKEN_PIPE && current->next != NULL
-			&& current->next->type == TOKEN_PIPE)
-		{
-			printf("minishell: syntax error near unexpected token `|'\n");
-			return (1);				
-		}
-		if ((current->type >= 4 && current->type <= 7) && current->next != NULL
-			&& (current->next->type >= 3 && current->next->type <= 7))
-		{
-			printf("minishell: syntax error near unexpected token `%s'\n",
-				current->next->token);
-			return (1);
-		}
+		if (middle_cases(current))
+			return(1);
 		if (current->next == NULL && (current->type >= 3 && current->type <= 7))
 		{
 			printf("minishell: syntax error near unexpected token `newline'\n");

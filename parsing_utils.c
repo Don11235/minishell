@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/06 12:47:57 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/13 12:40:41 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	strlen_before_spaces_or_delimiter(char *str)
 	i = 0;
 	while (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13) && str[i] != '\0'
 		&& str[i] != '/' && str[i] != '$' && str[i] != '"' && str[i] != '\''
-		&& str[i] != '.' && str[i] != ',' && str[i] != ';' && str[i] != ':')
+		&& str[i] != '.' && str[i] != ',' && str[i] != ';' && str[i] != ':'
+		&& str[i] != ']')
 		i++;
 	return (i);
 }
