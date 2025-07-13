@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:15:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/28 19:15:15 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/12 17:54:08 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,17 @@ int	print_export_error(char *identifier)
 
 void	print_exit_error(char *arg)
 {
-	write(2, "minishell: export: ", 19);
+	write(2, "minishell: exit: ", 17);
 	write(2, arg, ft_strlen(arg));
-	write(2, ": numeric argument required", 27);
+	write(2, ": numeric argument required\n", 28);
+}
+
+int	print_cmd_error(char *cmd, char *msg, int exit_code)
+{
+	write(2, "minishell: ", 11);
+	write(2, cmd, ft_strlen(cmd));
+	write(2, ": ", 2);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	return (exit_code);
 }

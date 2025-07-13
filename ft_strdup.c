@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 19:44:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/07 19:39:20 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/08 22:46:33 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(char *src)
 	char	*p;
 
 	i = 0;
+	if (!src)
+		return (NULL);
 	p = malloc(ft_strlen(src) + 1);
 	if (p == NULL)
 		return (NULL);
@@ -27,6 +29,5 @@ char	*ft_strdup(char *src)
 		i++;
 	}
 	p[i] = '\0';
-	free(src);
 	return (p);
 }

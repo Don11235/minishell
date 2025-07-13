@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   env_to_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 10:51:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/12 18:19:47 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/07 16:52:28 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/07 20:39:24 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+char	**env_to_array(t_env *env)
 {
-	int	i;
+	int		size;
+	int		i;
+	char	**env_array;
 
 	i = 0;
-	while (s[i] != '\0')
+	size = env_size(env);
+	env_array = malloc((size + 1) * sizeof(char *));
+	if (!env_array)
+		return (NULL);
+	while (env)
+	{
+		env_array[i] = ft_strjoin_with(env->key, env->value, '=');
+		if (!env_array[i])
+				return (NULL); //free
 		i++;
-	return (i);
+		env = env->next;
+	}
+	env_array[i] = NULL;
+	return (env_array);
 }

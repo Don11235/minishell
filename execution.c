@@ -6,66 +6,106 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/30 18:10:21 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:09:23 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_pipe_fds(t_command *cmd, int *pipefd)
+int	handle_pipe_fds(t_command *cmd, int prev_read_end, int *pipefd)
 {
-	int	ret1;
-	int	ret2;
+	int	ret;
 
+	if (cmd->pipe_in && prev_read_end != -1)
+	{
+		ret = dup2(prev_read_end, STDIN_FILENO);
+		if (check_fail(ret, "pipe read"))
+			return (1); 
+		close(prev_read_end);
+	}
 	if (cmd->pipe_out)
 	{
-		ret1 = dup2(pipefd[1], STDOUT_FILENO);
-		check_or_exit(ret1, "dup2");
+		ret = dup2(pipefd[1], STDOUT_FILENO);
+		if (check_fail(ret, "pipe write"))
+			return (1);
+		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	else
-		close(pipefd[1]);
-	if (cmd->pipe_in)
-	{
-		ret2 = dup2(pipefd[0], STDIN_FILENO);
-		check_or_exit(ret2, "dup2");
-		close(pipefd[0]);
-	}
-	else
-		close(pipefd[0]);
+	return (0);
 }
 
-void	handle_redirections(t_command *cmd)
+int	prepare_heredocs(t_command *cmd)
 {
-	if (!cmd->rds)
-		return ;
 	t_redirection	*redirect;
+	int				pipefd[2];
+	char			*line;
 
-	redirect = cmd->rds;
-	while (redirect)
+	while (cmd)
 	{
-		if (redirect->type == TOKEN_RD_IN)
-			setup_redirections(TOKEN_RD_IN, redirect->filename_or_delimiter);
-		else if (redirect->type == TOKEN_RD_OUT)
-			setup_redirections(TOKEN_RD_OUT, redirect->filename_or_delimiter);
-		else if (redirect->type == TOKEN_APPEND)
-			setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter);
+		redirect = cmd->rds;
+		while (redirect)
+		{
+			if (redirect->type == TOKEN_HEREDOC)
+			{
+				if (cmd->heredoc_fd != -1)
+					close(pipefd[0]);
+				if (setup_pipe(pipefd))
+					return (1);
+				while (1)
+				{
+					line = readline("> ");
+					if (!line || line == redirect->filename_or_delimiter)
+					{
+						free(line);
+						break ;
+					}
+					ft_putstr_fd(line, pipefd[1]);
+					free(line);
+				}
+				close(pipefd[1]);
+				cmd->heredoc_fd = pipefd[0];
+			}
+			redirect = redirect->next;
+		}
+		cmd = cmd->next;
 	}
+	return (0);
 }
 
-int	execute(t_command *cmd_list, char **envp)
+int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 {
 	t_command	*cmd;
+	t_fd_backup	*fd_backup;
 	pid_t		pid;
 	int			pipefd[2];
+	int			is_built_in;
+	char		*cmd_path;
+	int			status;
+	int			prev_read_end = -1;
+
 
 	cmd = cmd_list;
 	while (cmd)
 	{
+		is_built_in = check_builtin(cmd);
+		if (!is_built_in)
+			cmd_path = resolve_command_path(cmd, env);
+		if (!cmd_path)
+			return (1);
 		if (cmd->pipe_out && setup_pipe(pipefd))
 			return (1);
-		if (cmd->built_in && !cmd->pipe_out)
-			execute_builtin(cmd);
+		if (is_built_in && !cmd->pipe_in && !cmd->pipe_out)
+		{
+			fd_backup = handle_redirections(cmd);
+			if (!fd_backup)
+				return (1);
+			execute_builtin(cmd, env, shell);
+			if (fd_backup->has_redirection)
+			{				
+				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
+				free(fd_backup);
+			}
+		}
 		else
 		{
 			pid = fork();
@@ -73,17 +113,32 @@ int	execute(t_command *cmd_list, char **envp)
 				return (1);
 			if (pid == 0)
 			{
-				handle_pipe_fds(cmd, pipefd);
-				handle_redirections(cmd);
-				if (cmd->built_in)
-					execute_builtin(cmd);
+				if (handle_pipe_fds(cmd, prev_read_end, pipefd))
+					exit(1);
+				fd_backup = handle_redirections(cmd);
+				if (!fd_backup)
+					exit(1);
+				if (is_built_in)
+					execute_builtin(cmd, env, shell);
 				else
-					execve(cmd->path, cmd->args, envp);
+					execve(cmd_path, cmd->args, env_to_array(env));
+				exit(0);
+			}
+			else
+			{	
+				if (prev_read_end != -1)
+					close(prev_read_end);
+				if (cmd->pipe_out)
+				{
+					close(pipefd[1]);
+					prev_read_end = pipefd[0];
+				}
+				else
+					prev_read_end = -1;
 			}
 		}
 		cmd = cmd->next;
 	}
-	close(pipefd[0]);
-	close(pipefd[1]);
+	while (wait(&status) > 0);
 	return (0);
 }

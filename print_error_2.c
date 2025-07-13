@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   print_error_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 10:51:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/12 18:19:47 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/12 18:00:23 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/12 18:42:55 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+void	print_shlvl_too_high_error(char *shlvl)
 {
-	int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	write(2, "minishell: warning: shell level (", 33);
+	write(2, shlvl, ft_strlen(shlvl));
+	write(2, ") too high, resetting to 1\n", 27);
 }
