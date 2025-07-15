@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/13 12:40:41 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:08:34 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ int words_count(t_token *beginning)
 
 int	calc_new_str_len(char *str, t_env *env)
 {
-	int	i;
-	int len;
+	int		(i), (len);
 	t_env	*env_line;
 
 	i = 0;
@@ -86,12 +85,18 @@ int	calc_new_str_len(char *str, t_env *env)
 		{
 			i++;
 			len++;
-			env_line = find_env_exp(env, &str[i]);
-			if (env_line != NULL)
-				len += ft_strlen(env_line->value);
+			if (str[i] != '\0')
+			{
+				env_line = find_env_exp(env, &str[i]);
+				if (env_line != NULL)
+					len += ft_strlen(env_line->value);
+			}
 		}
-		i++;
-		len++;
+		else
+		{
+			i++;
+			len++;
+		}
 	}
 	return len;
 }
