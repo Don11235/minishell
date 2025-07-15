@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/12 21:47:31 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:59:57 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int				add_token_string_to_token_list(char *str, int i, int j, t_token **list);
 void			filling_type_pipe_or_rd(t_token *list);
 void			filling_type_s_or_d_quote(t_token *list);
 int				printing_dollar(char *new_str, int *j, char *str, int *i);
-int				expand_to_an_empty_string(char *str, int *i, t_env *env_line);
+int				expand_to_an_empty_string(char *str, int *i, t_env *env_line, int *flag);
 int				expand_to_a_real_value(char *new_str, int *j, int *i, t_env *env_line);
 void			expanding(char *new_str, int *j, char *str_to_add);
 int				skipping_if_quote_mark(char *str, int *i, int *flag, char *q);

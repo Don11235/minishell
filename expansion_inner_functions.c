@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/05 20:50:28 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:59:32 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	printing_dollar(char *new_str, int *j, char *str, int *i)
 	return (continue_flag);
 }
 
-int	expand_to_an_empty_string(char *str, int *i, t_env *env_line)
+int	expand_to_an_empty_string(char *str, int *i, t_env *env_line, int *flag)
 {
 	int	continue_flag;
 

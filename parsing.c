@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/07 18:18:19 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:59:43 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*remove_quote(t_token *token, t_env *env)
 		{
 			continue_flag = printing_dollar(new_str, &j, str, &i);
 			env_line = find_env_exp(env, &str[i]);
-			continue_flag = expand_to_an_empty_string(str, &i, env_line);
+			continue_flag = expand_to_an_empty_string(str, &i, env_line, &flag);
 			continue_flag = expand_to_a_real_value(new_str, &j, &i, env_line);
 		}
 		if (continue_flag == 1)
