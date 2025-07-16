@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/15 12:59:57 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 22:05:05 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ void			ft_lstadd_back_command(t_command **lst, t_command *new);
 void			ft_lstadd_back_redirection(t_redirection ***lst, t_redirection *new);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strdup(char *src);
-t_command		*parse_input(char *str, t_env *env);
+t_command		*parse_input(char *str, t_env *env, t_shell *shell);
 size_t			ft_strlen(const char *s);
 char			**ft_split(char const *s, char c);
 char			*ft_strjoin_with(char const *s1, char const *s2, char sep);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
-int				valid_tokens(t_token *head);
+int				valid_tokens(t_token *head, t_shell *shell);
 int				check_fail(int result, char *msg);
 int				setup_redirections(int type, char *filename);
 int				execute(t_command *cmd_list, t_env *env, t_shell *shell);
@@ -128,7 +128,7 @@ int				calc_new_str_len(char *str, t_env *env);
 int				expand_condition(char *str, int i, int flag, char q);
 int				in_case_of_quote_not_closed(char *new_str, int j, int flag);
 void			filling_type_pipe_or_rd(t_token *list);
-int				inner_pipes_and_rds_tokens(char *str, t_token **list, int **i, int s_or_d);
+int				inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d);
 int				quote_tokens(char *str, t_token **list, int *i);
 int				pipes_and_rds_tokens(char *str, t_token **list, int *i);
 int				word_tokens(char *str, t_token **list, int *i);
@@ -158,3 +158,4 @@ int				restore_stdio(int saved_stdin, int saved_stdout);
 t_fd_backup		*handle_redirections(t_command *cmd);
 int				ft_atoi(const char *str);
 char			*ft_itoa(int n);
+int				expand_to_last_exit_status(char *new_str, int *j, char *str, int *i, t_shell *shell);

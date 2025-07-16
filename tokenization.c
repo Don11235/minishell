@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:13:10 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/06 13:15:40 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 19:42:11 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int pipes_and_rds_tokens(char *str, t_token **list, int *i)
 	{
 		rd = str[*i];
 		if (str[*i + 1] == rd && rd != '|')
-			return (inner_pipes_and_rds_tokens(str, list, &i, 2));
+			return (inner_pipes_and_rds_tokens(str, list, i, 2));
 		else
-			return (inner_pipes_and_rds_tokens(str, list, &i, 1));
+			return (inner_pipes_and_rds_tokens(str, list, i, 1));
 	}
 	return (0);
 }
