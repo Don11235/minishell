@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/10 22:31:54 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/14 02:43:09 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ static int	redirect_fd(char *filename, int flags, int std_fd)
 		return (1);
 	ret = dup2(fd, std_fd);
 	if (check_fail(ret, filename))
+		return (1);
+	close(fd);
+	return (0);
+}
+
+static int	redirect_heredoc(int fd, int std_fd)
+{
+	int	ret;
+
+	ret = dup2(fd, std_fd);
+	if (check_fail(ret, "heredoc"))
 		return (1);
 	close(fd);
 	return (0);
@@ -52,6 +63,11 @@ int	setup_redirections(int type, char *filename)
 	}
 	return (0);
 }
+
+// t_fd_backup	*init_fd_backup(t_command *cmd)
+// {
+	
+// }
 
 t_fd_backup	*handle_redirections(t_command *cmd)
 {
@@ -96,6 +112,8 @@ t_fd_backup	*handle_redirections(t_command *cmd)
 			if (setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter))
 				return (NULL);
 		}
+		else if (redirect->type == TOKEN_HEREDOC)
+			redirect_heredoc(cmd->heredoc_fd, STDIN_FILENO);
 		redirect = redirect->next;
 	}
 	return (fd_backup);

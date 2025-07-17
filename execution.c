@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/12 21:09:23 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/17 01:01:05 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	prepare_heredocs(t_command *cmd)
 				while (1)
 				{
 					line = readline("> ");
-					if (!line || line == redirect->filename_or_delimiter)
+					if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
 					{
 						free(line);
 						break ;
@@ -85,6 +85,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 
 
 	cmd = cmd_list;
+	prepare_heredocs(cmd);
 	while (cmd)
 	{
 		is_built_in = check_builtin(cmd);
@@ -105,6 +106,8 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
 				free(fd_backup);
 			}
+			else
+				free(fd_backup);
 		}
 		else
 		{
@@ -113,6 +116,8 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				return (1);
 			if (pid == 0)
 			{
+				set_signal(SIGINT, SIG_DFL);
+				set_signal(SIGQUIT, SIG_DFL);
 				if (handle_pipe_fds(cmd, prev_read_end, pipefd))
 					exit(1);
 				fd_backup = handle_redirections(cmd);

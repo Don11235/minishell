@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/12 21:47:31 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/17 01:03:05 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <limits.h>
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
@@ -158,3 +159,5 @@ int				restore_stdio(int saved_stdin, int saved_stdout);
 t_fd_backup		*handle_redirections(t_command *cmd);
 int				ft_atoi(const char *str);
 char			*ft_itoa(int n);
+void			prompt_sigint_handler(int sig);
+int				set_signal(int signo, void (*handler)(int));
