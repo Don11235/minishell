@@ -6,12 +6,36 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/15 22:03:39 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:55:52 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
+{
+	char		q;
+	int			continue_flag;
+	t_env		*env_line;
+	t_parsing	*parsing;
+
+	parsing = malloc(sizeof(t_parsing)); //free
+	if (parsing == NULL)
+		return (NULL);
+	remove_quote_func_init(parsing, token, env);
+	while (parsing->str[parsing->i] != '\0')
+	{
+		continue_flag = remove_quote_inner_loop(token, env, shell, parsing);
+		if (continue_flag == 1)
+			continue ;
+		parsing->new_str[parsing->j++] = parsing->str[parsing->i++];
+	}
+	if (in_case_of_quote_not_closed(parsing->new_str, parsing->j, parsing->flag))
+		return (free(parsing->str), NULL);
+	return (free(parsing->str), parsing->new_str);
+}
+
+/*
 char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 {
 	char	*str;
@@ -41,6 +65,7 @@ char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 		return (free(str), NULL);
 	return (free(str), new_str);
 }
+*/
 
 void	filling_pipes(t_command *command, t_token *current_token)
 {

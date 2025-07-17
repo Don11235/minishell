@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/15 17:08:34 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:29:24 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	expanding(char *new_str, int *j, char *str_to_add)
 		(*j)++;
 	}
 }
-
+/*
 t_env	*find_env_exp(t_env *env, char *key)
 {
 	t_env	*tmp;
@@ -35,6 +35,27 @@ t_env	*find_env_exp(t_env *env, char *key)
 	while (tmp)
 	{
 		if (!ft_strcmp_exp(key, tmp->key))
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+*/
+
+t_env	*find_env_exp(t_env *env, t_parsing *parsing)
+{
+	t_env	*tmp;
+	char	*str;
+	int		i;
+
+	str = parsing->str;
+	i = parsing->i;
+	tmp = env;
+	if (!str)
+		return (NULL);
+	while (tmp)
+	{
+		if (!ft_strcmp_exp(&str[i], tmp->key))
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -72,22 +93,22 @@ int words_count(t_token *beginning)
 	return i;
 }
 
-int	calc_new_str_len(char *str, t_env *env)
+int	calc_new_str_len(t_parsing *parsing, t_env *env)
 {
 	int		(i), (len);
 	t_env	*env_line;
 
 	i = 0;
 	len = 0;
-	while (str[i] != '\0')
+	while (parsing->str[i] != '\0')
 	{
-		if (str[i] == '$')
+		if (parsing->str[i] == '$')
 		{
 			i++;
 			len++;
-			if (str[i] != '\0')
+			if (parsing->str[i] != '\0')
 			{
-				env_line = find_env_exp(env, &str[i]);
+				env_line = find_env_exp(env, parsing);
 				if (env_line != NULL)
 					len += ft_strlen(env_line->value);
 			}
