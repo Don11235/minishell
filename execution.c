@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/17 01:01:05 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:51:19 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			}
 			else
 			{	
+				set_signal(SIGINT, SIG_IGN);
 				if (prev_read_end != -1)
 					close(prev_read_end);
 				if (cmd->pipe_out)
@@ -145,5 +146,13 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		cmd = cmd->next;
 	}
 	while (wait(&status) > 0);
+	if (WIFSIGNALED(status))
+	{
+		int sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			write(1, "Quit: 3\n", 8);
+		else if (sig == SIGINT)
+			write(1, "\n", 1);
+	}
 	return (0);
 }

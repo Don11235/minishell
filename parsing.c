@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/15 14:50:08 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:59:52 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 		if (*current_token != NULL && (*current_token)->type < 3)
 		{
 			args[i] = remove_quote(*current_token, env); //free
+			printf("%s--\n", args[i]);
 			if (args[i++] == NULL) //free function
 				return (NULL);
 			*current_token = (*current_token)->next;

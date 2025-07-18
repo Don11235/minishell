@@ -23,6 +23,7 @@ int main(int argc, char *argv[], char **envp)
 		}
 		add_history(input);
 		cmd = parse_input(input, env); // when pars_input return NULL which mean fails 
+		printf("%p\n", cmd);
 		if (!cmd)
 			continue ;
 		execute(cmd, env, &shell);
