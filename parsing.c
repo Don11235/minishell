@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 15:29:48 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 17:58:34 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 	t_redirection	*redirection;
 	char			**args;
 	int				i;
+	char			*file;
 
 	i = 0;
 	args = malloc(sizeof(char *) * (words_count(*current_token) + 1)); //free
@@ -74,8 +75,12 @@ char **inner_filling_cmd_list(t_token **current_token,
 		}
 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
 		{
-			redirection = ft_lstnew_redirection((*current_token)->type,
-				remove_quote(*current_token, env, shell)); //free
+			file = remove_quote(*current_token, env, shell);
+			if (file == NULL)
+				return (NULL);
+			redirection = ft_lstnew_redirection((*current_token)->type, file);
+			if ((*current_token)->type == TOKEN_HEREDOC)
+				redirection->is_delimiter_quoted = is_quoted((*current_token)->token);
 			ft_lstadd_back_redirection(&redirection_list, redirection);
 			*current_token = (*current_token)->next->next;
 		}

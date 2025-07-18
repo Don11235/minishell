@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 15:28:36 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 17:29:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_token
 typedef struct s_redirection
 {
 	int						type;
+	int						is_delimiter_quoted;
 	char					*filename_or_delimiter;
 	struct s_redirection	*next;
 }	t_redirection;
@@ -57,7 +58,6 @@ typedef struct s_command
 	int					pipe_out; 
 	int					heredoc_fd;
 	struct s_command	*next;
-	// struct s_command	*prev;
 }	t_command;
 
 typedef struct s_parsing
