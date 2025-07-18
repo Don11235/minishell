@@ -6,39 +6,33 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 13:59:52 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 15:29:48 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remove_quote(t_token *token, t_env *env)
+char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 {
-	char	*str;
-	char	*new_str;
-	char	q;
-	t_env	*env_line;
+	char		q;
+	int			continue_flag;
+	t_env		*env_line;
+	t_parsing	*parsing;
 
-	int (i), (j), (continue_flag), flag = 0;
-	j = 0;
-	str = remove_quote_func_init(&i, token, &new_str, env);
-	while (str[i] != '\0')
+	parsing = malloc(sizeof(t_parsing)); //free
+	if (parsing == NULL)
+		return (NULL);
+	remove_quote_func_init(parsing, token, env);
+	while (parsing->str[parsing->i] != '\0')
 	{
-		continue_flag = skipping_if_quote_mark(str, &i, &flag, &q);
-		if (expand_condition(str, i, flag, q) && token->type != TOKEN_HEREDOC)
-		{
-			continue_flag = printing_dollar(new_str, &j, str, &i);
-			env_line = find_env_exp(env, &str[i]);
-			continue_flag = expand_to_an_empty_string(str, &i, env_line);
-			continue_flag = expand_to_a_real_value(new_str, &j, &i, env_line);
-		}
+		continue_flag = remove_quote_inner_loop(token, env, shell, parsing);
 		if (continue_flag == 1)
 			continue ;
-		new_str[j++] = str[i++];
+		parsing->new_str[parsing->j++] = parsing->str[parsing->i++];
 	}
-	if (in_case_of_quote_not_closed(new_str, j, flag))
-		return (free(str), NULL);
-	return (free(str), new_str);
+	if (in_case_of_quote_not_closed(parsing->new_str, parsing->j, parsing->flag))
+		return (free(parsing->str), NULL);
+	return (free(parsing->str), parsing->new_str);
 }
 
 void	filling_pipes(t_command *command, t_token *current_token)
@@ -61,7 +55,7 @@ void	filling_pipes(t_command *command, t_token *current_token)
 }
 
 char **inner_filling_cmd_list(t_token **current_token,
-	t_redirection **redirection_list, t_env *env)
+	t_redirection **redirection_list, t_env *env, t_shell *shell)
 {
 	t_redirection	*redirection;
 	char			**args;
@@ -73,8 +67,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 	{
 		if (*current_token != NULL && (*current_token)->type < 3)
 		{
-			args[i] = remove_quote(*current_token, env); //free
-			printf("%s--\n", args[i]);
+			args[i] = remove_quote(*current_token, env, shell); //free
 			if (args[i++] == NULL) //free function
 				return (NULL);
 			*current_token = (*current_token)->next;
@@ -82,7 +75,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
 		{
 			redirection = ft_lstnew_redirection((*current_token)->type,
-				remove_quote(*current_token, env)); //free
+				remove_quote(*current_token, env, shell)); //free
 			ft_lstadd_back_redirection(&redirection_list, redirection);
 			*current_token = (*current_token)->next->next;
 		}
@@ -91,7 +84,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 	return (args);
 }
 
-t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env)
+t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env, t_shell *shell)
 {
 	t_token			*current_token;
 	t_command		*command_list;
@@ -104,7 +97,7 @@ t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env)
 	while (current_token != NULL)
 	{
 		redirection_list = NULL;
-		args = inner_filling_cmd_list(&current_token, &redirection_list, env);
+		args = inner_filling_cmd_list(&current_token, &redirection_list, env, shell);
 		if (args == NULL)
 			return (NULL);
 		command = ft_lstnew_command(args); //free
@@ -120,7 +113,7 @@ t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env)
 	return (command_list);
 }
 
-t_command	*parse_input(char *str, t_env *env)
+t_command	*parse_input(char *str, t_env *env, t_shell *shell)
 {
 	t_token		*token_list;
 	t_command	*command_list;
@@ -138,8 +131,8 @@ t_command	*parse_input(char *str, t_env *env)
 		if (word_tokens(str, &token_list, &i))
 			return (NULL);
 	}
-	if (valid_tokens(token_list))
+	if (valid_tokens(token_list, shell))
 		return (NULL);
-	command_list = filling_cmd_list(token_list, 0, env);
+	command_list = filling_cmd_list(token_list, 0, env, shell);
 	return (command_list);
 }

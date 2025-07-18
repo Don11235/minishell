@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:26:15 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/06 12:32:08 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/15 19:36:11 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,25 @@ void filling_type_pipe_or_rd(t_token *list)
 	}
 }
 
-int inner_pipes_and_rds_tokens(char *str, t_token **list, int **i, int s_or_d)
+int inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d)
 {
 	char 	*s;
 	int		j;
 	t_token	*token;
 
-	s = malloc(s_or_d + 1); //freed
+	s = malloc(s_or_d + 1); //free
 	if (s == NULL)
 		return (1);
 	j = 0;
 	while (j < s_or_d)
 	{
-		s[j] = str[**i];
+		s[j] = str[*i];
 		j++;
 	}
 	s[j] = '\0';
 	token = ft_lstnew_token(s); //free
 	filling_type_pipe_or_rd(token);
 	ft_lstadd_back_token(list, token);
-	**i += s_or_d;
-	free(s);
+	*i += s_or_d;
 	return (0);
 }

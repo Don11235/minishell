@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/06 12:47:57 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/18 13:21:19 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,20 @@ void	expanding(char *new_str, int *j, char *str_to_add)
 	}
 }
 
-t_env	*find_env_exp(t_env *env, char *key)
+t_env	*find_env_exp(t_env *env, t_parsing *parsing)
 {
 	t_env	*tmp;
+	char	*str;
+	int		i;
 
+	str = parsing->str;
+	i = parsing->i;
 	tmp = env;
-	if (!key)
+	if (!str)
 		return (NULL);
 	while (tmp)
 	{
-		if (!ft_strcmp_exp(key, tmp->key))
+		if (!ft_strcmp_exp(&str[i], tmp->key))
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -48,7 +52,8 @@ int	strlen_before_spaces_or_delimiter(char *str)
 	i = 0;
 	while (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13) && str[i] != '\0'
 		&& str[i] != '/' && str[i] != '$' && str[i] != '"' && str[i] != '\''
-		&& str[i] != '.' && str[i] != ',' && str[i] != ';' && str[i] != ':')
+		&& str[i] != '.' && str[i] != ',' && str[i] != ';' && str[i] != ':'
+		&& str[i] != ']')
 		i++;
 	return (i);
 }
@@ -71,26 +76,31 @@ int words_count(t_token *beginning)
 	return i;
 }
 
-int	calc_new_str_len(char *str, t_env *env)
+int	calc_new_str_len(t_parsing *parsing, t_env *env)
 {
-	int	i;
-	int len;
+	int		(i), (len);
 	t_env	*env_line;
 
 	i = 0;
 	len = 0;
-	while (str[i] != '\0')
+	while (parsing->str[i] != '\0')
 	{
-		if (str[i] == '$')
+		if (parsing->str[i] == '$')
 		{
 			i++;
 			len++;
-			env_line = find_env_exp(env, &str[i]);
-			if (env_line != NULL)
-				len += ft_strlen(env_line->value);
+			if (parsing->str[i] != '\0')
+			{
+				env_line = find_env_exp(env, parsing);
+				if (env_line != NULL)
+					len += ft_strlen(env_line->value);
+			}
 		}
-		i++;
-		len++;
+		else
+		{
+			i++;
+			len++;
+		}
 	}
 	return len;
 }

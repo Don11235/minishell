@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:40:45 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/14 00:11:27 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 15:24:53 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_token	*ft_lstnew_token(char *token)
 	new_node = malloc(sizeof(t_token));
 	new_node -> token = token;
 	new_node -> next = NULL;
-	// new_node -> prev = NULL;
 	return (new_node);
 }
 
