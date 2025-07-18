@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 17:58:34 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/18 19:28:58 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 			continue ;
 		parsing->new_str[parsing->j++] = parsing->str[parsing->i++];
 	}
+	parsing->new_str[parsing->j] = '\0';
 	if (in_case_of_quote_not_closed(parsing->new_str, parsing->j, parsing->flag))
 		return (free(parsing->str), NULL);
 	return (free(parsing->str), parsing->new_str);
@@ -80,7 +81,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 				return (NULL);
 			redirection = ft_lstnew_redirection((*current_token)->type, file);
 			if ((*current_token)->type == TOKEN_HEREDOC)
-				redirection->is_delimiter_quoted = is_quoted((*current_token)->token);
+				redirection->is_delimiter_quoted = is_quoted((*current_token)->next->token);
 			ft_lstadd_back_redirection(&redirection_list, redirection);
 			*current_token = (*current_token)->next->next;
 		}

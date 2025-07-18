@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/16 17:06:30 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/18 19:28:15 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsin
 
 int	in_case_of_quote_not_closed(char *new_str, int j, int flag)
 {
-	new_str[j] = '\0';
 	if (flag % 2 == 1)
 	{
 		printf("quote not closed\n");
