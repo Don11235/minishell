@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/16 16:29:24 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/18 13:21:19 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,6 @@ void	expanding(char *new_str, int *j, char *str_to_add)
 		(*j)++;
 	}
 }
-/*
-t_env	*find_env_exp(t_env *env, char *key)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	if (!key)
-		return (NULL);
-	while (tmp)
-	{
-		if (!ft_strcmp_exp(key, tmp->key))
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-*/
 
 t_env	*find_env_exp(t_env *env, t_parsing *parsing)
 {

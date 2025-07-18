@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/16 16:55:00 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/18 13:21:09 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int				skipping_if_quote_mark(t_parsing *parsing, char *q);
 int				expand_condition(t_parsing *parsing, char q);
 int				printing_dollar(t_parsing *parsing);
 int				expand_to_last_exit_status(t_parsing *parsing, t_shell *shell);
-t_env			*find_env_exp(t_env *env, t_parsing *parsing); // changed
+t_env			*find_env_exp(t_env *env, t_parsing *parsing);
 int				expand_to_an_empty_string(t_parsing *parsing, t_env *env_line);
 int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
