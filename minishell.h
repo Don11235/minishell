@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 17:29:29 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 18:02:54 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ typedef struct s_fd_backup
 	int	saved_stdout;
 	int	has_redirection;
 }   t_fd_backup;
+
+typedef struct s_hdpart {
+    char *str;
+    int should_expand;
+    struct s_hdpart *next;
+}	t_hdpart;
 
 
 t_token			*ft_lstnew_token(char *token);
@@ -171,3 +177,4 @@ int				expand_to_an_empty_string(t_parsing *parsing, t_env *env_line);
 int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
 int				calc_new_str_len(t_parsing *parsing, t_env *env);
+char			*ft_strjoin(char const *s1, char const *s2);
