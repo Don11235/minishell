@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/20 18:09:18 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 18:26:21 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_hdpart	*split_heredoc_line(char *line)
 				substr = ft_substr(line, j, i - j);
 				new_part = ft_lstnew_hd(substr, 0);
 				ft_lstadd_back_hd(&parts, new_part);
-				free(substr);
+			//	free(substr);
 			}
 			var_len = 1;
 			if (line[i + 1] == '?' || line[i + 1] == '$')
@@ -80,7 +80,7 @@ t_hdpart	*split_heredoc_line(char *line)
 			substr = ft_substr(line, i, var_len);
 			new_part = ft_lstnew_hd(substr, 1);
 			ft_lstadd_back_hd(&parts, new_part);
-			free(substr);
+			//free(substr);
 			i += var_len;
 			j = i;
 		}
@@ -92,7 +92,7 @@ t_hdpart	*split_heredoc_line(char *line)
 		substr = ft_substr(line, j, i - j);
 		new_part = ft_lstnew_hd(substr, 0);
 		ft_lstadd_back_hd(&parts, new_part);
-		free(substr);
+		//free(substr);
 	}
 	return (parts);
 }
@@ -127,7 +127,7 @@ char	*heredoc_expand_line(t_env *env, char *line)
 			env_node = find_env(env, key);
 			if (env_node)
 			{
-				free(parts->str);
+			//	free(parts->str);
 				parts->str = env_node->value;
 			}
 		}

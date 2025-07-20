@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 22:22:56 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/07 17:24:49 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 18:23:36 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+static void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char		*tmp1;
 	const unsigned char	*tmp2;

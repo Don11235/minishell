@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/20 18:17:24 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 18:22:05 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,3 +179,4 @@ int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_par
 int				calc_new_str_len(t_parsing *parsing, t_env *env);
 char			*ft_strjoin(char const *s1, char const *s2);
 int				is_quoted(char *token);
+char			*heredoc_expand_line(t_env *env, char *line);

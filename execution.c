@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/07/20 18:11:31 by mben-cha         ###   ########.fr       */
-=======
-/*   Updated: 2025/07/18 18:25:08 by ytlidi           ###   ########.fr       */
->>>>>>> 3b0d3d08a71d045588c5ef7e2cafc240efb00a09
+/*   Updated: 2025/07/20 18:33:49 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +34,7 @@ int	handle_pipe_fds(t_command *cmd, int prev_read_end, int *pipefd)
 	return (0);
 }
 
-int	prepare_heredocs(t_command *cmd)
+int	prepare_heredocs(t_command *cmd, t_env *env)
 {
 	t_redirection	*redirect;
 	int				pipefd[2];
@@ -58,13 +54,13 @@ int	prepare_heredocs(t_command *cmd)
 				while (1)
 				{
 					line = readline("> ");
-					if (!redirect->is_delimiter_quoted)
-						line = 
 					if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
 					{
 						free(line);
 						break ;
 					}
+					if (!redirect->is_delimiter_quoted)
+						line = heredoc_expand_line(env, line);
 					ft_putstr_fd(line, pipefd[1]);
 					free(line);
 				}
@@ -91,7 +87,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 
 
 	cmd = cmd_list;
-	prepare_heredocs(cmd);
+	prepare_heredocs(cmd, env);
 	while (cmd)
 	{
 		is_built_in = check_builtin(cmd);
