@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/07/20 18:02:54 by mben-cha         ###   ########.fr       */
+=======
+/*   Updated: 2025/07/18 18:18:36 by ytlidi           ###   ########.fr       */
+>>>>>>> 3b0d3d08a71d045588c5ef7e2cafc240efb00a09
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,3 +182,4 @@ int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
 int				calc_new_str_len(t_parsing *parsing, t_env *env);
 char			*ft_strjoin(char const *s1, char const *s2);
+int				is_quoted(char *token);
