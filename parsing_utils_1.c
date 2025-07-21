@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 13:21:19 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/21 21:37:44 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ int	calc_new_str_len(t_parsing *parsing, t_env *env)
 			{
 				env_line = find_env_exp(env, parsing);
 				if (env_line != NULL)
+				{
 					len += ft_strlen(env_line->value);
+					printf("value length: %zu", ft_strlen(env_line->value));
+				}
 			}
 		}
 		else

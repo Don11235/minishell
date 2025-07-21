@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:55:56 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/05 20:10:51 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/21 19:20:32 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 int	inner_word_or_quote_skipping_condition(char *str, int i, int flag, int type)
 {
 	int	condition;
+	int	len;
 
+	len = ft_strlen(str);
+	if (i >= len || str[i] == '\0')
+		return (0);
 	if (type == 0)
-		condition = ((str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13)
+		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13)
 			&& str[i] != '|' && str[i] != '>' && str[i] != '<')
-			|| flag % 2 == 1) && str[i] != '\0';
+			|| flag % 2 == 1;
 	else if (type == 1)
-		condition = ((str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13))
-			|| flag % 2 == 1) && str[i] != '\0';
-	return condition;
+		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13))
+			|| flag % 2 == 1;
+	return (condition);
 }
 
 void	inner_word_or_quote_skipping(char *str, int *i, int *flag, char *q)

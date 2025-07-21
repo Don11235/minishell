@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/18 18:25:08 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/21 18:11:09 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	prepare_heredocs(t_command *cmd)
 				{
 					line = readline("> ");
 					if (!redirect->is_delimiter_quoted)
-						line = 
+						// line = 
 					if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
 					{
 						free(line);
