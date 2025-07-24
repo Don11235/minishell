@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:46:11 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/13 19:12:21 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/22 19:31:34 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ int	ft_strcmp_exp(char *s1, char *s2)
 {
 	unsigned int	i;
 
+	if (s1 == NULL || s2 == NULL)
+		return (1);
 	i = 0;
-	while (s1[i] == s2[i] && s2[i] != '\0')
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
 	{
 		i++;
 	}

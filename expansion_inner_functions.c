@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 13:11:48 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:46:26 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	printing_dollar(t_parsing *parsing)
 	i = parsing->i;
 	i++;
 	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		|| str[i] == '\0' || str[i] == '"')
+		|| str[i] == '\0' || (str[i] == '"' && i >= 2 && str[i - 2] == '"'))
 	{
 		new_str[j] = '$';
 		j++;

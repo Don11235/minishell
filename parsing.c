@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 19:28:58 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/24 16:27:06 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 		continue_flag = remove_quote_inner_loop(token, env, shell, parsing);
 		if (continue_flag == 1)
 			continue ;
+		if (parsing->str[parsing->i] == '\0')
+			break ;
 		parsing->new_str[parsing->j++] = parsing->str[parsing->i++];
 	}
 	parsing->new_str[parsing->j] = '\0';

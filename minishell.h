@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 18:18:36 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/22 12:24:12 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_parsing
 	char	*str;
 	int		i;
 	int		flag;
+	int		k;
 }	t_parsing;
 
 typedef struct s_env

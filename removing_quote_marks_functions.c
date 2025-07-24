@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/21 21:37:51 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:45:59 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsin
 	{
 		continue_flag = printing_dollar(parsing);
 		continue_flag = expand_to_last_exit_status(parsing, shell);
+		if (parsing->str[parsing->i] == '\0')
+			return (1);
 		env_line = find_env_exp(env, parsing);
 		continue_flag = expand_to_an_empty_string(parsing, env_line);
 		continue_flag = expand_to_a_real_value(parsing, env_line);
