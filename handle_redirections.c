@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/14 02:43:09 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:30:02 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,11 @@ t_fd_backup	*handle_redirections(t_command *cmd)
 			if (setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter))
 				return (NULL);
 		}
-		else if (redirect->type == TOKEN_HEREDOC)
-			redirect_heredoc(cmd->heredoc_fd, STDIN_FILENO);
+		else if (redirect->type == TOKEN_HEREDOC && redirect->heredoc_fd != -1)
+		{
+			if (redirect_heredoc(redirect->heredoc_fd, STDIN_FILENO))
+				return (NULL);
+		}
 		redirect = redirect->next;
 	}
 	return (fd_backup);

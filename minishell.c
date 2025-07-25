@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int	g_signal = 0;
+
 int main(int argc, char *argv[], char **envp)
 {
 	char		*input;
@@ -13,6 +15,7 @@ int main(int argc, char *argv[], char **envp)
 		return (1);
 	while (1)
 	{
+		disable_echoctl();
 		set_signal(SIGINT, prompt_sigint_handler);
 		set_signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell$ "); 

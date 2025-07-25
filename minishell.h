@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/20 18:22:05 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/25 15:39:23 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <signal.h>
+#include <termios.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
@@ -47,6 +48,7 @@ typedef struct s_redirection
 	int						type;
 	int						is_delimiter_quoted;
 	char					*filename_or_delimiter;
+	int						heredoc_fd;
 	struct s_redirection	*next;
 }	t_redirection;
 
@@ -56,7 +58,6 @@ typedef struct s_command
 	t_redirection		*rds;
 	int					pipe_in;
 	int					pipe_out; 
-	int					heredoc_fd;
 	struct s_command	*next;
 }	t_command;
 
@@ -88,11 +89,17 @@ typedef struct s_fd_backup
 	int	has_redirection;
 }   t_fd_backup;
 
-typedef struct s_hdpart {
+typedef struct s_hdpart
+{
     char *str;
     int should_expand;
     struct s_hdpart *next;
 }	t_hdpart;
+
+typedef struct s_sigflag
+{
+	int	sig_flag;
+}	t_sigflag;
 
 
 t_token			*ft_lstnew_token(char *token);
@@ -149,7 +156,7 @@ char			**env_to_array(t_env *env);
 int				check_builtin(t_command *comd);
 int				execute_builtin(t_command *cmd, t_env *env_list, t_shell *shell);
 int				cd(char *path, t_env **env, t_shell *shell);
-int				echo(char **args);
+int				echo(char **args, t_shell *shell);
 int				env(t_env *env, t_shell *shell);
 int				do_exit(t_command *cmd, t_shell *shell);
 int				export(t_env **env, char **args, t_shell *shell);
@@ -179,4 +186,8 @@ int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_par
 int				calc_new_str_len(t_parsing *parsing, t_env *env);
 char			*ft_strjoin(char const *s1, char const *s2);
 int				is_quoted(char *token);
-char			*heredoc_expand_line(t_env *env, char *line);
+char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
+void			disable_echoctl(void);
+void			restore_termios(void);
+void			handle_hd_signal(int sig);
+void			*ft_memcpy(void *dest, const void *src, size_t n);

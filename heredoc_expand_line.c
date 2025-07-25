@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/20 18:26:21 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 21:48:36 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_hdpart	*split_heredoc_line(char *line)
 				substr = ft_substr(line, j, i - j);
 				new_part = ft_lstnew_hd(substr, 0);
 				ft_lstadd_back_hd(&parts, new_part);
-			//	free(substr);
+				free(substr);
 			}
 			var_len = 1;
 			if (line[i + 1] == '?' || line[i + 1] == '$')
@@ -80,7 +80,7 @@ t_hdpart	*split_heredoc_line(char *line)
 			substr = ft_substr(line, i, var_len);
 			new_part = ft_lstnew_hd(substr, 1);
 			ft_lstadd_back_hd(&parts, new_part);
-			//free(substr);
+			free(substr);
 			i += var_len;
 			j = i;
 		}
@@ -92,7 +92,7 @@ t_hdpart	*split_heredoc_line(char *line)
 		substr = ft_substr(line, j, i - j);
 		new_part = ft_lstnew_hd(substr, 0);
 		ft_lstadd_back_hd(&parts, new_part);
-		//free(substr);
+		free(substr);
 	}
 	return (parts);
 }
@@ -112,26 +112,45 @@ char	*join_heredoc_parts(t_hdpart *parts)
 	return (str);
 }
 
-char	*heredoc_expand_line(t_env *env, char *line)
+char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
 {
 	t_hdpart	*parts;
 	char		*key;
 	t_env		*env_node;
+	t_hdpart	*tmp;
 
 	parts = split_heredoc_line(line);
-	while (parts)
+	tmp = parts;
+	while (tmp)
 	{
-		if (parts->should_expand)
+		if (tmp->should_expand)
 		{
-			key = ft_substr(parts->str, 1, ft_strlen(parts->str) - 1);
+			key = ft_substr(tmp->str, 1, ft_strlen(tmp->str) - 1);
 			env_node = find_env(env, key);
 			if (env_node)
 			{
-			//	free(parts->str);
-				parts->str = env_node->value;
+				free(tmp->str);
+				tmp->str = env_node->value;
+			}
+			else if (key[0] == '$')
+			{
+				free(tmp->str);
+				tmp->str = "$";
+				free(key);
+			}
+			else if (key[0] == '?')
+			{
+				free(tmp->str);
+				tmp->str = ft_itoa(shell->last_exit_status);
+				free(key);
+			}
+			else
+			{
+				free(tmp->str);
+				tmp->str = "";
 			}
 		}
-		parts = parts->next;
+		tmp = tmp->next;
 	}
 	return (join_heredoc_parts(parts));
 }

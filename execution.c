@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/20 18:33:49 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/25 18:51:35 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,40 @@ int	handle_pipe_fds(t_command *cmd, int prev_read_end, int *pipefd)
 	return (0);
 }
 
-int	prepare_heredocs(t_command *cmd, t_env *env)
+
+void	reset_all_heredoc_fds(t_command *cmd_list)
+{
+	t_redirection	*red;
+
+	while (cmd_list)
+	{
+		red = cmd_list->rds;
+		while (red)
+		{
+			if (red->type == TOKEN_HEREDOC && red->heredoc_fd != -1)
+			{
+				close(red->heredoc_fd);
+				red->heredoc_fd = -1;
+			}
+			else
+				break ;
+			red = red->next;
+		}
+		cmd_list = cmd_list->next;
+	}
+}
+
+int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 {
 	t_redirection	*redirect;
+	t_command		*cmd_list;
+	pid_t			pid;
 	int				pipefd[2];
 	char			*line;
+	char			*final_line;
+	int				status;
 
+	cmd_list = cmd;
 	while (cmd)
 	{
 		redirect = cmd->rds;
@@ -47,25 +75,57 @@ int	prepare_heredocs(t_command *cmd, t_env *env)
 		{
 			if (redirect->type == TOKEN_HEREDOC)
 			{
-				if (cmd->heredoc_fd != -1)
-					close(pipefd[0]);
 				if (setup_pipe(pipefd))
 					return (1);
-				while (1)
+				pid = fork();
+				if (pid == -1)
+					return (1);
+				if (pid == 0)
 				{
-					line = readline("> ");
-					if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
+					set_signal(SIGINT, SIG_DFL);
+					while (1)
 					{
+						line = readline("> ");
+						if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
+						{
+							free(line);
+							exit(0);
+						}
+						if (!redirect->is_delimiter_quoted)
+						{
+							final_line = heredoc_expand_line(env, line, shell);
+							ft_putstr_fd(final_line, pipefd[1]);
+						}
+						else
+							ft_putstr_fd(line, pipefd[1]);
 						free(line);
-						break ;
 					}
-					if (!redirect->is_delimiter_quoted)
-						line = heredoc_expand_line(env, line);
-					ft_putstr_fd(line, pipefd[1]);
-					free(line);
+					exit(0);
 				}
-				close(pipefd[1]);
-				cmd->heredoc_fd = pipefd[0];
+				else
+				{
+					close(pipefd[1]);
+					if (waitpid(pid, &status, 0) == -1)
+					{
+						if (errno == EINTR)
+						{
+							close(pipefd[0]);
+							reset_all_heredoc_fds(cmd_list);
+							shell->last_exit_status = 130;
+							return (1);
+						}
+						else
+							return (check_fail(-1, "waitpid"));
+					}
+					if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+					{
+						close(pipefd[0]);
+						reset_all_heredoc_fds(cmd_list);
+						shell->last_exit_status = 1;
+						return (1);
+					}
+					redirect->heredoc_fd = pipefd[0];
+				}
 			}
 			redirect = redirect->next;
 		}
@@ -84,10 +144,11 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 	char		*cmd_path;
 	int			status;
 	int			prev_read_end = -1;
+	int			sig;
 
 
 	cmd = cmd_list;
-	prepare_heredocs(cmd, env);
+	prepare_heredocs(cmd, env, shell);
 	while (cmd)
 	{
 		is_built_in = check_builtin(cmd);
@@ -118,6 +179,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				return (1);
 			if (pid == 0)
 			{
+				restore_termios();
 				set_signal(SIGINT, SIG_DFL);
 				set_signal(SIGQUIT, SIG_DFL);
 				if (handle_pipe_fds(cmd, prev_read_end, pipefd))
@@ -150,7 +212,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 	while (wait(&status) > 0);
 	if (WIFSIGNALED(status))
 	{
-		int sig = WTERMSIG(status);
+		sig = WTERMSIG(status);
 		if (sig == SIGQUIT)
 			write(1, "Quit: 3\n", 8);
 		else if (sig == SIGINT)

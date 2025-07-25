@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   disable_echoctl.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 18:02:05 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/23 19:16:24 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/20 22:31:37 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/21 17:12:35 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	disable_echoctl(void)
 {
-	size_t	len;
-	char	*pt;
+	struct termios term;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	pt = (char *)malloc((len + 1) * sizeof(char));
-	if (pt == NULL)
-		return (NULL);
-	ft_memcpy(pt, s1, ft_strlen(s1));
-	ft_memcpy(pt + ft_strlen(s1), s2, ft_strlen(s2));
-	pt[len] = '\0';
-	return (pt);
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
+
+void	restore_termios(void)
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
