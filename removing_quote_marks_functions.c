@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/23 20:45:59 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/25 19:09:28 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ int	skipping_if_quote_mark(t_parsing *parsing, char *q)
 
 void	remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env)
 {
-	char	*new_str;
-
 	parsing->i = 0;
 	parsing->j = 0;
+	parsing->k = 0;
 	parsing->flag = 0;
 	if (token->type >= 4 && token->type <= 7)
 		parsing->str = token->next->token;
 	else
 		parsing->str = token->token;
-	new_str = malloc(calc_new_str_len(parsing, env) + 1); //free
-	if (new_str == NULL)
+	parsing->new_str = malloc(sizeof(t_arg_word));
+	parsing->new_str->str = malloc(calc_new_str_len(parsing, env) + 1); //free
+	parsing->new_str->expanded = 0;
+	if (parsing->new_str->str == NULL)
 		return ;
-	parsing->new_str = new_str;
 }
 
 int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing)
@@ -66,7 +66,7 @@ int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsin
 		continue_flag = expand_to_last_exit_status(parsing, shell);
 		if (parsing->str[parsing->i] == '\0')
 			return (1);
-		env_line = find_env_exp(env, parsing);
+		env_line = find_env_exp(env, parsing, parsing->i);
 		continue_flag = expand_to_an_empty_string(parsing, env_line);
 		continue_flag = expand_to_a_real_value(parsing, env_line);
 	}

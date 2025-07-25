@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/22 21:46:26 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/25 15:48:25 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	printing_dollar(t_parsing *parsing)
 	char	*str;
 	int		i;
 
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	j = parsing->j;
 	str = parsing->str;
 	i = parsing->i;
@@ -46,7 +46,7 @@ int	printing_dollar(t_parsing *parsing)
 		j++;
 		continue_flag = 1;
 	}
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	parsing->j = j;
 	parsing->i = i;
 	return (continue_flag);
@@ -61,7 +61,7 @@ int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 	char	*new_str;
 
 	str = parsing->str;
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	exit_status = ft_itoa(shell->last_exit_status);
 	k = 0;
 	if (str[parsing->i] == '?')
@@ -76,13 +76,13 @@ int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 		continue_flag = 1;
 	}
 	parsing->str = str;
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	return (continue_flag);
 }
 
 int	expand_to_an_empty_string(t_parsing *parsing, t_env *env_line)
 {
-	int	continue_flag;
+	int		continue_flag;
 	char	*str;
 	int		i;
 
@@ -104,7 +104,7 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 	int		j;
 	int		i;
 
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	j = parsing->j;
 	i = parsing->i;
 	if (env_line != NULL)
@@ -112,8 +112,9 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 		expanding(new_str, &j, env_line->value);
 		i += ft_strlen(env_line->key);
 		continue_flag = 1;
+		parsing->new_str->expanded = 1;
 	}
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	parsing->j = j;
 	parsing->i = i;
 	return (continue_flag);

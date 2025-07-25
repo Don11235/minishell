@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/22 23:36:24 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/25 19:13:41 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,21 @@ void	expanding(char *new_str, int *j, char *str_to_add)
 	}
 }
 
-t_env	*find_env_exp(t_env *env, t_parsing *parsing)
+t_env	*find_env_exp(t_env *env, t_parsing *parsing, int i)
 {
 	t_env	*tmp;
 	char	*str;
-	int		i;
 
 	str = parsing->str;
-	i = parsing->k;
 	tmp = env;
 	if (!str)
 		return (NULL);
 	while (tmp)
 	{
 		if (!ft_strcmp_exp(&str[i], tmp->key))
+		{
 			return (tmp);
+		}
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -91,7 +91,7 @@ int	calc_new_str_len(t_parsing *parsing, t_env *env)
 			if (parsing->str[i] != '\0')
 			{
 				parsing->k = i;
-				env_line = find_env_exp(env, parsing);
+				env_line = find_env_exp(env, parsing, i);
 				if (env_line != NULL)
 					len += ft_strlen(env_line->value);
 			}

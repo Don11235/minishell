@@ -6,19 +6,23 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/24 16:27:06 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/25 19:51:26 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
+t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 {
 	char		q;
 	int			continue_flag;
 	t_env		*env_line;
 	t_parsing	*parsing;
+	t_arg_word	*arg_word;
 
+	arg_word = malloc(sizeof(t_arg_word));
+	if (arg_word == NULL)
+		return (NULL);
 	parsing = malloc(sizeof(t_parsing)); //free
 	if (parsing == NULL)
 		return (NULL);
@@ -30,12 +34,12 @@ char	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 			continue ;
 		if (parsing->str[parsing->i] == '\0')
 			break ;
-		parsing->new_str[parsing->j++] = parsing->str[parsing->i++];
+		parsing->new_str->str[parsing->j++] = parsing->str[parsing->i++];
 	}
-	parsing->new_str[parsing->j] = '\0';
-	if (in_case_of_quote_not_closed(parsing->new_str, parsing->j, parsing->flag))
+	parsing->new_str->str[parsing->j] = '\0';
+	if (in_case_of_quote_not_closed(parsing->new_str->str, parsing->j, parsing->flag))
 		return (free(parsing->str), NULL);
-	return (free(parsing->str), parsing->new_str);
+	return (parsing->new_str);
 }
 
 void	filling_pipes(t_command *command, t_token *current_token)
@@ -57,28 +61,89 @@ void	filling_pipes(t_command *command, t_token *current_token)
 	}	
 }
 
+int	array_count(char **args, t_token **list)
+{
+	int		i;
+	t_token	*node;
+
+	i = 0;
+	while (args[i] != NULL)
+	{
+		node = ft_lstnew_token(args[i]);
+		if (node == NULL)
+			return (i);
+		ft_lstadd_back_token(list, node);
+		i++;
+	}
+	return (i);
+}
+
+int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **list)
+{
+	t_arg_word	*quote_removed;
+	char		**array;
+	int			counter;
+	t_token		*node;
+
+	while (current_token != NULL && current_token->type != TOKEN_PIPE)
+	{
+		if (current_token != NULL && current_token->type < 3)
+		{
+			quote_removed = remove_quote(current_token, env, shell);
+			printf("quote_removed: %p\n", quote_removed);
+			if (!quote_removed)
+				exit(0);
+			if (quote_removed->expanded == 1)
+			{
+				array = ft_split(quote_removed->str, ' ');
+				counter += array_count(array, list);
+			}
+			else
+			{
+				node = ft_lstnew_token(quote_removed->str);
+				ft_lstadd_back_token(list, node);
+				counter++;
+			}
+			current_token = current_token->next;
+		}
+		else if (current_token->type >= 4 && current_token->type <= 7)
+			current_token = current_token->next->next;
+	}
+	return (counter);
+}
+
+void	list_to_args(t_token *list, char **args)
+{
+	int		i;
+
+	i = 0;
+	while (list != NULL)
+	{
+		args[i] = list->token;
+		list = list->next;
+		i++;
+	}
+	args[i] = NULL;
+}
+
 char **inner_filling_cmd_list(t_token **current_token,
 	t_redirection **redirection_list, t_env *env, t_shell *shell)
 {
 	t_redirection	*redirection;
 	char			**args;
-	int				i;
 	char			*file;
+	t_token			*list;
 
-	i = 0;
-	args = malloc(sizeof(char *) * (words_count(*current_token) + 1)); //free
+	list = NULL;
+	args = malloc(sizeof(char *) * (args_count(*current_token, env, shell, &list) + 1)); //free	
+	list_to_args(list, args);
 	while (*current_token != NULL && (*current_token)->type != TOKEN_PIPE)
 	{
 		if (*current_token != NULL && (*current_token)->type < 3)
-		{
-			args[i] = remove_quote(*current_token, env, shell); //free
-			if (args[i++] == NULL) //free function
-				return (NULL);
 			*current_token = (*current_token)->next;
-		}
 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
 		{
-			file = remove_quote(*current_token, env, shell);
+			file = remove_quote(*current_token, env, shell)->str;
 			if (file == NULL)
 				return (NULL);
 			redirection = ft_lstnew_redirection((*current_token)->type, file);
@@ -88,9 +153,43 @@ char **inner_filling_cmd_list(t_token **current_token,
 			*current_token = (*current_token)->next->next;
 		}
 	}
-	args[i] = NULL;
 	return (args);
 }
+
+// char **inner_filling_cmd_list(t_token **current_token,
+// 	t_redirection **redirection_list, t_env *env, t_shell *shell)
+// {
+// 	t_redirection	*redirection;
+// 	char			**args;
+// 	int				i;
+// 	char			*file;
+
+// 	i = 0;
+// 	args = malloc(sizeof(char *) * (words_count(*current_token) + 1)); //free
+// 	while (*current_token != NULL && (*current_token)->type != TOKEN_PIPE)
+// 	{
+// 		if (*current_token != NULL && (*current_token)->type < 3)
+// 		{
+// 			args[i] = remove_quote(*current_token, env, shell); //free
+// 			if (args[i++] == NULL) //free function
+// 				return (NULL);
+// 			*current_token = (*current_token)->next;
+// 		}
+// 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
+// 		{
+// 			file = remove_quote(*current_token, env, shell);
+// 			if (file == NULL)
+// 				return (NULL);
+// 			redirection = ft_lstnew_redirection((*current_token)->type, file);
+// 			if ((*current_token)->type == TOKEN_HEREDOC)
+// 				redirection->is_delimiter_quoted = is_quoted((*current_token)->next->token);
+// 			ft_lstadd_back_redirection(&redirection_list, redirection);
+// 			*current_token = (*current_token)->next->next;
+// 		}
+// 	}
+// 	args[i] = NULL;
+// 	return (args);
+// }
 
 t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env, t_shell *shell)
 {
