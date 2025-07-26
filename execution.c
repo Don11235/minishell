@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/25 18:51:35 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 15:25:42 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,22 +104,14 @@ int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 				}
 				else
 				{
+					set_signal(SIGINT, SIG_IGN);
 					close(pipefd[1]);
 					if (waitpid(pid, &status, 0) == -1)
-					{
-						if (errno == EINTR)
-						{
-							close(pipefd[0]);
-							reset_all_heredoc_fds(cmd_list);
-							shell->last_exit_status = 130;
-							return (1);
-						}
-						else
-							return (check_fail(-1, "waitpid"));
-					}
+						return (check_fail(-1, "waitpid"));
 					if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 					{
 						close(pipefd[0]);
+						write(1, "\n", 1);
 						reset_all_heredoc_fds(cmd_list);
 						shell->last_exit_status = 1;
 						return (1);
@@ -148,7 +140,8 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 
 
 	cmd = cmd_list;
-	prepare_heredocs(cmd, env, shell);
+	if (prepare_heredocs(cmd, env, shell))
+		return (1);
 	while (cmd)
 	{
 		is_built_in = check_builtin(cmd);

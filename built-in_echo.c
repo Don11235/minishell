@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 17:04:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/20 22:11:41 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 13:14:25 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ int	echo(char **args, t_shell *shell)
 		if (printf("\n") == -1)
 			return (shell->last_exit_status = 1, 1);
 	}
-	return (0);
+	
+	return (shell->last_exit_status = 0, 0);
 }
