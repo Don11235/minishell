@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/25 19:12:46 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/26 14:26:16 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int				set_signal(int signo, void (*handler)(int));
 void			remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env);
 int				skipping_if_quote_mark(t_parsing *parsing, char *q);
 int				expand_condition(t_parsing *parsing, char q);
-int				printing_dollar(t_parsing *parsing);
+int				printing_dollar(t_parsing *parsing, t_env *env_line);
 int				expand_to_last_exit_status(t_parsing *parsing, t_shell *shell);
 t_env			*find_env_exp(t_env *env, t_parsing *parsing, int i);
 int				expand_to_an_empty_string(t_parsing *parsing, t_env *env_line);

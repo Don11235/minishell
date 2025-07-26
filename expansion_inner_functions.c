@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/25 15:48:25 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/26 17:21:32 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	expand_condition(t_parsing *parsing, char q)
 	return (condition);
 }
 
-int	printing_dollar(t_parsing *parsing)
+int	printing_dollar(t_parsing *parsing, t_env *env_line)
 {
 	int		continue_flag;
 	char	*new_str;
@@ -36,11 +36,10 @@ int	printing_dollar(t_parsing *parsing)
 
 	new_str = parsing->new_str->str;
 	j = parsing->j;
-	str = parsing->str;
 	i = parsing->i;
-	i++;
-	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		|| str[i] == '\0' || (str[i] == '"' && i >= 2 && str[i - 2] == '"'))
+	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13)) || str[i] == '\0'
+		|| (parsing->flag == 1 && env_line == NULL && (str[i] == ' ' || str[i] == '"'))
+		|| str[i] == ':' || str[i] == '=')
 	{
 		new_str[j] = '$';
 		j++;
@@ -48,7 +47,6 @@ int	printing_dollar(t_parsing *parsing)
 	}
 	parsing->new_str->str = new_str;
 	parsing->j = j;
-	parsing->i = i;
 	return (continue_flag);
 }
 

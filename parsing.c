@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/25 19:51:26 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/26 13:54:00 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,17 @@ int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **lis
 	int			counter;
 	t_token		*node;
 
+	counter = 0;
 	while (current_token != NULL && current_token->type != TOKEN_PIPE)
 	{
 		if (current_token != NULL && current_token->type < 3)
 		{
 			quote_removed = remove_quote(current_token, env, shell);
-			printf("quote_removed: %p\n", quote_removed);
-			if (!quote_removed)
-				exit(0);
+			if (quote_removed == NULL)
+				return (-1);
 			if (quote_removed->expanded == 1)
 			{
-				array = ft_split(quote_removed->str, ' ');
+				array = ft_split(quote_removed->str, ' '); //free
 				counter += array_count(array, list);
 			}
 			else
@@ -135,7 +135,10 @@ char **inner_filling_cmd_list(t_token **current_token,
 	t_token			*list;
 
 	list = NULL;
-	args = malloc(sizeof(char *) * (args_count(*current_token, env, shell, &list) + 1)); //free	
+	int count = args_count(*current_token, env, shell, &list);
+	if (count == -1)
+		return (NULL);
+	args = malloc(sizeof(char *) * (count + 1)); //free	
 	list_to_args(list, args);
 	while (*current_token != NULL && (*current_token)->type != TOKEN_PIPE)
 	{
