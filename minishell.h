@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/25 15:39:23 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 22:43:20 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int				quote_tokens(char *str, t_token **list, int *i);
 int				pipes_and_rds_tokens(char *str, t_token **list, int *i);
 int				word_tokens(char *str, t_token **list, int *i);
 int				words_count(t_token *beginning);
-char			*resolve_command_path(t_command *cmd, t_env *env);
+char			*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell);
 int				print_cmd_error(char *cmd, char *msg, int exit_code);
 void			ft_putstr_fd(char *s, int fd);
 int				env_size(t_env *env);

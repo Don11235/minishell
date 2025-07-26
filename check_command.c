@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/12 12:17:10 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 23:00:39 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	check_builtin(t_command *comd)
 		return (0);
 }
 
-char	*resolve_command_path(t_command *cmd, t_env *env)
+char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
 {
 	if (ft_strchr(cmd->args[0], '/'))
 	{
@@ -52,6 +52,7 @@ char	*resolve_command_path(t_command *cmd, t_env *env)
 		else
 		{
 			print_cmd_error(cmd->args[0], "No such file or directory", 127);
+			shell->last_exit_status = 127;
 			return (NULL);
 		}
 	}
@@ -68,6 +69,7 @@ char	*resolve_command_path(t_command *cmd, t_env *env)
 		if (!path_node)
 		{
 			print_cmd_error(cmd->args[0], "No such file or directory", 127);
+			shell->last_exit_status = 127;
 			return (NULL);
 		}
 		path = path_node->value;
@@ -86,6 +88,7 @@ char	*resolve_command_path(t_command *cmd, t_env *env)
 			i++;
 		}
 		print_cmd_error(cmd->args[0], "command not found", 127);
+		shell->last_exit_status = 127;
 	}
 	return (NULL);
 }

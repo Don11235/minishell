@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/26 15:25:42 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 22:43:45 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,23 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		return (1);
 	while (cmd)
 	{
+		if (!cmd->args[0])
+		{
+			fd_backup = handle_redirections(cmd);
+			if (!fd_backup)
+				return (1);
+			if (fd_backup->has_redirection)
+			{				
+				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
+				free(fd_backup);
+			}
+			else
+				free(fd_backup);
+			return (1);
+		}
 		is_built_in = check_builtin(cmd);
 		if (!is_built_in)
-			cmd_path = resolve_command_path(cmd, env);
+			cmd_path = resolve_command_path(cmd, env, shell);
 		if (!cmd_path)
 			return (1);
 		if (cmd->pipe_out && setup_pipe(pipefd))
@@ -189,6 +203,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			else
 			{	
 				set_signal(SIGINT, SIG_IGN);
+				reset_all_heredoc_fds(cmd_list);
 				if (prev_read_end != -1)
 					close(prev_read_end);
 				if (cmd->pipe_out)
@@ -207,9 +222,15 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 	{
 		sig = WTERMSIG(status);
 		if (sig == SIGQUIT)
+		{
+			shell->last_exit_status = 128 + sig;
 			write(1, "Quit: 3\n", 8);
+		}
 		else if (sig == SIGINT)
+		{
+			shell->last_exit_status = 128 + sig;
 			write(1, "\n", 1);
+		}
 	}
 	return (0);
 }
