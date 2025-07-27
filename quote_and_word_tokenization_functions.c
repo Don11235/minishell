@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:55:56 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/21 19:20:32 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 11:53:46 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	add_token_string_to_token_list(char *str, int i, int j, t_token **list)
 		else
 			token->type = TOKEN_WORD; //not necessary (it's 0 by default)
 		ft_lstadd_back_token(list, token);
+		free(s);
 	}
 	return (0);
 }

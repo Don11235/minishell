@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 23:35:02 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:15:47 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **lis
 		}
 		else if (current_token->type >= 4 && current_token->type <= 7)
 			current_token = current_token->next->next;
+			
 	}
 	return (counter);
 }
@@ -246,5 +247,6 @@ t_command	*parse_input(char *str, t_env *env, t_shell *shell)
 	if (valid_tokens(token_list, shell))
 		return (NULL);
 	command_list = filling_cmd_list(token_list, 0, env, shell);
+	free_list(token_list);
 	return (command_list);
 }
