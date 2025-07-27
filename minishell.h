@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 15:32:11 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 15:48:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,20 @@ typedef struct s_command
 	struct s_command	*next;
 }	t_command;
 
+typedef struct s_arg_word
+{
+	char	*str;
+	int		expanded;
+}	t_arg_word;
+
 typedef struct s_parsing
 {
-	char	*new_str;
-	int		j;
-	char	*str;
-	int		i;
-	int		flag;
+	int			j;
+	char		*str;
+	int			i;
+	int			flag;
+	int			k;
+	t_arg_word	*new_str;
 }	t_parsing;
 
 typedef struct s_env
@@ -95,6 +102,7 @@ typedef struct s_hdpart
     int should_expand;
     struct s_hdpart *next;
 }	t_hdpart;
+
 
 
 t_token			*ft_lstnew_token(char *token);
@@ -172,9 +180,9 @@ int				set_signal(int signo, void (*handler)(int));
 void			remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env);
 int				skipping_if_quote_mark(t_parsing *parsing, char *q);
 int				expand_condition(t_parsing *parsing, char q);
-int				printing_dollar(t_parsing *parsing);
+int				printing_dollar(t_parsing *parsing, t_env *env_line);
 int				expand_to_last_exit_status(t_parsing *parsing, t_shell *shell);
-t_env			*find_env_exp(t_env *env, t_parsing *parsing);
+t_env			*find_env_exp(t_env *env, t_parsing *parsing, int i);
 int				expand_to_an_empty_string(t_parsing *parsing, t_env *env_line);
 int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
@@ -186,3 +194,4 @@ void			disable_echoctl(void);
 void			restore_termios(void);
 void			free_cmd_list(t_command *cmd_list);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
+void			free_list(t_token *list);

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/21 17:44:14 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 15:50:04 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	expand_condition(t_parsing *parsing, char q)
 	return (condition);
 }
 
-int	printing_dollar(t_parsing *parsing)
+int	printing_dollar(t_parsing *parsing, t_env *env_line)
 {
 	int		continue_flag;
 	char	*new_str;
@@ -34,21 +34,20 @@ int	printing_dollar(t_parsing *parsing)
 	char	*str;
 	int		i;
 
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	j = parsing->j;
 	str = parsing->str;
 	i = parsing->i;
-	i++;
-	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		|| str[i] == '\0' || str[i] == '"')
+	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13)) || str[i] == '\0'
+		|| (parsing->flag == 1 && env_line == NULL && (str[i] == ' ' || str[i] == '"'))
+		|| str[i] == ':' || str[i] == '=')
 	{
 		new_str[j] = '$';
 		j++;
 		continue_flag = 1;
 	}
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	parsing->j = j;
-	parsing->i = i;
 	return (continue_flag);
 }
 
@@ -61,7 +60,7 @@ int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 	char	*new_str;
 
 	str = parsing->str;
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	exit_status = ft_itoa(shell->last_exit_status);
 	k = 0;
 	if (str[parsing->i] == '?')
@@ -76,13 +75,13 @@ int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 		continue_flag = 1;
 	}
 	parsing->str = str;
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	return (continue_flag);
 }
 
 int	expand_to_an_empty_string(t_parsing *parsing, t_env *env_line)
 {
-	int	continue_flag;
+	int		continue_flag;
 	char	*str;
 	int		i;
 
@@ -104,7 +103,7 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 	int		j;
 	int		i;
 
-	new_str = parsing->new_str;
+	new_str = parsing->new_str->str;
 	j = parsing->j;
 	i = parsing->i;
 	if (env_line != NULL)
@@ -112,8 +111,9 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 		expanding(new_str, &j, env_line->value);
 		i += ft_strlen(env_line->key);
 		continue_flag = 1;
+		parsing->new_str->expanded = 1;
 	}
-	parsing->new_str = new_str;
+	parsing->new_str->str = new_str;
 	parsing->j = j;
 	parsing->i = i;
 	return (continue_flag);

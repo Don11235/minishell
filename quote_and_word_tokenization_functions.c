@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:55:56 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/05 20:10:51 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 11:53:46 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 int	inner_word_or_quote_skipping_condition(char *str, int i, int flag, int type)
 {
 	int	condition;
+	int	len;
 
+	len = ft_strlen(str);
+	if (i >= len || str[i] == '\0')
+		return (0);
 	if (type == 0)
-		condition = ((str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13)
+		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13)
 			&& str[i] != '|' && str[i] != '>' && str[i] != '<')
-			|| flag % 2 == 1) && str[i] != '\0';
+			|| flag % 2 == 1;
 	else if (type == 1)
-		condition = ((str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13))
-			|| flag % 2 == 1) && str[i] != '\0';
-	return condition;
+		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13))
+			|| flag % 2 == 1;
+	return (condition);
 }
 
 void	inner_word_or_quote_skipping(char *str, int *i, int *flag, char *q)
@@ -60,6 +64,7 @@ int	add_token_string_to_token_list(char *str, int i, int j, t_token **list)
 		else
 			token->type = TOKEN_WORD; //not necessary (it's 0 by default)
 		ft_lstadd_back_token(list, token);
+		free(s);
 	}
 	return (0);
 }

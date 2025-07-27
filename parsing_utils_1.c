@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 13:21:19 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/26 19:42:41 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,21 @@ void	expanding(char *new_str, int *j, char *str_to_add)
 	}
 }
 
-t_env	*find_env_exp(t_env *env, t_parsing *parsing)
+t_env	*find_env_exp(t_env *env, t_parsing *parsing, int i)
 {
 	t_env	*tmp;
 	char	*str;
-	int		i;
 
 	str = parsing->str;
-	i = parsing->i;
 	tmp = env;
 	if (!str)
 		return (NULL);
 	while (tmp)
 	{
 		if (!ft_strcmp_exp(&str[i], tmp->key))
+		{
 			return (tmp);
+		}
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -53,7 +53,8 @@ int	strlen_before_spaces_or_delimiter(char *str)
 	while (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13) && str[i] != '\0'
 		&& str[i] != '/' && str[i] != '$' && str[i] != '"' && str[i] != '\''
 		&& str[i] != '.' && str[i] != ',' && str[i] != ';' && str[i] != ':'
-		&& str[i] != ']')
+		&& str[i] != ']' && str[i] != '=' && !(str[i] >= '0' && str[i] <= '9')
+		&& str[i] != ')')
 		i++;
 	return (i);
 }
@@ -78,11 +79,10 @@ int words_count(t_token *beginning)
 
 int	calc_new_str_len(t_parsing *parsing, t_env *env)
 {
-	int		(i), (len);
 	t_env	*env_line;
 
+	int (i), len = 0;
 	i = 0;
-	len = 0;
 	while (parsing->str[i] != '\0')
 	{
 		if (parsing->str[i] == '$')
@@ -91,7 +91,8 @@ int	calc_new_str_len(t_parsing *parsing, t_env *env)
 			len++;
 			if (parsing->str[i] != '\0')
 			{
-				env_line = find_env_exp(env, parsing);
+				parsing->k = i;
+				env_line = find_env_exp(env, parsing, i);
 				if (env_line != NULL)
 					len += ft_strlen(env_line->value);
 			}
