@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:46:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/27 15:30:35 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:03:52 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_args(char **args)
+static void	free_args(char **args)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ void	free_args(char **args)
 	free(args);
 }
 
-void	free_redirecrion(t_redirection *rd)
+static void	free_redirecrion(t_redirection *rd)
 {
 	t_redirection	*tmp;
 
@@ -41,7 +41,7 @@ void	free_cmd_list(t_command *cmd_list)
 
 	while (cmd_list)
 	{
-		free_args(cmd_list->args);
+		//free_args(cmd_list->args);
 		free_redirecrion(cmd_list->rds);
 		tmp = cmd_list;
 		cmd_list = cmd_list->next;

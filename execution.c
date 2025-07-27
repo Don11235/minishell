@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/27 15:49:16 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 15:58:22 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,5 +232,5 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			write(1, "\n", 1);
 		}
 	}
-	return (0);
+	return (free_cmd_list(cmd_list), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 15:48:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:05:56 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ int				execute(t_command *cmd_list, t_env *env, t_shell *shell);
 int				ft_strcmp(const char *s1, const char *s2);
 t_env			*ft_lstnew(char *key, char *value);
 void			ft_lstadd_back(t_env **env, t_env *new);
-void			free_split(char **array);
 int				print_getcwd_error(char *cmd_name);
 int				print_chdir_error(char *path);
 void			add_env(t_env **env, char *key, char *value);
