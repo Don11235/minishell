@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:46:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/27 16:03:52 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:58:21 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	free_args(char **args)
 
 	i = 0;
 	while (args[i])
-		free(args[i]);
+		free(args[i++]);
 	free(args);
 }
 
@@ -41,7 +41,7 @@ void	free_cmd_list(t_command *cmd_list)
 
 	while (cmd_list)
 	{
-		//free_args(cmd_list->args);
+		free_args(cmd_list->args);
 		free_redirecrion(cmd_list->rds);
 		tmp = cmd_list;
 		cmd_list = cmd_list->next;
