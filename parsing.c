@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 12:15:47 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 15:33:53 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	t_parsing	*parsing;
 	t_arg_word	*arg_word;
 
-	// arg_word = malloc(sizeof(t_arg_word));
-	// if (arg_word == NULL)
-	// 	return (NULL);
 	parsing = malloc(sizeof(t_parsing)); //free
 	if (parsing == NULL)
 		return (NULL);
@@ -99,6 +96,7 @@ int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **lis
 			{
 				array = ft_split(quote_removed->str, ' '); //free
 				counter += array_count(array, list);
+				free_split(array); //**************
 			}
 			else
 			{
@@ -107,10 +105,11 @@ int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **lis
 				counter++;
 			}
 			current_token = current_token->next;
+			(free(quote_removed->str), free(quote_removed)); //**************
 		}
 		else if (current_token->type >= 4 && current_token->type <= 7)
 			current_token = current_token->next->next;
-			
+		
 	}
 	return (counter);
 }
@@ -122,7 +121,7 @@ void	list_to_args(t_token *list, char **args)
 	i = 0;
 	while (list != NULL)
 	{
-		args[i] = list->token;
+		args[i] = ft_strdup(list->token);
 		list = list->next;
 		i++;
 	}
@@ -134,7 +133,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 {
 	t_redirection	*redirection;
 	char			**args;
-	char			*file;
+	t_arg_word		*quote_removed;
 	t_token			*list;
 
 	list = NULL;
@@ -143,16 +142,18 @@ char **inner_filling_cmd_list(t_token **current_token,
 		return (NULL);
 	args = malloc(sizeof(char *) * (count + 1)); //free	
 	list_to_args(list, args);
+	free_list(list);
 	while (*current_token != NULL && (*current_token)->type != TOKEN_PIPE)
 	{
 		if (*current_token != NULL && (*current_token)->type < 3)
 			*current_token = (*current_token)->next;
 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
 		{
-			file = remove_quote(*current_token, env, shell)->str;
-			if (file == NULL)
+			quote_removed = remove_quote(*current_token, env, shell);
+			if (quote_removed == NULL)
 				return (NULL);
-			redirection = ft_lstnew_redirection((*current_token)->type, file);
+			redirection = ft_lstnew_redirection((*current_token)->type, quote_removed->str);
+			(free(quote_removed->str), free(quote_removed));
 			if ((*current_token)->type == TOKEN_HEREDOC)
 				redirection->is_delimiter_quoted = is_quoted((*current_token)->next->token);
 			ft_lstadd_back_redirection(&redirection_list, redirection);
@@ -161,41 +162,6 @@ char **inner_filling_cmd_list(t_token **current_token,
 	}
 	return (args);
 }
-
-// char **inner_filling_cmd_list(t_token **current_token,
-// 	t_redirection **redirection_list, t_env *env, t_shell *shell)
-// {
-// 	t_redirection	*redirection;
-// 	char			**args;
-// 	int				i;
-// 	char			*file;
-
-// 	i = 0;
-// 	args = malloc(sizeof(char *) * (words_count(*current_token) + 1)); //free
-// 	while (*current_token != NULL && (*current_token)->type != TOKEN_PIPE)
-// 	{
-// 		if (*current_token != NULL && (*current_token)->type < 3)
-// 		{
-// 			args[i] = remove_quote(*current_token, env, shell); //free
-// 			if (args[i++] == NULL) //free function
-// 				return (NULL);
-// 			*current_token = (*current_token)->next;
-// 		}
-// 		else if ((*current_token)->type >= 4 && (*current_token)->type <= 7)
-// 		{
-// 			file = remove_quote(*current_token, env, shell);
-// 			if (file == NULL)
-// 				return (NULL);
-// 			redirection = ft_lstnew_redirection((*current_token)->type, file);
-// 			if ((*current_token)->type == TOKEN_HEREDOC)
-// 				redirection->is_delimiter_quoted = is_quoted((*current_token)->next->token);
-// 			ft_lstadd_back_redirection(&redirection_list, redirection);
-// 			*current_token = (*current_token)->next->next;
-// 		}
-// 	}
-// 	args[i] = NULL;
-// 	return (args);
-// }
 
 t_command	*filling_cmd_list(t_token *token_list, int pipe_flag, t_env *env, t_shell *shell)
 {
@@ -245,7 +211,7 @@ t_command	*parse_input(char *str, t_env *env, t_shell *shell)
 			return (NULL);
 	}
 	if (valid_tokens(token_list, shell))
-		return (NULL);
+		return (free_list(token_list), NULL);
 	command_list = filling_cmd_list(token_list, 0, env, shell);
 	free_list(token_list);
 	return (command_list);

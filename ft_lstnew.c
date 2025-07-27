@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:40:45 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 23:53:24 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 15:08:34 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_redirection *ft_lstnew_redirection(int type, char *filename_or_delimiter)
 	new_node = malloc(sizeof(t_redirection));
 	new_node -> type = type;
 	new_node -> is_delimiter_quoted = 0;
-	new_node -> filename_or_delimiter = filename_or_delimiter;
+	new_node -> filename_or_delimiter = ft_strdup(filename_or_delimiter);
 	new_node -> next = NULL;
 	return (new_node);
 }
