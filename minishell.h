@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 22:43:20 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/27 15:32:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,6 @@ typedef struct s_hdpart
     struct s_hdpart *next;
 }	t_hdpart;
 
-typedef struct s_sigflag
-{
-	int	sig_flag;
-}	t_sigflag;
-
 
 t_token			*ft_lstnew_token(char *token);
 t_command		*ft_lstnew_command(char **args);
@@ -189,5 +184,5 @@ int				is_quoted(char *token);
 char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
 void			disable_echoctl(void);
 void			restore_termios(void);
-void			handle_hd_signal(int sig);
+void			free_cmd_list(t_command *cmd_list);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
