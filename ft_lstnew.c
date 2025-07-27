@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:40:45 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 17:30:43 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 23:53:24 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_token	*ft_lstnew_token(char *token)
 	t_token	*new_node;
 
 	new_node = malloc(sizeof(t_token));
-	new_node -> token = token;
+	new_node -> token = ft_strdup(token);
 	new_node -> next = NULL;
 	return (new_node);
 }

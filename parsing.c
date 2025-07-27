@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 13:54:00 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/26 23:35:02 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	t_parsing	*parsing;
 	t_arg_word	*arg_word;
 
-	arg_word = malloc(sizeof(t_arg_word));
-	if (arg_word == NULL)
-		return (NULL);
+	// arg_word = malloc(sizeof(t_arg_word));
+	// if (arg_word == NULL)
+	// 	return (NULL);
 	parsing = malloc(sizeof(t_parsing)); //free
 	if (parsing == NULL)
 		return (NULL);
@@ -39,7 +39,9 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	parsing->new_str->str[parsing->j] = '\0';
 	if (in_case_of_quote_not_closed(parsing->new_str->str, parsing->j, parsing->flag))
 		return (free(parsing->str), NULL);
-	return (parsing->new_str);
+	arg_word = parsing->new_str;
+	free(parsing);
+	return (arg_word);
 }
 
 void	filling_pipes(t_command *command, t_token *current_token)
