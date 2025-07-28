@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_and_redirections_tokenization_functio        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:26:15 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/15 19:36:11 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 21:34:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ int inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d)
 	filling_type_pipe_or_rd(token);
 	ft_lstadd_back_token(list, token);
 	*i += s_or_d;
+	free(s);
 	return (0);
 }

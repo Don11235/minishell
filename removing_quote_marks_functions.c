@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 15:53:24 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/28 18:46:08 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	in_case_of_quote_not_closed(char *new_str, int j, int flag)
 	if (flag % 2 == 1)
 	{
 		printf("quote not closed\n");
-		free(new_str);
 		return (1);
 	}
 	return (0);

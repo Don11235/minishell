@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils_2.c                                  :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/18 18:11:40 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/28 23:36:23 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/27 21:25:32 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/27 21:25:41 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_unquoted(char *token)
+void    free_env(t_env *env_list)
 {
-	int	i;
+    t_env   *tmp;
 
-	i = 0;
-	while (token[i] != '\0' && token[i] != '"' && token[i] != '\'')
-		i++;
-	if (token[i] == '"' || token[i] == '\'')
-		return (0);
-	return (1);
+    while (env_list)
+    {
+        free(env_list->key);
+        free(env_list->value);
+        tmp = env_list;
+        env_list = env_list->next;
+        free(tmp);
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/27 16:57:56 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/28 23:39:13 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 							free(line);
 							exit(0);
 						}
-						if (!redirect->is_delimiter_quoted)
+						if (!redirect->is_delimiter_unquoted)
 						{
 							final_line = heredoc_expand_line(env, line, shell);
 							ft_putstr_fd(final_line, pipefd[1]);
@@ -197,7 +197,13 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				if (is_built_in)
 					execute_builtin(cmd, env, shell);
 				else
-					execve(cmd_path, cmd->args, env_to_array(env));
+				{
+					if (execve(cmd_path, cmd->args, env_to_array(env)) == -1)
+					{
+						check_fail(-1, cmd_path);
+						exit(126);
+					}
+				}
 				exit(0);
 			}
 			else
@@ -232,5 +238,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			write(1, "\n", 1);
 		}
 	}
+	else
+		shell->last_exit_status = WEXITSTATUS(status);
 	return (free_cmd_list(cmd_list), 0);
 }

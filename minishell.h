@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 16:05:56 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/28 23:38:10 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <readline/history.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 typedef enum s_tokens
 {
@@ -46,7 +47,7 @@ typedef struct s_token
 typedef struct s_redirection
 {
 	int						type;
-	int						is_delimiter_quoted;
+	int						is_delimiter_unquoted;
 	char					*filename_or_delimiter;
 	int						heredoc_fd;
 	struct s_redirection	*next;
@@ -187,10 +188,11 @@ int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
 int				calc_new_str_len(t_parsing *parsing, t_env *env);
 char			*ft_strjoin(char const *s1, char const *s2);
-int				is_quoted(char *token);
+int				is_unquoted(char *token);
 char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
 void			disable_echoctl(void);
 void			restore_termios(void);
 void			free_cmd_list(t_command *cmd_list);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			free_list(t_token *list);
+char			**ft_split_whitespace(char const *s);
