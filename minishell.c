@@ -20,6 +20,7 @@ int main(int argc, char *argv[], char **envp)
 		if (!input)
 		{
 			write(1, "exit\n", 5);
+			free_env(env);
 			break;
 		}
 		add_history(input);

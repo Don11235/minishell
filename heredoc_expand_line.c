@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/20 21:48:36 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 03:56:24 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,17 @@ char	*join_heredoc_parts(t_hdpart *parts)
 {
 	t_hdpart *current;
 	char	*str;
+	char	*tmp;
 
-	str = "";
+	str = ft_strdup("");
+	if (!str)
+		return (NULL);
 	current = parts;
 	while (current)
 	{
-		str = ft_strjoin(str, current->str);
+		tmp = ft_strjoin(str, current->str);
+		free(str);
+		str = tmp;
 		current = current->next;
 	}
 	return (str);
@@ -118,6 +123,7 @@ char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
 	char		*key;
 	t_env		*env_node;
 	t_hdpart	*tmp;
+	char		*expanded_line;
 
 	parts = split_heredoc_line(line);
 	tmp = parts;
@@ -149,8 +155,10 @@ char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
 				free(tmp->str);
 				tmp->str = "";
 			}
+			free(key);
 		}
 		tmp = tmp->next;
 	}
-	return (join_heredoc_parts(parts));
+	expanded_line = join_heredoc_parts(parts);
+	return (free_hd_parts(parts), expanded_line);
 }

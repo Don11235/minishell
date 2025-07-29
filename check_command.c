@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/28 23:18:35 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 05:35:40 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
 		path_node = find_env(env, "PATH");
 		if (!path_node)
 		{
-			print_cmd_error(cmd->args[0], "No such file or directory.", 127);
+			print_cmd_error(cmd->args[0], "No such file or directory", 127);
 			shell->last_exit_status = 127;
 			return (NULL);
 		}
@@ -101,6 +101,7 @@ char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
 				return (free_split(path_dir), NULL);
 			if (!access(cmd_path, F_OK))
 				return (free_split(path_dir), cmd_path);
+			free(cmd_path);
 			i++;
 		}
 		free_split(path_dir);

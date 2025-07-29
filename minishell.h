@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/28 23:38:10 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 03:55:20 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,8 @@ char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
 void			disable_echoctl(void);
 void			restore_termios(void);
 void			free_cmd_list(t_command *cmd_list);
+void			free_env(t_env *env_list);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			free_list(t_token *list);
 char			**ft_split_whitespace(char const *s);
+void			free_hd_parts(t_hdpart *part);

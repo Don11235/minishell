@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/28 23:39:13 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 06:08:50 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,15 +169,14 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		{
 			fd_backup = handle_redirections(cmd);
 			if (!fd_backup)
+			{
+				printf("out\n");
 				return (1);
-			execute_builtin(cmd, env, shell);
-			if (fd_backup->has_redirection)
-			{				
-				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
-				free(fd_backup);
 			}
-			else
-				free(fd_backup);
+			execute_builtin(cmd, env, shell);
+			if (fd_backup->has_redirection)		
+				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
+			free(fd_backup);
 		}
 		else
 		{
@@ -210,6 +209,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			{	
 				set_signal(SIGINT, SIG_IGN);
 				reset_all_heredoc_fds(cmd_list);
+				free(cmd_path);
 				if (prev_read_end != -1)
 					close(prev_read_end);
 				if (cmd->pipe_out)
