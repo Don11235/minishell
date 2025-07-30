@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/29 23:21:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:23:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	reset_all_heredoc_fds(t_command *cmd_list)
 {
 	t_redirection	*red;
 
+	if (!cmd_list->rds)
+		return ;
 	while (cmd_list)
 	{
 		red = cmd_list->rds;
@@ -95,6 +97,7 @@ int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 						{
 							final_line = heredoc_expand_line(env, line, shell);
 							ft_putstr_fd(final_line, pipefd[1]);
+							free(final_line);
 						}
 						else
 							ft_putstr_fd(line, pipefd[1]);
@@ -154,9 +157,11 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		}
 		is_built_in = check_builtin(cmd);
 		if (!is_built_in)
+		{
 			cmd_path = resolve_command_path(cmd, env, shell);
-		if (!cmd_path)
-			return (1);
+			if (!cmd_path)
+				return (1);
+		}
 		if (cmd->pipe_out && setup_pipe(pipefd))
 			return (1);
 		if (is_built_in && !cmd->pipe_in && !cmd->pipe_out)
@@ -164,7 +169,6 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			if (handle_redirections(cmd->rds))
 				return (restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout), 1);
 			execute_builtin(cmd, env, shell);		
-			restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 		}
 		else
 		{
@@ -196,7 +200,8 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			{	
 				set_signal(SIGINT, SIG_IGN);
 				reset_all_heredoc_fds(cmd_list);
-				free(cmd_path);
+				if (!is_built_in)
+					free(cmd_path);
 				if (prev_read_end != -1)
 					close(prev_read_end);
 				if (cmd->pipe_out)
@@ -211,6 +216,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		cmd = cmd->next;
 	}
 	while (wait(&status) > 0);
+	restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/30 16:44:49 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:16:09 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,29 +136,29 @@ char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
 			if (env_node)
 			{
 				free(tmp->str);
-				tmp->str = env_node->value;
+				tmp->str = ft_strdup(env_node->value);
 			}
 			else if (key[0] == '$')
 			{
 				free(tmp->str);
-				tmp->str = "$";
+				tmp->str = ft_strdup("$");
 				free(key);
 			}
 			else if (key[0] == '?')
 			{
 				free(tmp->str);
-				tmp->str = ft_itoa(shell->last_exit_status);
+				tmp->str = ft_strdup(ft_itoa(shell->last_exit_status));
 				free(key);
 			}
 			else
 			{
 				free(tmp->str);
-				tmp->str = "";
+				tmp->str = ft_strdup("");
 			}
 			free(key);
 		}
 		tmp = tmp->next;
 	}
 	expanded_line = join_heredoc_parts(parts);
-	return (expanded_line);
+	return (free_hd_parts(parts), expanded_line);
 }
