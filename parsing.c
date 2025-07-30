@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/28 23:38:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:21:39 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	parsing = malloc(sizeof(t_parsing)); //free
 	if (parsing == NULL)
 		return (NULL);
-	remove_quote_func_init(parsing, token, env);
+	remove_quote_func_init(parsing, token, env, shell);
 	while (parsing->str[parsing->i] != '\0')
 	{
 		continue_flag = remove_quote_inner_loop(token, env, shell, parsing);

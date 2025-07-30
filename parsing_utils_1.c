@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 19:42:41 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/30 13:24:59 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int words_count(t_token *beginning)
 	return i;
 }
 
-int	calc_new_str_len(t_parsing *parsing, t_env *env)
+int	calc_new_str_len(t_parsing *parsing, t_env *env, t_shell *shell)
 {
 	t_env	*env_line;
 
@@ -89,6 +89,12 @@ int	calc_new_str_len(t_parsing *parsing, t_env *env)
 		{
 			i++;
 			len++;
+			if (parsing->str[i] == '?')
+			{
+				i++;
+				len += ft_strlen(ft_itoa(shell->last_exit_status));
+				continue;
+			}
 			if (parsing->str[i] != '\0')
 			{
 				parsing->k = i;

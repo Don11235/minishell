@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/29 06:08:50 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 23:21:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 							free(line);
 							exit(0);
 						}
-						if (!redirect->is_delimiter_unquoted)
+						if (redirect->is_delimiter_unquoted)
 						{
 							final_line = heredoc_expand_line(env, line, shell);
 							ft_putstr_fd(final_line, pipefd[1]);
@@ -129,7 +129,7 @@ int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 {
 	t_command	*cmd;
-	t_fd_backup	*fd_backup;
+	t_fd_backup	fd_backup;
 	pid_t		pid;
 	int			pipefd[2];
 	int			is_built_in;
@@ -140,22 +140,16 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 
 
 	cmd = cmd_list;
+	if (init_fd_backup(&fd_backup))
+		return (1);
 	if (prepare_heredocs(cmd, env, shell))
 		return (1);
 	while (cmd)
 	{
 		if (!cmd->args[0])
 		{
-			fd_backup = handle_redirections(cmd);
-			if (!fd_backup)
-				return (1);
-			if (fd_backup->has_redirection)
-			{				
-				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
-				free(fd_backup);
-			}
-			else
-				free(fd_backup);
+			handle_redirections(cmd->rds);
+			restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 			return (1);
 		}
 		is_built_in = check_builtin(cmd);
@@ -167,16 +161,10 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			return (1);
 		if (is_built_in && !cmd->pipe_in && !cmd->pipe_out)
 		{
-			fd_backup = handle_redirections(cmd);
-			if (!fd_backup)
-			{
-				printf("out\n");
-				return (1);
-			}
-			execute_builtin(cmd, env, shell);
-			if (fd_backup->has_redirection)		
-				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
-			free(fd_backup);
+			if (handle_redirections(cmd->rds))
+				return (restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout), 1);
+			execute_builtin(cmd, env, shell);		
+			restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 		}
 		else
 		{
@@ -190,8 +178,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				set_signal(SIGQUIT, SIG_DFL);
 				if (handle_pipe_fds(cmd, prev_read_end, pipefd))
 					exit(1);
-				fd_backup = handle_redirections(cmd);
-				if (!fd_backup)
+				if (handle_redirections(cmd->rds))
 					exit(1);
 				if (is_built_in)
 					execute_builtin(cmd, env, shell);

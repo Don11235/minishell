@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/29 03:56:24 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:44:49 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,5 +160,5 @@ char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
 		tmp = tmp->next;
 	}
 	expanded_line = join_heredoc_parts(parts);
-	return (free_hd_parts(parts), expanded_line);
+	return (expanded_line);
 }

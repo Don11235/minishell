@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/29 03:55:20 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:12:05 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ typedef struct s_fd_backup
 {
     int saved_stdin;
 	int	saved_stdout;
-	int	has_redirection;
 }   t_fd_backup;
 
 typedef struct s_hdpart
@@ -152,7 +151,7 @@ int				pipes_and_rds_tokens(char *str, t_token **list, int *i);
 int				word_tokens(char *str, t_token **list, int *i);
 int				words_count(t_token *beginning);
 char			*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell);
-int				print_cmd_error(char *cmd, char *msg, int exit_code);
+void			print_cmd_error(char *cmd, char *msg, int exit_code, t_shell *shell);
 void			ft_putstr_fd(char *s, int fd);
 int				env_size(t_env *env);
 char			**env_to_array(t_env *env);
@@ -172,12 +171,12 @@ void			free_split(char **array);
 void			quick_sort_env(t_env **array, int low, int high);
 t_env			**get_sorted_env_ptr_array(t_env *env_list);
 int				restore_stdio(int saved_stdin, int saved_stdout);
-t_fd_backup		*handle_redirections(t_command *cmd);
+int				handle_redirections(t_redirection *redirect);
 int				ft_atoi(const char *str);
 char			*ft_itoa(int n);
 void			prompt_sigint_handler(int sig);
 int				set_signal(int signo, void (*handler)(int));
-void			remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env);
+void			remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env, t_shell *shell);
 int				skipping_if_quote_mark(t_parsing *parsing, char *q);
 int				expand_condition(t_parsing *parsing, char q);
 int				printing_dollar(t_parsing *parsing, t_env *env_line);
@@ -186,7 +185,7 @@ t_env			*find_env_exp(t_env *env, t_parsing *parsing, int i);
 int				expand_to_an_empty_string(t_parsing *parsing, t_env *env_line);
 int				expand_to_a_real_value(t_parsing *parsing, t_env *env_line);
 int				remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing);
-int				calc_new_str_len(t_parsing *parsing, t_env *env);
+int				calc_new_str_len(t_parsing *parsing, t_env *env, t_shell *shell);
 char			*ft_strjoin(char const *s1, char const *s2);
 int				is_unquoted(char *token);
 char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
@@ -198,3 +197,4 @@ void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			free_list(t_token *list);
 char			**ft_split_whitespace(char const *s);
 void			free_hd_parts(t_hdpart *part);
+int				init_fd_backup(t_fd_backup *fd_backup);
