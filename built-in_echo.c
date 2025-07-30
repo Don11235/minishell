@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 17:04:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/08 16:25:19 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/26 13:14:25 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	is_n_option(char *arg)
 	return (1);
 }
 
-int	echo(char **args)
+int	echo(char **args, t_shell *shell)
 {
 	int	i;
 	int	flag;
@@ -48,14 +48,15 @@ int	echo(char **args)
 	while (args[i])
 	{
 		if (printf("%s", args[i++]) == -1)
-			return (1);
+			return (shell->last_exit_status = 1, 1);
 		if (args[i] != NULL && printf(" ") == -1)
-			return (1);
+			return (shell->last_exit_status = 1, 1);
 	}
 	if (flag == 0)
 	{
 		if (printf("\n") == -1)
-			return (1);
+			return (shell->last_exit_status = 1, 1);
 	}
-	return (0);
+	
+	return (shell->last_exit_status = 0, 0);
 }

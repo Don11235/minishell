@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   print_error_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:15:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/12 17:54:08 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:11:37 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void	print_exit_error(char *arg)
 	write(2, ": numeric argument required\n", 28);
 }
 
-int	print_cmd_error(char *cmd, char *msg, int exit_code)
+void	print_cmd_error(char *cmd, char *msg, int exit_code, t_shell *shell)
 {
 	write(2, "minishell: ", 11);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": ", 2);
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
-	return (exit_code);
+	shell->last_exit_status = exit_code;
 }

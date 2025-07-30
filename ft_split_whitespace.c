@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_whitespace.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/13 21:51:49 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/28 21:08:28 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/28 20:06:28 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/28 21:11:44 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	num_substr(char const *str, char c)
+static size_t	num_substr(char const *str)
 {
 	int		i;
 	size_t	count;
@@ -21,43 +21,47 @@ static size_t	num_substr(char const *str, char c)
 	count = 0;
 	if (*str == '\0')
 		return (0);
-	if (c == '\0')
-		return (1);
 	while (str[i] != '\0')
 	{
-		if (str[i] != c && str[i + 1] == c)
+		//if (str[i] != c && str[i + 1] == c)
+		if ((!(str[i] >= 9 && str[i] <= 13) && str[i] != ' ')
+			&& ((str[i + 1] >= 9 && str[i + 1] <= 13) || str[i + 1] == ' '))
 			count++;
 		i++;
 	}
-	if (str[i - 1] == c)
+	//if (str[i - 1] == c)
+	if ((str[i - 1] >= 9 && str[i - 1] <= 13) || str[i - 1] == ' ')
 		return (count);
 	else
 		return (count + 1);
 }
 
-static size_t	len_substr(char const *sb, char c)
+static size_t	len_substr(char const *sb)
 {
 	size_t	count;
 
 	count = 0;
-	while (sb[count] != c && sb[count])
+	//while (sb[count] != c && sb[count])
+	while (!(sb[count] >= 9 && sb[count] <= 13) && sb[count] != ' ' && sb[count])
 		count++;
 	return (count);
 }
 
-static char	*dup_substr(char const *s, char c, int *i)
+static char	*dup_substr(char const *s, int *i)
 {
 	size_t		len;
 	char		*pt;
 
-	while (s[*i] == c)
+	//while (s[*i] == c)
+	while ((s[*i] >= 9 && s[*i] <= 13) || s[*i] == ' ')
 		(*i)++;
-	len = len_substr(s + (*i), c) + 1;
+	len = len_substr(s + (*i)) + 1;
 	pt = (char *)malloc(len * sizeof(char));
 	if (pt == NULL)
 		return (NULL);
 	ft_strlcpy(pt, s + (*i), len);
-	while (s[(*i)] != '\0' && s[(*i)] != c)
+	//while (s[(*i)] != '\0' && s[(*i)] != c)
+	while (s[(*i)] != '\0' && !(s[(*i)] >= 9 && s[(*i)] <= 13) && s[(*i)] != ' ')
 		(*i)++;
 	return (pt);
 }
@@ -72,7 +76,7 @@ static void	free_allocated_memory(char **p, size_t i)
 	free(p);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split_whitespace(char const *s)
 {
 	char	**pt;
 	size_t	num;
@@ -83,13 +87,13 @@ char	**ft_split(char const *s, char c)
 	pos = 0;
 	if (s == NULL)
 		return (NULL);
-	num = num_substr(s, c);
+	num = num_substr(s);
 	pt = malloc((num + 1) * sizeof(char *));
 	if (pt == NULL)
 		return (NULL);
 	while (i < num)
 	{
-		pt[i] = dup_substr(s, c, &pos);
+		pt[i] = dup_substr(s, &pos);
 		if (pt[i] == NULL)
 		{
 			free_allocated_memory(pt, i);

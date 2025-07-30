@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_inner_functions.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/26 21:02:25 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/27 21:27:22 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 	}
 	parsing->str = str;
 	parsing->new_str->str = new_str;
-	return (continue_flag);
+	return (free(exit_status), continue_flag);
 }
 
 int	expand_to_an_empty_string(t_parsing *parsing, t_env *env_line)

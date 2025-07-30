@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:46:50 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 15:33:53 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/30 13:21:39 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	parsing = malloc(sizeof(t_parsing)); //free
 	if (parsing == NULL)
 		return (NULL);
-	remove_quote_func_init(parsing, token, env);
+	remove_quote_func_init(parsing, token, env, shell);
 	while (parsing->str[parsing->i] != '\0')
 	{
 		continue_flag = remove_quote_inner_loop(token, env, shell, parsing);
@@ -35,7 +35,7 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 	}
 	parsing->new_str->str[parsing->j] = '\0';
 	if (in_case_of_quote_not_closed(parsing->new_str->str, parsing->j, parsing->flag))
-		return (free(parsing->str), NULL);
+		return (free(parsing->new_str->str), free(parsing->new_str), free(parsing), NULL);
 	arg_word = parsing->new_str;
 	free(parsing);
 	return (arg_word);
@@ -94,7 +94,7 @@ int	args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **lis
 				return (-1);
 			if (quote_removed->expanded == 1)
 			{
-				array = ft_split(quote_removed->str, ' '); //free
+				array = ft_split_whitespace(quote_removed->str); //free
 				counter += array_count(array, list);
 				free_split(array); //**************
 			}
@@ -139,7 +139,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 	list = NULL;
 	int count = args_count(*current_token, env, shell, &list);
 	if (count == -1)
-		return (NULL);
+		return (free_list(list), NULL);
 	args = malloc(sizeof(char *) * (count + 1)); //free	
 	list_to_args(list, args);
 	free_list(list);
@@ -155,7 +155,7 @@ char **inner_filling_cmd_list(t_token **current_token,
 			redirection = ft_lstnew_redirection((*current_token)->type, quote_removed->str);
 			(free(quote_removed->str), free(quote_removed));
 			if ((*current_token)->type == TOKEN_HEREDOC)
-				redirection->is_delimiter_quoted = is_quoted((*current_token)->next->token);
+				redirection->is_delimiter_unquoted = is_unquoted((*current_token)->next->token);
 			ft_lstadd_back_redirection(&redirection_list, redirection);
 			*current_token = (*current_token)->next->next;
 		}

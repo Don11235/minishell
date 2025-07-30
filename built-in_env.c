@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 17:01:38 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/06/28 18:34:07 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:13:24 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	env(t_env *env, t_shell *shell)
 	while (env)
 	{
 		if (env->value && printf("%s=%s\n", env->key, env->value) == -1)
-			return (1);
+			return (shell->last_exit_status = 1, 1);
 		env = env->next;
 	}
 	return (shell->last_exit_status = 0, 0);

@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_signal.c                                       :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 23:25:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/26 13:41:20 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/27 21:25:32 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/27 21:25:41 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    prompt_sigint_handler(int sig)
+void    free_env(t_env *env_list)
 {
-    (void)sig;
-    write(1, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
-} 
+    t_env   *tmp;
 
-int	set_signal(int signo, void (*handler)(int))
-{
-    struct sigaction sa;
-
-    sa.sa_handler = handler;
-    sa.sa_flags = 0;
-    sigemptyset(&sa.sa_mask);
-    if (sigaction(signo, &sa, NULL) == -1)
-		return (1);
-	return (0);
+    while (env_list)
+    {
+        free(env_list->key);
+        free(env_list->value);
+        tmp = env_list;
+        env_list = env_list->next;
+        free(tmp);
+    }
 }

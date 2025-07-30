@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 18:11:40 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/18 18:19:39 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/28 23:36:23 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_quoted(char *token)
+int	is_unquoted(char *token)
 {
 	int	i;
 
@@ -20,6 +20,6 @@ int	is_quoted(char *token)
 	while (token[i] != '\0' && token[i] != '"' && token[i] != '\'')
 		i++;
 	if (token[i] == '"' || token[i] == '\'')
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }

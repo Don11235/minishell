@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/12 12:17:10 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:14:46 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,49 +43,70 @@ int	check_builtin(t_command *comd)
 		return (0);
 }
 
-char	*resolve_command_path(t_command *cmd, t_env *env)
+static char *handle_direct_path(t_command *cmd, t_shell *shell)
 {
-	if (ft_strchr(cmd->args[0], '/'))
+	struct stat st;
+
+	if (!stat(cmd->args[0], &st))
 	{
-		if (!access(cmd->args[0], F_OK))
-			return (cmd->args[0]);
-		else
+		if (S_ISDIR(st.st_mode))
 		{
-			print_cmd_error(cmd->args[0], "No such file or directory", 127);
+			print_cmd_error(cmd->args[0], "is a directory", 126, shell);
 			return (NULL);
 		}
+		else
+			return (ft_strdup(cmd->args[0]));
 	}
 	else
 	{
-		t_env	*path_node;
-		char	*path;
-		char	*cmd_path;
-		char	**path_dir;
-		int		i;
+		print_cmd_error(cmd->args[0], "No such file or directory", 127, shell);
+		return (NULL);
+	}
+}
 
-		i = 0;
+char	*search_cmd_in_path_list(t_command *cmd, char *path, t_shell *shell)
+{
+	char	*cmd_path;
+	char	**path_dir;
+	int		i;
+
+	i = 0;
+	path_dir = ft_split(path, ':');
+	if (path_dir == NULL)
+		return (NULL);
+	while (path_dir[i])
+	{
+		cmd_path = ft_strjoin_with(path_dir[i], cmd->args[0], '/');
+		if (cmd_path == NULL)
+			return (free_split(path_dir), NULL);
+		if (!access(cmd_path, F_OK))
+			return (free_split(path_dir), cmd_path);
+		free(cmd_path);
+		i++;
+	}
+	free_split(path_dir);
+	print_cmd_error(cmd->args[0], "command not found", 127, shell);
+	return (NULL);
+}
+
+char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
+{
+	t_env	*path_node;
+	char	*path;
+
+	if (ft_strchr(cmd->args[0], '/'))
+		return (handle_direct_path(cmd, shell));
+	else
+	{
 		path_node = find_env(env, "PATH");
 		if (!path_node)
 		{
-			print_cmd_error(cmd->args[0], "No such file or directory", 127);
+			print_cmd_error(cmd->args[0], "No such file or directory", 127, shell);
 			return (NULL);
 		}
 		path = path_node->value;
 		if (!path)
 			return (NULL);
-		path_dir = ft_split(path, ':'); //free
-		if (path_dir == NULL)
-			return (NULL);
-		while (path_dir[i])
-		{
-			cmd_path = ft_strjoin_with(path_dir[i], cmd->args[0], '/');
-			if (cmd_path == NULL) //free path dir
-				return (NULL);
-			if (!access(cmd_path, F_OK))
-				return (cmd_path);
-			i++;
-		}
-		print_cmd_error(cmd->args[0], "command not found", 127);
+		return (search_cmd_in_path_list(cmd, path, shell));
 	}
-	return (NULL);
 }

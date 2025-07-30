@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   removing_quote_marks_functions.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 11:41:04 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/30 13:22:06 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	skipping_if_quote_mark(t_parsing *parsing, char *q)
 	return (continue_flag);
 }
 
-void	remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env)
+void	remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env, t_shell *shell)
 {
 	parsing->i = 0;
 	parsing->j = 0;
@@ -47,7 +47,7 @@ void	remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env)
 	else
 		parsing->str = token->token;
 	parsing->new_str = malloc(sizeof(t_arg_word));
-	parsing->new_str->str = malloc(calc_new_str_len(parsing, env) + 1); //free
+	parsing->new_str->str = malloc(calc_new_str_len(parsing, env, shell) + 1); //free
 	parsing->new_str->expanded = 0;
 	if (parsing->new_str->str == NULL)
 		return ;
@@ -79,7 +79,6 @@ int	in_case_of_quote_not_closed(char *new_str, int j, int flag)
 	if (flag % 2 == 1)
 	{
 		printf("quote not closed\n");
-		free(new_str);
 		return (1);
 	}
 	return (0);

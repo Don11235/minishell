@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/14 02:43:09 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/29 23:23:24 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,57 +64,45 @@ int	setup_redirections(int type, char *filename)
 	return (0);
 }
 
-// t_fd_backup	*init_fd_backup(t_command *cmd)
-// {
-	
-// }
-
-t_fd_backup	*handle_redirections(t_command *cmd)
+int	init_fd_backup(t_fd_backup *fd_backup)
 {
-	t_redirection	*redirect;
-	t_fd_backup		*fd_backup;
-
-	fd_backup = malloc(sizeof(t_fd_backup));
-	if (!fd_backup)
-		return (NULL);
-	fd_backup->has_redirection = 0;
-	if (!cmd->rds)
-		return (fd_backup);
 	fd_backup->saved_stdin = dup(STDIN_FILENO);
 	if (check_fail(fd_backup->saved_stdin, "dup"))
-	{
-		free(fd_backup);
-		return (NULL);
-	}
+		return (1);
 	fd_backup->saved_stdout = dup(STDOUT_FILENO);
 	if (check_fail(fd_backup->saved_stdout, "dup"))
 	{
 		close (fd_backup->saved_stdin);
-		free(fd_backup);
-		return (NULL);
+		return (1);
 	}
-	fd_backup->has_redirection = 1;
-	redirect = cmd->rds;
+	return (0);
+}
+
+int	handle_redirections(t_redirection *redirect)
+{
 	while (redirect)
 	{
 		if (redirect->type == TOKEN_RD_IN)
 		{
 			if (setup_redirections(TOKEN_RD_IN, redirect->filename_or_delimiter))
-				return (NULL);
+				return (1);
 		}
 		else if (redirect->type == TOKEN_RD_OUT)
 		{
 			if (setup_redirections(TOKEN_RD_OUT, redirect->filename_or_delimiter))
-				return (NULL);
+				return (1);
 		}
 		else if (redirect->type == TOKEN_APPEND)
 		{
 			if (setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter))
-				return (NULL);
+				return (1);
 		}
-		else if (redirect->type == TOKEN_HEREDOC)
-			redirect_heredoc(cmd->heredoc_fd, STDIN_FILENO);
+		else if (redirect->type == TOKEN_HEREDOC && redirect->heredoc_fd != -1)
+		{
+			if (redirect_heredoc(redirect->heredoc_fd, STDIN_FILENO))
+				return (1);
+		}
 		redirect = redirect->next;
 	}
-	return (fd_backup);
+	return (0);
 }

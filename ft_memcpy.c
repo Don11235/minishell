@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_signal.c                                       :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 23:25:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/26 13:41:20 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/07/23 19:16:05 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/07/23 19:16:13 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    prompt_sigint_handler(int sig)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-    (void)sig;
-    write(1, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
-} 
+	unsigned char		*tmp1;
+	const unsigned char	*tmp2;
 
-int	set_signal(int signo, void (*handler)(int))
-{
-    struct sigaction sa;
-
-    sa.sa_handler = handler;
-    sa.sa_flags = 0;
-    sigemptyset(&sa.sa_mask);
-    if (sigaction(signo, &sa, NULL) == -1)
-		return (1);
-	return (0);
+	if (dest == src)
+		return (dest);
+	if (dest == NULL && src == NULL)
+		return (NULL);
+	tmp1 = (unsigned char *)dest;
+	tmp2 = (const unsigned char *)src;
+	while (n--)
+		*tmp1++ = *tmp2++;
+	return (dest);
 }

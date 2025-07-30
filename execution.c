@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/21 18:11:09 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/07/29 23:21:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,40 @@ int	handle_pipe_fds(t_command *cmd, int prev_read_end, int *pipefd)
 	return (0);
 }
 
-int	prepare_heredocs(t_command *cmd)
+
+void	reset_all_heredoc_fds(t_command *cmd_list)
+{
+	t_redirection	*red;
+
+	while (cmd_list)
+	{
+		red = cmd_list->rds;
+		while (red)
+		{
+			if (red->type == TOKEN_HEREDOC && red->heredoc_fd != -1)
+			{
+				close(red->heredoc_fd);
+				red->heredoc_fd = -1;
+			}
+			else
+				break ;
+			red = red->next;
+		}
+		cmd_list = cmd_list->next;
+	}
+}
+
+int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
 {
 	t_redirection	*redirect;
+	t_command		*cmd_list;
+	pid_t			pid;
 	int				pipefd[2];
 	char			*line;
+	char			*final_line;
+	int				status;
 
+	cmd_list = cmd;
 	while (cmd)
 	{
 		redirect = cmd->rds;
@@ -47,25 +75,49 @@ int	prepare_heredocs(t_command *cmd)
 		{
 			if (redirect->type == TOKEN_HEREDOC)
 			{
-				if (cmd->heredoc_fd != -1)
-					close(pipefd[0]);
 				if (setup_pipe(pipefd))
 					return (1);
-				while (1)
+				pid = fork();
+				if (pid == -1)
+					return (1);
+				if (pid == 0)
 				{
-					line = readline("> ");
-					if (!redirect->is_delimiter_quoted)
-						// line = 
-					if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
+					set_signal(SIGINT, SIG_DFL);
+					while (1)
 					{
+						line = readline("> ");
+						if (!line || !ft_strcmp(line, redirect->filename_or_delimiter))
+						{
+							free(line);
+							exit(0);
+						}
+						if (redirect->is_delimiter_unquoted)
+						{
+							final_line = heredoc_expand_line(env, line, shell);
+							ft_putstr_fd(final_line, pipefd[1]);
+						}
+						else
+							ft_putstr_fd(line, pipefd[1]);
 						free(line);
-						break ;
 					}
-					ft_putstr_fd(line, pipefd[1]);
-					free(line);
+					exit(0);
 				}
-				close(pipefd[1]);
-				cmd->heredoc_fd = pipefd[0];
+				else
+				{
+					set_signal(SIGINT, SIG_IGN);
+					close(pipefd[1]);
+					if (waitpid(pid, &status, 0) == -1)
+						return (check_fail(-1, "waitpid"));
+					if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+					{
+						close(pipefd[0]);
+						write(1, "\n", 1);
+						reset_all_heredoc_fds(cmd_list);
+						shell->last_exit_status = 1;
+						return (1);
+					}
+					redirect->heredoc_fd = pipefd[0];
+				}
 			}
 			redirect = redirect->next;
 		}
@@ -77,39 +129,42 @@ int	prepare_heredocs(t_command *cmd)
 int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 {
 	t_command	*cmd;
-	t_fd_backup	*fd_backup;
+	t_fd_backup	fd_backup;
 	pid_t		pid;
 	int			pipefd[2];
 	int			is_built_in;
 	char		*cmd_path;
 	int			status;
 	int			prev_read_end = -1;
+	int			sig;
 
 
 	cmd = cmd_list;
-	prepare_heredocs(cmd);
+	if (init_fd_backup(&fd_backup))
+		return (1);
+	if (prepare_heredocs(cmd, env, shell))
+		return (1);
 	while (cmd)
 	{
+		if (!cmd->args[0])
+		{
+			handle_redirections(cmd->rds);
+			restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
+			return (1);
+		}
 		is_built_in = check_builtin(cmd);
 		if (!is_built_in)
-			cmd_path = resolve_command_path(cmd, env);
+			cmd_path = resolve_command_path(cmd, env, shell);
 		if (!cmd_path)
 			return (1);
 		if (cmd->pipe_out && setup_pipe(pipefd))
 			return (1);
 		if (is_built_in && !cmd->pipe_in && !cmd->pipe_out)
 		{
-			fd_backup = handle_redirections(cmd);
-			if (!fd_backup)
-				return (1);
-			execute_builtin(cmd, env, shell);
-			if (fd_backup->has_redirection)
-			{				
-				restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
-				free(fd_backup);
-			}
-			else
-				free(fd_backup);
+			if (handle_redirections(cmd->rds))
+				return (restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout), 1);
+			execute_builtin(cmd, env, shell);		
+			restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 		}
 		else
 		{
@@ -118,22 +173,30 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 				return (1);
 			if (pid == 0)
 			{
+				restore_termios();
 				set_signal(SIGINT, SIG_DFL);
 				set_signal(SIGQUIT, SIG_DFL);
 				if (handle_pipe_fds(cmd, prev_read_end, pipefd))
 					exit(1);
-				fd_backup = handle_redirections(cmd);
-				if (!fd_backup)
+				if (handle_redirections(cmd->rds))
 					exit(1);
 				if (is_built_in)
 					execute_builtin(cmd, env, shell);
 				else
-					execve(cmd_path, cmd->args, env_to_array(env));
+				{
+					if (execve(cmd_path, cmd->args, env_to_array(env)) == -1)
+					{
+						check_fail(-1, cmd_path);
+						exit(126);
+					}
+				}
 				exit(0);
 			}
 			else
 			{	
 				set_signal(SIGINT, SIG_IGN);
+				reset_all_heredoc_fds(cmd_list);
+				free(cmd_path);
 				if (prev_read_end != -1)
 					close(prev_read_end);
 				if (cmd->pipe_out)
@@ -150,11 +213,19 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 	while (wait(&status) > 0);
 	if (WIFSIGNALED(status))
 	{
-		int sig = WTERMSIG(status);
+		sig = WTERMSIG(status);
 		if (sig == SIGQUIT)
+		{
+			shell->last_exit_status = 128 + sig;
 			write(1, "Quit: 3\n", 8);
+		}
 		else if (sig == SIGINT)
+		{
+			shell->last_exit_status = 128 + sig;
 			write(1, "\n", 1);
+		}
 	}
-	return (0);
+	else
+		shell->last_exit_status = WEXITSTATUS(status);
+	return (free_cmd_list(cmd_list), 0);
 }
