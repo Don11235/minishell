@@ -24,7 +24,11 @@ int main(int argc, char *argv[], char **envp)
 		add_history(input);
 		cmd = parse_input(input, env, &shell);
 		if (!cmd)
+		{
+			free(input);
 			continue ;
+		}
 		execute(cmd, env, &shell);
+		free(input);
 	}
 }

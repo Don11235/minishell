@@ -10,4 +10,4 @@ SRC = ft_lstadd_back.c ft_lstnew.c ft_split.c ft_strdup.c ft_strjoin_with.c ft_s
 	  ft_isdigit.c ft_isalnum.c ft_isalpha.c free_split.c env_sort.c export_utils.c restore_stdio.c ft_atoi.c \
 	  ft_itoa.c print_error_2.c set_signal.c free.c
 all :
-	cc $(SRC) -fsanitize=address -lreadline -L/goinfre/$(USER)/homebrew/opt/readline/lib -I/goinfre/$(USER)/homebrew/opt/readline/include
+	cc $(SRC) -lreadline -L/goinfre/$(USER)/homebrew/opt/readline/lib -I/goinfre/$(USER)/homebrew/opt/readline/include
