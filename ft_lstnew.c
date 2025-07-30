@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:40:45 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/28 23:38:59 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 23:17:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_command *ft_lstnew_command(char **args)
 	new_node -> args = args;
 	new_node -> pipe_in = 0;
 	new_node -> pipe_out = 0;
+	new_node -> pid = -1;
 	new_node -> rds = NULL;
 	new_node -> next = NULL;
 	return (new_node);

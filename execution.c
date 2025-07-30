@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/30 20:23:11 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:06:22 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,8 +215,8 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		}
 		cmd = cmd->next;
 	}
-	while (wait(&status) > 0);
 	restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
+	while (wait(&status) > 0);
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);

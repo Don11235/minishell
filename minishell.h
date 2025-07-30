@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/30 18:52:01 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/30 23:10:32 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ typedef struct s_command
 	char				**args;
 	t_redirection		*rds;
 	int					pipe_in;
-	int					pipe_out; 
+	int					pipe_out;
+	pid_t				pid; 
 	struct s_command	*next;
 }	t_command;
 
