@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/30 21:06:22 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 19:30:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,10 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		{
 			cmd_path = resolve_command_path(cmd, env, shell);
 			if (!cmd_path)
-				return (1);
+			{
+				cmd = cmd->next;
+				continue ;
+			}
 		}
 		if (cmd->pipe_out && setup_pipe(pipefd))
 			return (1);
@@ -175,6 +178,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			pid = fork();
 			if (pid == -1)
 				return (1);
+			cmd->pid = pid;
 			if (pid == 0)
 			{
 				restore_termios();
@@ -216,22 +220,23 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 		cmd = cmd->next;
 	}
 	restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
-	while (wait(&status) > 0);
-	if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		if (sig == SIGQUIT)
-		{
-			shell->last_exit_status = 128 + sig;
-			write(1, "Quit: 3\n", 8);
-		}
-		else if (sig == SIGINT)
-		{
-			shell->last_exit_status = 128 + sig;
-			write(1, "\n", 1);
-		}
-	}
-	else
-		shell->last_exit_status = WEXITSTATUS(status);
+	wait_for_child(cmd_list, shell);
+	// while (wait(&status) > 0);
+	// if (WIFSIGNALED(status))
+	// {
+	// 	sig = WTERMSIG(status);
+	// 	if (sig == SIGQUIT)
+	// 	{
+	// 		shell->last_exit_status = 128 + sig;
+	// 		write(1, "Quit: 3\n", 8);
+	// 	}
+	// 	else if (sig == SIGINT)
+	// 	{
+	// 		shell->last_exit_status = 128 + sig;
+	// 		write(1, "\n", 1);
+	// 	}
+	// }
+	// else
+	// 	shell->last_exit_status = WEXITSTATUS(status);
 	return (free_cmd_list(cmd_list), 0);
 }

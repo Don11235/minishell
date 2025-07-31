@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/30 15:14:46 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 18:59:02 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*search_cmd_in_path_list(t_command *cmd, char *path, t_shell *shell)
 		i++;
 	}
 	free_split(path_dir);
-	print_cmd_error(cmd->args[0], "command not found", 127, shell);
+	print_cmd_error(cmd->args[0], "command not found.", 127, shell);
 	return (NULL);
 }
 

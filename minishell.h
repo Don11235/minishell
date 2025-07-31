@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/30 23:10:32 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:38:33 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,4 +199,5 @@ void			free_list(t_token *list);
 char			**ft_split_whitespace(char const *s);
 void			free_hd_parts(t_hdpart *part);
 int				init_fd_backup(t_fd_backup *fd_backup);
+int				wait_for_child(t_command *cmd, t_shell *shell);
 
