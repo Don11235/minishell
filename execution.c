@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/31 19:30:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/01 00:39:42 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,23 @@ int	handle_pipe_fds(t_command *cmd, int prev_read_end, int *pipefd)
 	return (0);
 }
 
+void	reset_heredoc_fd(t_command *cmd)
+{
+	t_redirection	*red;
+
+		red = cmd->rds;
+		while (red)
+		{
+			if (red->type == TOKEN_HEREDOC && red->heredoc_fd != -1)
+			{
+				close(red->heredoc_fd);
+				red->heredoc_fd = -1;
+			}
+			else
+				break ;
+			red = red->next;
+		}
+}
 
 void	reset_all_heredoc_fds(t_command *cmd_list)
 {
@@ -203,7 +220,7 @@ int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
 			else
 			{	
 				set_signal(SIGINT, SIG_IGN);
-				reset_all_heredoc_fds(cmd_list);
+				reset_heredoc_fd(cmd);
 				if (!is_built_in)
 					free(cmd_path);
 				if (prev_read_end != -1)
