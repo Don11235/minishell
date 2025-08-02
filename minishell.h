@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/30 15:12:05 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 22:36:34 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_parsing
 	char		*str;
 	int			i;
 	int			flag;
-	int			k;
 	t_arg_word	*new_str;
 }	t_parsing;
 
@@ -198,3 +197,6 @@ void			free_list(t_token *list);
 char			**ft_split_whitespace(char const *s);
 void			free_hd_parts(t_hdpart *part);
 int				init_fd_backup(t_fd_backup *fd_backup);
+int				args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **list);
+void			list_to_args(t_token *list, char **args);
+t_arg_word		*remove_quote(t_token *token, t_env *env, t_shell *shell);

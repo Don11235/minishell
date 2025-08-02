@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_and_redirections_tokenization_functio        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:26:15 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 21:34:00 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:18:13 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void filling_type_pipe_or_rd(t_token *list)
+void	filling_type_pipe_or_rd(t_token *list)
 {
 	if (list->token[1] == '\0')
 	{
@@ -32,13 +32,13 @@ void filling_type_pipe_or_rd(t_token *list)
 	}
 }
 
-int inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d)
+int	inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d)
 {
-	char 	*s;
+	char	*s;
 	int		j;
 	t_token	*token;
 
-	s = malloc(s_or_d + 1); //free
+	s = malloc(s_or_d + 1);
 	if (s == NULL)
 		return (1);
 	j = 0;
@@ -48,7 +48,7 @@ int inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, int s_or_d)
 		j++;
 	}
 	s[j] = '\0';
-	token = ft_lstnew_token(s); //free
+	token = ft_lstnew_token(s);
 	filling_type_pipe_or_rd(token);
 	ft_lstadd_back_token(list, token);
 	*i += s_or_d;

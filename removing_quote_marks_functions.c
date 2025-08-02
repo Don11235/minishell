@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   removing_quote_marks_functions.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/30 13:22:06 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 17:55:46 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,24 @@ int	skipping_if_quote_mark(t_parsing *parsing, char *q)
 	return (continue_flag);
 }
 
-void	remove_quote_func_init(t_parsing *parsing, t_token *token, t_env *env, t_shell *shell)
+void	remove_quote_func_init(t_parsing *parsing, t_token *token,
+	t_env *env, t_shell *shell)
 {
 	parsing->i = 0;
 	parsing->j = 0;
-	parsing->k = 0;
 	parsing->flag = 0;
 	if (token->type >= 4 && token->type <= 7)
 		parsing->str = token->next->token;
 	else
 		parsing->str = token->token;
 	parsing->new_str = malloc(sizeof(t_arg_word));
-	parsing->new_str->str = malloc(calc_new_str_len(parsing, env, shell) + 1); //free
-	parsing->new_str->expanded = 0;
+	parsing->new_str->str = malloc(calc_new_str_len(parsing, env, shell) + 1);
 	if (parsing->new_str->str == NULL)
 		return ;
 }
 
-int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsing *parsing)
+int	remove_quote_inner_loop(t_token *token, t_env *env,
+	t_shell *shell, t_parsing *parsing)
 {
 	int		continue_flag;
 	char	q;
@@ -71,7 +71,7 @@ int	remove_quote_inner_loop(t_token *token, t_env *env, t_shell *shell, t_parsin
 		continue_flag = expand_to_an_empty_string(parsing, env_line);
 		continue_flag = expand_to_a_real_value(parsing, env_line);
 	}
-	return (continue_flag);	
+	return (continue_flag);
 }
 
 int	in_case_of_quote_not_closed(char *new_str, int j, int flag)
