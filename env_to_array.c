@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:52:28 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/07 20:39:24 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:29:38 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**env_to_array(t_env *env)
 	{
 		env_array[i] = ft_strjoin_with(env->key, env->value, '=');
 		if (!env_array[i])
-				return (NULL); //free
+			return (NULL);
 		i++;
 		env = env->next;
 	}

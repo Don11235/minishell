@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 22:31:37 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/21 17:12:35 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:24:25 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	disable_echoctl(void)
 {
-	struct termios term;
+	struct termios	term;
 
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		return ;
@@ -30,4 +30,3 @@ void	restore_termios(void)
 	term.c_lflag |= ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
-

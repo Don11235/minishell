@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   removing_quote_marks_functions.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/03 22:04:42 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/04 20:13:57 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,17 @@ int	remove_quote_inner_loop(t_token *token, t_env *env,
 	{
 		parsing->i++;
 		env_line = find_env_exp(env, parsing, parsing->i);
-		continue_flag = printing_dollar(parsing, env_line);
+		continue_flag += printing_dollar(parsing, env_line);
 		if (parsing->str[parsing->i] == '\0')
 			return (1);
-		continue_flag = expand_to_last_exit_status(parsing, shell);
-		continue_flag = expand_to_an_empty_string(parsing, env_line);
-		continue_flag = expand_to_a_real_value(parsing, env_line);
+		continue_flag += expand_to_last_exit_status(parsing, shell);
+		continue_flag += expand_to_an_empty_string(parsing, env_line);
+		continue_flag += expand_to_a_real_value(parsing, env_line);
 	}
 	return (continue_flag);
 }
 
-int	in_case_of_quote_not_closed(char *new_str, int j, int flag)
+int	in_case_of_quote_not_closed(int flag)
 {
 	if (flag % 2 == 1)
 	{

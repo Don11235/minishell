@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 20:22:07 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/27 21:26:10 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:47:21 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ static int	parse_shlvl(char *value)
 	int		lvl;
 
 	if (!is_valid_numeric(value))
-		return 1;
+		return (1);
 	lvl = ft_atoi(value);
 	if (lvl < 0)
-		return 0;
+		return (0);
 	if (lvl > 1000)
 	{
 		shlvl = ft_itoa(lvl + 1);
@@ -47,9 +47,8 @@ static int	parse_shlvl(char *value)
 		free(shlvl);
 		return (1);
 	}
-	return lvl + 1;
+	return (lvl + 1);
 }
-
 
 static void	update_shlvl(t_env *env_list)
 {

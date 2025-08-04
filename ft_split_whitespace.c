@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:06:28 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/28 21:11:44 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:46:14 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ static size_t	num_substr(char const *str)
 		return (0);
 	while (str[i] != '\0')
 	{
-		//if (str[i] != c && str[i + 1] == c)
 		if ((!(str[i] >= 9 && str[i] <= 13) && str[i] != ' ')
 			&& ((str[i + 1] >= 9 && str[i + 1] <= 13) || str[i + 1] == ' '))
 			count++;
 		i++;
 	}
-	//if (str[i - 1] == c)
 	if ((str[i - 1] >= 9 && str[i - 1] <= 13) || str[i - 1] == ' ')
 		return (count);
 	else
@@ -41,8 +39,8 @@ static size_t	len_substr(char const *sb)
 	size_t	count;
 
 	count = 0;
-	//while (sb[count] != c && sb[count])
-	while (!(sb[count] >= 9 && sb[count] <= 13) && sb[count] != ' ' && sb[count])
+	while (!(sb[count] >= 9 && sb[count] <= 13) && sb[count] != ' '
+		&& sb[count])
 		count++;
 	return (count);
 }
@@ -52,7 +50,6 @@ static char	*dup_substr(char const *s, int *i)
 	size_t		len;
 	char		*pt;
 
-	//while (s[*i] == c)
 	while ((s[*i] >= 9 && s[*i] <= 13) || s[*i] == ' ')
 		(*i)++;
 	len = len_substr(s + (*i)) + 1;
@@ -60,8 +57,8 @@ static char	*dup_substr(char const *s, int *i)
 	if (pt == NULL)
 		return (NULL);
 	ft_strlcpy(pt, s + (*i), len);
-	//while (s[(*i)] != '\0' && s[(*i)] != c)
-	while (s[(*i)] != '\0' && !(s[(*i)] >= 9 && s[(*i)] <= 13) && s[(*i)] != ' ')
+	while (s[(*i)] != '\0' && !(s[(*i)] >= 9 && s[(*i)] <= 13)
+		&& s[(*i)] != ' ')
 		(*i)++;
 	return (pt);
 }

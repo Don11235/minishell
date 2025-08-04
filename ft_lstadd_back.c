@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:19:54 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/07 20:51:16 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/04 16:43:51 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_lstadd_back_redirection(t_redirection ***lst, t_redirection *new)
 
 	current = **lst;
 	if (new == NULL)
-		return;
+		return ;
 	if (**lst == NULL)
 		**lst = new;
 	else

@@ -6,23 +6,23 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:49:48 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 21:08:46 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:00:01 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid(char *arg)
+static int	is_unset_valid(char *arg)
 {
 	int	i;
 
 	i = 0;
 	if (ft_isdigit(arg[0]) || !arg[0])
-		return (print_export_error(arg));
+		return (print_unset_error(arg));
 	while (arg[i])
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			return (print_export_error(arg));
+			return (print_unset_error(arg));
 		i++;
 	}
 	return (0);
@@ -68,13 +68,13 @@ static void	unset_env_key(t_env **env, char *key)
 		if (prev_env == *env)
 		{
 			*env = prev_env->next;
-			free(prev_env);
+			free_env_node(prev_env);
 		}
 		else
 		{
 			node_to_remove = prev_env->next;
 			prev_env->next = node_to_remove->next;
-			free(node_to_remove);
+			free_env_node(node_to_remove);
 		}
 	}
 }
@@ -88,7 +88,7 @@ int	unset(t_env **env, char **args, t_shell *shell)
 	status = 0;
 	while (args[i])
 	{
-		if (is_valid(args[i]))
+		if (is_unset_valid(args[i]))
 			status = 1;
 		else
 			unset_env_key(env, args[i]);

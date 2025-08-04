@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 19:52:59 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/10 16:01:19 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:10:01 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,3 @@ int	check_fail(int result, char *context)
 	}
 	return (0);
 }
-

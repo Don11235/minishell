@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:13:10 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/31 15:56:25 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/04 20:51:08 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	quote_tokens(char *str, t_token **list, int *i)
 {
 	char	q;
-	t_token	*token;
 
 	int (j), (flag), len = ft_strlen(str);
 	if (*i >= len)
@@ -58,7 +57,6 @@ int	pipes_and_rds_tokens(char *str, t_token **list, int *i)
 int	word_tokens(char *str, t_token **list, int *i)
 {
 	char	q;
-	t_token	*token;
 
 	int (j), (flag), len = ft_strlen(str);
 	j = *i;

@@ -6,27 +6,11 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/03 03:17:58 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:11:44 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	is_valid(char *arg)
-{
-	int	i;
-
-	i = 0;
-	if (ft_isdigit(arg[0]) || arg[0] == '=' || !arg[0])
-		return (print_export_error(arg));
-	while (arg[i] && arg[i] != '=')
-	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			return (print_export_error(arg));
-		i++;
-	}
-	return (0);
-}
 
 static int	has_equal_sign(char *arg)
 {
@@ -81,7 +65,8 @@ void	print_export_env(t_env *env)
 		if (!sorted_array[i]->value)
 			printf("declare -x %s\n", sorted_array[i]->key);
 		else
-			printf("declare -x %s=\"%s\"\n", sorted_array[i]->key, sorted_array[i]->value);
+			printf("declare -x %s=\"%s\"\n", sorted_array[i]->key,
+				sorted_array[i]->value);
 		i++;
 	}
 }
@@ -94,7 +79,6 @@ void	add_or_update_export(t_env **env, char *key)
 		update_env(*env, key, NULL);
 }
 
-
 int	export(t_env **env, char **args, t_shell *shell)
 {
 	int		i;
@@ -102,12 +86,11 @@ int	export(t_env **env, char **args, t_shell *shell)
 
 	i = 1;
 	status = 0;
-	printf("----%s----\n", args[i]);
 	if (!args[1])
 		print_export_env(*env);
 	while (args[i])
 	{
-		if (is_valid(args[i]))
+		if (is_export_valid(args[i]))
 		{
 			status = 1;
 			i++;

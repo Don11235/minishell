@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 17:04:54 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/03 00:47:03 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:16:01 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_n_option(char *arg)
 	{
 		if (arg[i] != 'n')
 			return (0);
-		i++;	
+		i++;
 	}
 	return (1);
 }

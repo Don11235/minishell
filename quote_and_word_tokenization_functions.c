@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_and_word_tokenization_functions.c            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:55:56 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/31 16:16:26 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:48:53 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	inner_word_or_quote_skipping_condition(char *str, int i, int flag, int type)
 		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13)
 				&& str[i] != '|' && str[i] != '>' && str[i] != '<')
 			|| flag % 2 == 1;
-	else if (type == 1)
+	if (type == 1)
 		condition = (str[i] != ' ' && !(str[i] >= 9 && str[i] <= 13))
 			|| flag % 2 == 1;
 	return (condition);

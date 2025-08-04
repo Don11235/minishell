@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/30 18:44:27 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:52:48 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,8 @@ static int	redirect_heredoc(int fd, int std_fd)
 	return (0);
 }
 
-int	setup_redirections(int type, char *filename)
+static int	setup_redirect(int type, char *filename)
 {
-	int	fd;
-	int	ret;
-
 	if (type == TOKEN_RD_IN)
 	{
 		if (redirect_fd(filename, O_RDONLY, STDIN_FILENO))
@@ -84,17 +81,17 @@ int	handle_redirections(t_redirection *redirect)
 	{
 		if (redirect->type == TOKEN_RD_IN)
 		{
-			if (setup_redirections(TOKEN_RD_IN, redirect->filename_or_delimiter))
+			if (setup_redirect(TOKEN_RD_IN, redirect->filename_or_delimiter))
 				return (1);
 		}
 		else if (redirect->type == TOKEN_RD_OUT)
 		{
-			if (setup_redirections(TOKEN_RD_OUT, redirect->filename_or_delimiter))
+			if (setup_redirect(TOKEN_RD_OUT, redirect->filename_or_delimiter))
 				return (1);
 		}
 		else if (redirect->type == TOKEN_APPEND)
 		{
-			if (setup_redirections(TOKEN_APPEND, redirect->filename_or_delimiter))
+			if (setup_redirect(TOKEN_APPEND, redirect->filename_or_delimiter))
 				return (1);
 		}
 		else if (redirect->type == TOKEN_HEREDOC && redirect->heredoc_fd != -1)

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/31 18:59:02 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:23:57 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ int	check_builtin(t_command *comd)
 	cmd = comd->args[0];
 	if (!cmd)
 		return (0);
-	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "pwd") 
-		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
-			|| !ft_strcmp(cmd, "exit"))
+	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
+		|| !ft_strcmp(cmd, "exit"))
 	{
 		return (1);
 	}
@@ -43,9 +44,9 @@ int	check_builtin(t_command *comd)
 		return (0);
 }
 
-static char *handle_direct_path(t_command *cmd, t_shell *shell)
+static char	*handle_direct_path(t_command *cmd, t_shell *shell)
 {
-	struct stat st;
+	struct stat	st;
 
 	if (!stat(cmd->args[0], &st))
 	{
@@ -101,7 +102,8 @@ char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
 		path_node = find_env(env, "PATH");
 		if (!path_node)
 		{
-			print_cmd_error(cmd->args[0], "No such file or directory", 127, shell);
+			print_cmd_error(cmd->args[0], "No such file or directory", 127,
+				shell);
 			return (NULL);
 		}
 		path = path_node->value;

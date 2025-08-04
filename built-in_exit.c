@@ -6,16 +6,16 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:42:50 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/03 02:25:55 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:11:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid(char *arg)
+static int	is_exit_valid(char *arg)
 {
 	int	i;
-	
+
 	i = 0;
 	if (arg[i] == '+' || arg[i] == '-')
 		i++;
@@ -73,7 +73,7 @@ int	do_exit(t_command *cmd, t_shell *shell)
 	write(1, "exit\n", 6);
 	if (!cmd->args[1])
 		exit (shell->last_exit_status);
-	if (is_valid(cmd->args[1]))
+	if (is_exit_valid(cmd->args[1]))
 		exit(255);
 	if (cmd->args[2])
 	{
