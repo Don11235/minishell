@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_inner_functions.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/27 21:27:22 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/03 22:41:57 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	printing_dollar(t_parsing *parsing, t_env *env_line)
 	str = parsing->str;
 	i = parsing->i;
 	if ((str[i] == ' ' || (str[i] >= 9 && str[i] <= 13)) || str[i] == '\0'
-		|| (parsing->flag == 1 && env_line == NULL && (str[i] == ' ' || str[i] == '"'))
-		|| str[i] == ':' || str[i] == '=')
+		|| (parsing->flag == 1 && env_line == NULL && (str[i] == ' '
+				|| str[i] == '"')) || str[i] == ':' || str[i] == '=')
 	{
 		new_str[j] = '$';
 		j++;
@@ -51,9 +51,9 @@ int	printing_dollar(t_parsing *parsing, t_env *env_line)
 	return (continue_flag);
 }
 
-int expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
+int	expand_to_last_exit_status(t_parsing *parsing, t_shell *shell)
 {
-	int 	continue_flag;
+	int		continue_flag;
 	char	*exit_status;
 	int		k;
 	char	*str;
@@ -111,7 +111,8 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 		expanding(new_str, &j, env_line->value);
 		i += ft_strlen(env_line->key);
 		continue_flag = 1;
-		parsing->new_str->expanded = 1;
+		if(!is_an_assignment(parsing->str))
+			parsing->new_str->expanded = 1;
 	}
 	parsing->new_str->str = new_str;
 	parsing->j = j;

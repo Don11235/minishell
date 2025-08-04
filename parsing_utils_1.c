@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:38:34 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/30 13:24:59 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:45:25 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	strlen_before_spaces_or_delimiter(char *str)
 	return (i);
 }
 
-int words_count(t_token *beginning)
+int	words_count(t_token *beginning)
 {
 	int		i;
 	t_token	*current;
@@ -74,40 +74,5 @@ int words_count(t_token *beginning)
 			current = current->next;
 		i++;
 	}
-	return i;
-}
-
-int	calc_new_str_len(t_parsing *parsing, t_env *env, t_shell *shell)
-{
-	t_env	*env_line;
-
-	int (i), len = 0;
-	i = 0;
-	while (parsing->str[i] != '\0')
-	{
-		if (parsing->str[i] == '$')
-		{
-			i++;
-			len++;
-			if (parsing->str[i] == '?')
-			{
-				i++;
-				len += ft_strlen(ft_itoa(shell->last_exit_status));
-				continue;
-			}
-			if (parsing->str[i] != '\0')
-			{
-				parsing->k = i;
-				env_line = find_env_exp(env, parsing, i);
-				if (env_line != NULL)
-					len += ft_strlen(env_line->value);
-			}
-		}
-		else
-		{
-			i++;
-			len++;
-		}
-	}
-	return len;
+	return (i);
 }

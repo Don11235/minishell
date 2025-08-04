@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/03 00:37:29 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:13:47 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ typedef struct s_parsing
 	char		*str;
 	int			i;
 	int			flag;
-	int			k;
 	t_arg_word	*new_str;
 }	t_parsing;
 
@@ -213,4 +212,7 @@ int				prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell);
 void			reset_all_heredoc_fds(t_command *cmd_list);
 void			reset_heredoc_fd(t_command *cmd);
 int				handle_pipe_fds(t_command *cmd, int *prev_read_end, int *pipefd);
-
+int				args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **list);
+void			list_to_args(t_token *list, char **args);
+t_arg_word		*remove_quote(t_token *token, t_env *env, t_shell *shell);
+int				is_an_assignment(char *token);
