@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 19:25:27 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/03 03:17:58 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	export(t_env **env, char **args, t_shell *shell)
 
 	i = 1;
 	status = 0;
+	printf("----%s----\n", args[i]);
 	if (!args[1])
 		print_export_env(*env);
 	while (args[i])

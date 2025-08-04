@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/31 16:38:33 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/03 00:37:29 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,15 @@ typedef struct s_hdpart
     struct s_hdpart *next;
 }	t_hdpart;
 
+typedef struct s_exec_context
+{
+	t_env	*env;
+	t_shell	*shell;
+	int		prev_read_end;
+	int		is_builtin;
+	char	*cmd_path;
+}	t_exec_context;
+
 
 
 t_token			*ft_lstnew_token(char *token);
@@ -200,4 +209,8 @@ char			**ft_split_whitespace(char const *s);
 void			free_hd_parts(t_hdpart *part);
 int				init_fd_backup(t_fd_backup *fd_backup);
 int				wait_for_child(t_command *cmd, t_shell *shell);
+int				prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell);
+void			reset_all_heredoc_fds(t_command *cmd_list);
+void			reset_heredoc_fd(t_command *cmd);
+int				handle_pipe_fds(t_command *cmd, int *prev_read_end, int *pipefd);
 

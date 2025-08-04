@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:42:50 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/12 21:47:19 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/03 02:25:55 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ static int	is_valid(char *arg)
 	return (0);
 }
 
+static void	get_sign(const char **str, long int *sign)
+{
+	if (**str == '-' || **str == '+')
+	{
+		if (**str == '-')
+			*sign = -1;
+		(*str)++;
+	}
+}
+
 static long	ft_atol(const char *str)
 {
 	long int	num;
@@ -37,12 +47,7 @@ static long	ft_atol(const char *str)
 	sign = 1;
 	while ((*str >= 9 && *str <= 13) || *str == 32)
 		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
+	get_sign(&str, &sign);
 	while (*str >= '0' && *str <= '9')
 	{
 		if (num < (LONG_MIN + (*str - '0')) / 10)
