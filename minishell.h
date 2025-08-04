@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/31 22:36:34 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/03 21:31:36 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,3 +200,4 @@ int				init_fd_backup(t_fd_backup *fd_backup);
 int				args_count(t_token *current_token, t_env *env, t_shell *shell, t_token **list);
 void			list_to_args(t_token *list, char **args);
 t_arg_word		*remove_quote(t_token *token, t_env *env, t_shell *shell);
+int				is_an_assignment(char *token);

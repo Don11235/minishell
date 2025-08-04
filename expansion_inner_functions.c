@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 12:14:29 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/03 21:00:47 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/03 22:41:57 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ int	expand_to_a_real_value(t_parsing *parsing, t_env *env_line)
 		expanding(new_str, &j, env_line->value);
 		i += ft_strlen(env_line->key);
 		continue_flag = 1;
-		parsing->new_str->expanded = 1;
+		if(!is_an_assignment(parsing->str))
+			parsing->new_str->expanded = 1;
 	}
 	parsing->new_str->str = new_str;
 	parsing->j = j;

@@ -6,7 +6,7 @@
 /*   By: ytlidi <ytlidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 18:11:40 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/07/31 20:46:30 by ytlidi           ###   ########.fr       */
+/*   Updated: 2025/08/03 22:43:54 by ytlidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,18 @@ int	is_unquoted(char *token)
 	if (token[i] == '"' || token[i] == '\'')
 		return (0);
 	return (1);
+}
+
+int	is_an_assignment(char *token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i] != '\0' && token[i] != '=')
+		i++;
+	if (token[i] == '=')
+		return (1);
+	return (0);
 }
 
 static void	calc_env_expanding(t_env *env, t_parsing *parsing, int i, int *len)
