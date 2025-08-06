@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:02:35 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/04 20:13:57 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:34:11 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,12 @@ int	remove_quote_inner_loop(t_token *token, t_env *env,
 	return (continue_flag);
 }
 
-int	in_case_of_quote_not_closed(int flag)
+int	in_case_of_quote_not_closed(int flag, t_shell *shell)
 {
 	if (flag % 2 == 1)
 	{
 		printf("quote not closed\n");
+		shell->last_exit_status = 1;
 		return (1);
 	}
 	return (0);

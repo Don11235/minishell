@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 18:11:44 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:28:03 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	print_export_env(t_env *env)
 				sorted_array[i]->value);
 		i++;
 	}
+	free(sorted_array);
 }
 
 void	add_or_update_export(t_env **env, char *key)

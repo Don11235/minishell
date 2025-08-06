@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 23:45:49 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/04 20:51:55 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:34:34 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_arg_word	*remove_quote(t_token *token, t_env *env, t_shell *shell)
 		parsing->new_str->str[parsing->j++] = parsing->str[parsing->i++];
 	}
 	parsing->new_str->str[parsing->j] = '\0';
-	if (in_case_of_quote_not_closed(parsing->flag))
+	if (in_case_of_quote_not_closed(parsing->flag, shell))
 		return (free(parsing->new_str->str), free(parsing->new_str),
 			free(parsing), NULL);
 	arg_word = parsing->new_str;

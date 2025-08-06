@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/06 04:06:19 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:34:23 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ int				add_token_string_to_token_list(char *str, int i, int j,
 void			filling_type_pipe_or_rd(t_token *list);
 void			filling_type_s_or_d_quote(t_token *list);
 void			expanding(char *new_str, int *j, char *str_to_add);
-int				in_case_of_quote_not_closed(int flag);
+int				in_case_of_quote_not_closed(int flag, t_shell *shell);
 void			filling_type_pipe_or_rd(t_token *list);
 int				inner_pipes_and_rds_tokens(char *str, t_token **list, int *i, 
 					int s_or_d);
