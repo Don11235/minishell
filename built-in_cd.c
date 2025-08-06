@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 21:06:27 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/07/09 12:44:08 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 06:44:05 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,20 @@
 int	change_directory(char *path, t_env **env)
 {
 	char	*old_pwd;
+	t_env	*env_node;
 	char	*pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	if (old_pwd == NULL)
-		return (print_getcwd_error("cd"));
-	if (chdir(path) == -1)
 	{
-		print_chdir_error(path);
-		free(old_pwd);
-		return (1);
+		env_node = find_env(*env, "PWD");
+		if (!env_node)
+			return (print_getcwd_error("cd"));
+		else
+			old_pwd = ft_strdup(env_node->value);
 	}
+	if (chdir(path) == -1)
+		return (print_chdir_error(path), free(old_pwd), 1);
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
 		return (print_getcwd_error("cd"));
@@ -47,7 +50,10 @@ int	cd(char *path, t_env **env, t_shell *shell)
 	{
 		home = find_env(*env, "HOME");
 		if (!home)
+		{
+			print_home_not_set_error();
 			return (shell->last_exit_status = 1, 1);
+		}
 		result = change_directory(home->value, env);
 	}
 	else

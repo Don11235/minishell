@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 18:44:56 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 01:11:44 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	prepare_command(t_command *cmd, t_exec_context *ctx)
 	ctx->is_builtin = check_builtin(cmd);
 	if (!ctx->is_builtin)
 	{
-		ctx->cmd_path = resolve_command_path(cmd, ctx->env, ctx->shell);
+		ctx->cmd_path = resolve_command_path(cmd, *(ctx->env), ctx->shell);
 		if (!ctx->cmd_path)
 		{
 			cmd = cmd->next;
@@ -53,7 +53,7 @@ int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 			execute_builtin(cmd, ctx->env, ctx->shell);
 		else
 		{
-			if (execve(ctx->cmd_path, cmd->args, env_to_array(ctx->env)) == -1)
+			if (execve(ctx->cmd_path, cmd->args, env_to_array(*(ctx->env))) == -1)
 				(check_fail(-1, ctx->cmd_path), exit(126));
 		}
 		exit(0);
@@ -67,7 +67,7 @@ int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 	return (0);
 }
 
-int	execute_loop(t_command *cmd, t_env *env, t_shell *shell,
+int	execute_loop(t_command *cmd, t_env **env, t_shell *shell,
 	t_fd_backup *fd_backup)
 {
 	int				pipefd[2];
@@ -97,14 +97,22 @@ int	execute_loop(t_command *cmd, t_env *env, t_shell *shell,
 	return (0);
 }
 
-int	execute(t_command *cmd_list, t_env *env, t_shell *shell)
+int	execute(t_command *cmd_list, t_env **env, t_shell *shell)
 {
 	t_fd_backup	fd_backup;
 
-	if (init_fd_backup(&fd_backup) || prepare_heredocs(cmd_list, env, shell))
-		return (1);
+	if (init_fd_backup(&fd_backup))
+		return (free_cmd_list(cmd_list), 1);
+	if (prepare_heredocs(cmd_list, env, shell))
+	{
+		restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
+		return (free_cmd_list(cmd_list), 1);
+	}
 	if (execute_loop(cmd_list, env, shell, &fd_backup))
-		return (1);
+	{
+		restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
+		return (free_cmd_list(cmd_list), 1);
+	}
 	restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
 	wait_for_child(cmd_list, shell);
 	return (free_cmd_list(cmd_list), 0);

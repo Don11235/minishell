@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/04 19:50:56 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 04:06:19 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,14 @@ typedef struct s_hdpart
 
 typedef struct s_exec_context
 {
-	t_env	*env;
+	t_env	**env;
 	t_shell	*shell;
 	int		prev_read_end;
 	int		is_builtin;
 	char	*cmd_path;
 }	t_exec_context;
+
+extern int g_exit_status;
 
 t_token			*ft_lstnew_token(char *token);
 t_command		*ft_lstnew_command(char **args);
@@ -131,7 +133,7 @@ size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int				valid_tokens(t_token *head, t_shell *shell);
 int				check_fail(int result, char *msg);
 int				setup_redirections(int type, char *filename);
-int				execute(t_command *cmd_list, t_env *env, t_shell *shell);
+int				execute(t_command *cmd_list, t_env **env, t_shell *shell);
 int				ft_strcmp(const char *s1, const char *s2);
 t_env			*ft_lstnew(char *key, char *value);
 void			ft_lstadd_back(t_env **env, t_env *new);
@@ -172,14 +174,14 @@ void			ft_putstr_fd(char *s, int fd);
 int				env_size(t_env *env);
 char			**env_to_array(t_env *env);
 int				check_builtin(t_command *comd);
-int				execute_builtin(t_command *cmd, t_env *env_list,
+int				execute_builtin(t_command *cmd, t_env **env_list,
 					t_shell *shell);
 int				cd(char *path, t_env **env, t_shell *shell);
 int				echo(char **args, t_shell *shell);
 int				env(t_env *env, t_shell *shell);
 int				do_exit(t_command *cmd, t_shell *shell);
 int				export(t_env **env, char **args, t_shell *shell);
-int				pwd(t_shell *shell);
+int				pwd(t_shell *shell, t_env *env);
 int				unset(t_env **env, char **args, t_shell *shell);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);
@@ -208,7 +210,7 @@ int				calc_new_str_len(t_parsing *parsing, t_env *env,
 					t_shell *shell);
 char			*ft_strjoin(char const *s1, char const *s2);
 int				is_unquoted(char *token);
-char			*heredoc_expand_line(t_env *env, char *line, t_shell *shell);
+char			*heredoc_expand_line(t_env **env, char *line, t_shell *shell);
 void			disable_echoctl(void);
 void			restore_termios(void);
 void			free_cmd_list(t_command *cmd_list);
@@ -219,7 +221,7 @@ char			**ft_split_whitespace(char const *s);
 void			free_hd_parts(t_hdpart *part);
 int				init_fd_backup(t_fd_backup *fd_backup);
 int				wait_for_child(t_command *cmd, t_shell *shell);
-int				prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell);
+int				prepare_heredocs(t_command *cmd, t_env **env, t_shell *shell);
 void			reset_all_heredoc_fds(t_command *cmd_list);
 void			reset_heredoc_fd(t_command *cmd);
 int				handle_pipe_fds(t_command *cmd, int *prev_read_end,
@@ -230,7 +232,7 @@ void			list_to_args(t_token *list, char **args);
 t_arg_word		*remove_quote(t_token *token, t_env *env, t_shell *shell);
 int				is_an_assignment(char *token);
 int				is_export_valid(char *arg);
-void			init_exec_context(t_exec_context *ctx, t_env *env,
+void			init_exec_context(t_exec_context *ctx, t_env **env,
 					t_shell *shell);
 void			reset_child_state(void);
 int				skip_if_empty(t_command *cmd, t_fd_backup *fd_backup);
@@ -243,4 +245,5 @@ int				get_var_len(char *line, int i);
 int				print_unset_error(char *identifier);
 t_hdpart		*ft_lstnew_hd(char *str, int expand);
 void			ft_lstadd_back_hd(t_hdpart **part, t_hdpart *new);
+void			print_home_not_set_error(void);
 #endif

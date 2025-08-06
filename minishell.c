@@ -6,11 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:52:49 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 19:37:20 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 00:56:41 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_exit_status;
 
 static void	setup_prompt_signals(void)
 {
@@ -19,7 +21,7 @@ static void	setup_prompt_signals(void)
 	set_signal(SIGQUIT, SIG_IGN);
 }
 
-static char	*read_input(char *prompt, t_env *env)
+static char	*read_input(char *prompt, t_env *env, t_shell *shell)
 {
 	char	*input;
 
@@ -28,6 +30,11 @@ static char	*read_input(char *prompt, t_env *env)
 	{
 		write(1, "exit\n", 5);
 		free_env(env);
+	}
+	if (g_exit_status)
+	{
+		shell->last_exit_status = 1;
+		g_exit_status = 0;
 	}
 	return (input);
 }
@@ -47,7 +54,7 @@ int	main(int argc, char *argv[], char **envp)
 	while (1)
 	{
 		setup_prompt_signals();
-		input = read_input("minishell$ ", env); 
+		input = read_input("minishell$ ", env, &shell); 
 		if (!input)
 			break ;
 		add_history(input);
@@ -57,6 +64,6 @@ int	main(int argc, char *argv[], char **envp)
 			free(input);
 			continue ;
 		}
-		(execute(cmd, env, &shell), free(input));
+		(execute(cmd, &env, &shell), free(input));
 	}
 }

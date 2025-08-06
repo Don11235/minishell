@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 03:52:19 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 17:02:47 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/05 23:58:28 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	read_heredoc(t_redirection *redirect, int *pipefd, t_env *env,
+void	read_heredoc(t_redirection *redirect, int *pipefd, t_env **env,
 	t_shell *shell)
 {
 	char	*line;
@@ -69,7 +69,7 @@ static int	do_pipe_and_fork(int pipefd[2], pid_t *pid)
 	return (0);
 }
 
-static int	process_heredocs(t_command *cmd, t_command *cmd_list, t_env *env,
+static int	process_heredocs(t_command *cmd, t_command *cmd_list, t_env **env,
 	t_shell *shell)
 {
 	t_redirection	*redirect;
@@ -97,7 +97,7 @@ static int	process_heredocs(t_command *cmd, t_command *cmd_list, t_env *env,
 	return (0);
 }
 
-int	prepare_heredocs(t_command *cmd, t_env *env, t_shell *shell)
+int	prepare_heredocs(t_command *cmd, t_env **env, t_shell *shell)
 {
 	t_redirection	*redirect;
 	t_command		*cmd_list;

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:38:11 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 18:45:16 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 00:00:45 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,17 @@ void	replace_hd_variable(t_hdpart *tmp, t_env *env_node, t_shell *shell,
 	}
 }
 
-void	expand_hd_variable(t_hdpart	*tmp, t_env *env, t_shell *shell)
+void	expand_hd_variable(t_hdpart	*tmp, t_env **env, t_shell *shell)
 {
 	char	*key;
 	t_env	*env_node;
 
 	key = ft_substr(tmp->str, 1, ft_strlen(tmp->str) - 1);
-	env_node = find_env(env, key);
+	env_node = find_env(*env, key);
 	replace_hd_variable(tmp, env_node, shell, key);
 }
 
-char	*heredoc_expand_line(t_env *env, char *line, t_shell *shell)
+char	*heredoc_expand_line(t_env **env, char *line, t_shell *shell)
 {
 	t_hdpart	*parts;
 	t_hdpart	*tmp;

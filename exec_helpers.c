@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:03:38 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 16:30:58 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/06 00:57:25 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_exec_context(t_exec_context *ctx, t_env *env, t_shell *shell)
+void	init_exec_context(t_exec_context *ctx, t_env **env, t_shell *shell)
 {
 	ctx->env = env;
 	ctx->shell = shell;

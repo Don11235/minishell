@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:00:23 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 18:04:25 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/04 23:14:55 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,9 @@ int	print_unset_error(char *identifier)
 	write(2, identifier, ft_strlen(identifier));
 	write(2, "': not a valid identifier\n", 26);
 	return (1);
+}
+
+void	print_home_not_set_error(void)
+{
+	write(2, "minishell: cd: HOME not set\n", 28);
 }
