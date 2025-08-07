@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:09:10 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/04 20:52:48 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:53:17 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,6 @@ static int	setup_redirect(int type, char *filename)
 	{
 		if (redirect_fd(filename, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO))
 			return (1);
-	}
-	return (0);
-}
-
-int	init_fd_backup(t_fd_backup *fd_backup)
-{
-	fd_backup->saved_stdin = dup(STDIN_FILENO);
-	if (check_fail(fd_backup->saved_stdin, "dup"))
-		return (1);
-	fd_backup->saved_stdout = dup(STDOUT_FILENO);
-	if (check_fail(fd_backup->saved_stdout, "dup"))
-	{
-		close (fd_backup->saved_stdin);
-		return (1);
 	}
 	return (0);
 }

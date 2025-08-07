@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/06 01:11:44 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:30:07 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 {
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		return (1);
+		return (cleanup_fork(pipefd, prev_read_end), 1);
 	if (cmd->pid == 0)
 	{
 		reset_child_state();
@@ -76,7 +76,7 @@ int	execute_loop(t_command *cmd, t_env **env, t_shell *shell,
 	init_exec_context(&ctx, env, shell);
 	while (cmd)
 	{
-		if (skip_if_empty(cmd, fd_backup))
+		if (skip_if_empty(cmd))
 			return (1);
 		if (prepare_command(cmd, &ctx))
 		{
@@ -111,6 +111,7 @@ int	execute(t_command *cmd_list, t_env **env, t_shell *shell)
 	if (execute_loop(cmd_list, env, shell, &fd_backup))
 	{
 		restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);
+		wait_for_child(cmd_list, shell);
 		return (free_cmd_list(cmd_list), 1);
 	}
 	restore_stdio(fd_backup.saved_stdin, fd_backup.saved_stdout);

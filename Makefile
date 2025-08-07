@@ -13,7 +13,7 @@ SRC = ft_lstadd_back.c ft_lstnew.c ft_split.c utils_1.c utils_2.c utils_3.c util
 	  built-in_export.c built-in_pwd.c built-in_unset.c free_split.c env_sort.c export_utils.c restore_stdio.c \
 	  ft_itoa.c print_error_2.c set_signal.c heredoc_expand_line.c disable_echoctl.c free_list.c free_cmd_list.c free_env.c \
 	  ft_split_whitespace.c free_hd_parts.c wait_for_child.c prepare_heredocs.c reset_all_heredoc_fds.c reset_heredoc_fd.c \
-	  handle_pipe_fds.c exec_helpers.c heredoc_expand_line_helpers.c
+	  handle_pipe_fds.c exec_helpers.c heredoc_expand_line_helpers.c init_fd_backup.c cleanup_fork.c
 	
 OBJ = $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:03:38 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/06 00:57:25 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 14:25:16 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ void	reset_child_state(void)
 	set_signal(SIGQUIT, SIG_DFL);
 }
 
-int	skip_if_empty(t_command *cmd, t_fd_backup *fd_backup)
+int	skip_if_empty(t_command *cmd)
 {
 	if (!cmd->args[0])
 	{
 		handle_redirections(cmd->rds);
-		restore_stdio(fd_backup->saved_stdin, fd_backup->saved_stdout);
 		return (1);
 	}
 	return (0);

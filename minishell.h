@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/06 18:34:23 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 16:31:36 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ int				is_export_valid(char *arg);
 void			init_exec_context(t_exec_context *ctx, t_env **env,
 					t_shell *shell);
 void			reset_child_state(void);
-int				skip_if_empty(t_command *cmd, t_fd_backup *fd_backup);
+int				skip_if_empty(t_command *cmd);
 void			prepare_next_cmd(t_command *cmd, int *prev_read_end,
 					int *pipefd);
 void			add_plain_text_part(t_hdpart **parts, char *line, int i, int j);
@@ -246,4 +246,5 @@ int				print_unset_error(char *identifier);
 t_hdpart		*ft_lstnew_hd(char *str, int expand);
 void			ft_lstadd_back_hd(t_hdpart **part, t_hdpart *new);
 void			print_home_not_set_error(void);
+void			cleanup_fork(int *pipefd, int *prev_read_end);
 #endif

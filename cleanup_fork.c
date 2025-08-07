@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   restore_stdio.c                                    :+:      :+:    :+:   */
+/*   cleanup_fork.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 13:31:23 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/07 13:49:07 by mben-cha         ###   ########.fr       */
+/*   Created: 2025/08/07 16:27:44 by mben-cha          #+#    #+#             */
+/*   Updated: 2025/08/07 16:30:36 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	restore_stdio(int saved_stdin, int saved_stdout)
+void	cleanup_fork(int *pipefd, int *prev_read_end)
 {
-	int	ret;
-
-	ret = dup2(saved_stdin, STDIN_FILENO);
-	if (check_fail(ret, "dup2"))
-		return (1);
-	close(saved_stdin);
-	ret = dup2(saved_stdout, STDOUT_FILENO);
-	if (check_fail(ret, "dup2"))
-		return (1);
-	close(saved_stdout);
-	return (0);
+	if (*prev_read_end != -1)
+		close(*prev_read_end);
+	close(pipefd[0]);
+	close(pipefd[1]);
 }
