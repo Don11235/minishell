@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 03:52:19 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/05 23:58:28 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:59:01 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,11 @@ static int	process_heredocs(t_command *cmd, t_command *cmd_list, t_env **env,
 
 int	prepare_heredocs(t_command *cmd, t_env **env, t_shell *shell)
 {
-	t_redirection	*redirect;
 	t_command		*cmd_list;
 
 	cmd_list = cmd;
 	while (cmd)
 	{
-		redirect = cmd->rds;
 		if (process_heredocs(cmd, cmd_list, env, shell))
 			return (1);
 		cmd = cmd->next;

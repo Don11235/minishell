@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:52:28 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/07 18:38:48 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:06:16 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*join_env_var(char const *s1, char const *s2, char sep)
+static char	*join_env_var(char *s1, char *s2, char sep)
 {
 	size_t	len;
 	size_t	len1;
@@ -20,6 +20,8 @@ static char	*join_env_var(char const *s1, char const *s2, char sep)
 
 	if (s1 == NULL)
 		return (NULL);
+	if (s2 == NULL)
+		return (ft_strdup(s1));
 	len1 = ft_strlen(s1);
 	len = len1 + ft_strlen(s2);
 	pt = (char *)malloc((len + 2) * sizeof(char));

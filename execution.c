@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/07 18:30:07 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:00:12 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	prepare_command(t_command *cmd, t_exec_context *ctx)
 		ctx->cmd_path = resolve_command_path(cmd, *(ctx->env), ctx->shell);
 		if (!ctx->cmd_path)
 		{
+			if (cmd->pipe_out == 0 && cmd->pipe_in == 1)
+				close(ctx->prev_read_end);
 			cmd = cmd->next;
 			return (1);
 		}
