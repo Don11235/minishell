@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:26:41 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/05 19:35:47 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 06:01:19 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strchr(const char *s, int c)
+static char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
 
@@ -24,24 +24,6 @@ char	*ft_strchr(const char *s, int c)
 	if (*s == ch)
 		return ((char *)s);
 	return (NULL);
-}
-
-int	check_builtin(t_command *comd)
-{
-	char	*cmd;
-
-	cmd = comd->args[0];
-	if (!cmd)
-		return (0);
-	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
-		|| !ft_strcmp(cmd, "exit"))
-	{
-		return (1);
-	}
-	else
-		return (0);
 }
 
 static char	*handle_direct_path(t_command *cmd, t_shell *shell)
@@ -65,7 +47,7 @@ static char	*handle_direct_path(t_command *cmd, t_shell *shell)
 	}
 }
 
-char	*search_cmd_in_path_list(t_command *cmd, char *path, t_shell *shell)
+static char	*search_cmd_in_path_list(t_command *cmd, char *path, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**path_dir;
@@ -116,4 +98,22 @@ char	*resolve_command_path(t_command *cmd, t_env *env, t_shell *shell)
 			return (NULL);
 		return (search_cmd_in_path_list(cmd, path, shell));
 	}
+}
+
+int	check_builtin(t_command *comd)
+{
+	char	*cmd;
+
+	cmd = comd->args[0];
+	if (!cmd)
+		return (0);
+	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env") 
+		|| !ft_strcmp(cmd, "exit"))
+	{
+		return (1);
+	}
+	else
+		return (0);
 }

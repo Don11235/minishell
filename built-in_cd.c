@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 21:06:27 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/06 06:44:05 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 05:48:09 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	change_directory(char *path, t_env **env)
+static int	change_directory(char *path, t_env **env)
 {
 	char	*old_pwd;
 	t_env	*env_node;

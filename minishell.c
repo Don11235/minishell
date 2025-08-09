@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:52:49 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/06 18:45:22 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 06:12:16 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char *argv[], char **envp)
 		setup_prompt_signals();
 		input = read_input("minishell$ ", env, &shell); 
 		if (!input)
-			exit(shell.last_exit_status) ;
+			exit(shell.last_exit_status);
 		add_history(input);
 		cmd = parse_input(input, env, &shell);
 		if (!cmd)

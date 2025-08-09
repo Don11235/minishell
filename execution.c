@@ -6,13 +6,13 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:58:43 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/08 18:00:12 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 18:25:20 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_direct_builtin(t_command *cmd, t_fd_backup *fd_backup,
+static int	handle_direct_builtin(t_command *cmd, t_fd_backup *fd_backup,
 	t_exec_context *ctx)
 {
 	if (handle_redirections(cmd->rds))
@@ -22,7 +22,7 @@ int	handle_direct_builtin(t_command *cmd, t_fd_backup *fd_backup,
 	return (0);
 }
 
-int	prepare_command(t_command *cmd, t_exec_context *ctx)
+static int	prepare_command(t_command *cmd, t_exec_context *ctx)
 {
 	ctx->is_builtin = check_builtin(cmd);
 	if (!ctx->is_builtin)
@@ -39,7 +39,7 @@ int	prepare_command(t_command *cmd, t_exec_context *ctx)
 	return (0);
 }
 
-int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
+static int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 	t_exec_context	*ctx)
 {
 	cmd->pid = fork();
@@ -55,7 +55,7 @@ int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 			execute_builtin(cmd, ctx->env, ctx->shell);
 		else
 		{
-			if (execve(ctx->cmd_path, cmd->args, env_to_array(*(ctx->env))) == -1)
+			if (execve(ctx->cmd_path, cmd->args, env_to_arr(*(ctx->env))) == -1)
 				(check_fail(-1, ctx->cmd_path), exit(126));
 		}
 		exit(0);
@@ -69,7 +69,7 @@ int	handle_command_exec(t_command *cmd, int *pipefd, int *prev_read_end,
 	return (0);
 }
 
-int	execute_loop(t_command *cmd, t_env **env, t_shell *shell,
+static int	execute_loop(t_command *cmd, t_env **env, t_shell *shell,
 	t_fd_backup *fd_backup)
 {
 	int				pipefd[2];

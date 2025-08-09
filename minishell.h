@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:41:42 by ytlidi            #+#    #+#             */
-/*   Updated: 2025/08/07 16:31:36 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 06:32:36 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct s_exec_context
 	char	*cmd_path;
 }	t_exec_context;
 
-extern int g_exit_status;
+extern int	g_exit_status;
 
 t_token			*ft_lstnew_token(char *token);
 t_command		*ft_lstnew_command(char **args);
@@ -172,7 +172,7 @@ void			print_cmd_error(char *cmd, char *msg, int exit_code,
 					t_shell *shell);
 void			ft_putstr_fd(char *s, int fd);
 int				env_size(t_env *env);
-char			**env_to_array(t_env *env);
+char			**env_to_arr(t_env *env);
 int				check_builtin(t_command *comd);
 int				execute_builtin(t_command *cmd, t_env **env_list,
 					t_shell *shell);

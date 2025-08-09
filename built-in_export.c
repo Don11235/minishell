@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:00:31 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/06 18:28:03 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 18:23:50 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	has_equal_sign(char *arg)
 	return (0);
 }
 
-int	add_key_value(t_env **env, char *arg)
+static int	add_key_value(t_env **env, char *arg)
 {
 	char	**key_value;
 	t_env	*exist;
@@ -53,7 +53,7 @@ int	add_key_value(t_env **env, char *arg)
 	return (0);
 }
 
-void	print_export_env(t_env *env)
+static void	print_export_env(t_env *env)
 {
 	t_env	**sorted_array;
 	int		i;
@@ -72,7 +72,7 @@ void	print_export_env(t_env *env)
 	free(sorted_array);
 }
 
-void	add_or_update_export(t_env **env, char *key)
+static void	add_or_update_export(t_env **env, char *key)
 {
 	if (!find_env(*env, key))
 		add_env(env, key, NULL);

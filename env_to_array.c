@@ -6,7 +6,7 @@
 /*   By: mben-cha <mben-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:52:28 by mben-cha          #+#    #+#             */
-/*   Updated: 2025/08/07 22:06:16 by mben-cha         ###   ########.fr       */
+/*   Updated: 2025/08/09 06:32:00 by mben-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*join_env_var(char *s1, char *s2, char sep)
 	return (pt);
 }
 
-char	**env_to_array(t_env *env)
+char	**env_to_arr(t_env *env)
 {
 	int		size;
 	int		i;
